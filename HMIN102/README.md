@@ -10,6 +10,7 @@
 * [3. Schémas avancés de paramétrage](#schémas-avancés-de-paramétrage)
 ## Liens utiles :
 [*Accès au cours*](http://www.lirmm.fr/~dony/ "Accèder au cours") <small> ["UEs en cours"] </small>
+
 [*Accès au moodle*](https://moodle.umontpellier.fr/course/view.php?id=5908 "Accèder au moodle")
 
 ## Programme
