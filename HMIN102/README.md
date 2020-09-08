@@ -65,7 +65,7 @@ Ensemble de *théories, méthodes, techniques, outils* permettant de *récupére
 (carre 5)
 ```
 
-2. **Composé** les el.s configurés
+2. **Composé** les el. configurés
 
     ![Software Reuse image](https://www.clker.com/cliparts/b/f/d/c/11954226151896466519anywhere_info_Software_Reuse.svg.med.png)
     
