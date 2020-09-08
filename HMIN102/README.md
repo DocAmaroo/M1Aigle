@@ -69,7 +69,6 @@ Ensemble de *théories, méthodes, techniques, outils* permettant de *récupére
     ![Software Reuse image](https://www.clker.com/cliparts/b/f/d/c/11954226151896466519anywhere_info_Software_Reuse.svg.med.png)
     <small>*source : [clker](https://www.clker.com/)*</small>
 
-<<<<<<< HEAD
 ## 3. Schémas avancés de paramétrage
 ### 3.1 Définitions
 - [ ] <em style="color:rgba(46, 170, 57, 0.8);">polymorphe</em> &rarr; qui peut se présenter sous &#8800; formes.
@@ -87,7 +86,3 @@ Les itérateurs par exemple :
 (map carre '(1 2 3))
 = (1 4 9)
 ```
-=======
-## Schémas avancés de paramétrage
-### Définitions
->>>>>>> 714be30339cf577b836391d442fa5b2bea7f4812
