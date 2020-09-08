@@ -1,6 +1,8 @@
 # HMIN102 - Ingénierie logicielle
 *"Développement de logiciel réutilisable"*
 
+---
+
 ## Sommaire
 * [Liens utiles](#liens-utiles)
 * [1. Programme](#programme)
