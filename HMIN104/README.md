@@ -40,7 +40,7 @@
 * Compilat° bytecode (+portable | lang. Java)
 
 ## Le langage
-*Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN104/cours/intro.pdf "cours d'introduction HMIN104")*
+*Voir diapos 14 &rarr; <a href="https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN104/cours/intro.pdf" target="_blank" title="cours d'introduction HMIN104"> intro.pdf </a>*
 
 :fire: Le langage utilisé est Turing-complet.
 
