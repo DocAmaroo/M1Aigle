@@ -23,12 +23,16 @@
 
 ### Difficultées
 :children_crossing: Choix de la structure de data (AST)
+
 :children_crossing: Décomposit° en étape intermédiaire
+
 :children_crossing: Bonne connaissance du lang. cible
+
 :children_crossing: Gestion des erreurs
 
 ### Attentes d'un compilateur
 :triangular_flag_on_post: **Correction** &rarr; le prog. traduit fait ce qu'on att. de lui)
+
 :triangular_flag_on_post: **Efficacité**
 
 ## Programme
