@@ -97,7 +97,7 @@ Ensemble de *théories, méthodes, techniques, outils* permettant de *récupére
 
 :bulb: entité paramétrée d’ordre sup. &rarr; `entité ayant un param. pouvant évoluer par une entité du même type qu'elle même.`
 
-:bulb: f° d’ordre sup. &rarr; `f° qui accepte une f° en arg. et/ou rend une f° en valeur`* <small> *(callback)* </small>
+:bulb: f° d’ordre sup. &rarr; `f° qui accepte une f° en arg. et/ou rend une f° en valeur` <small> *(callback)* </small>
 
 #### 3.2.1  Paramétrage d’une fonction par une autre
 Les itérateurs par exemple :
