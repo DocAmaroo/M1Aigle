@@ -4,6 +4,9 @@
 ## Sommaire
 * [Liens utiles](#liens-utiles)
 * [Introduction](#introduction)
+    * [Définitions](#définitions)
+    * [Difficultées](#difficultées)
+    * [Attentes d'un compilateur](#attentes-dun-compilateur)
 * [Programme](#programme)
 
 ## Liens utiles :
@@ -11,31 +14,29 @@
 
 ## Introduction
 ### Définitions
-:bulb: **compilateur**  
-&rarr; `traduit un lang. de haut niv. vers du bas niv.`
+:bulb: compilateur &rarr; `traduit un lang. de haut niv. vers du bas niv.`
 
-:bulb: **analyse syntax.**
-&rarr; `passer du txt. à une structure arborescente sur laquelle on peut travailler.`
+:bulb: analyse syntax. &rarr; `passer du txt. à une structure arborescente sur laquelle on peut travailler.`
 
-:bulb: **compilat° à la volée** <small>*('Just-In-Time' JIT)*</small>
+:bulb: compilat° à la volée <small>*('Just-In-Time' JIT)*</small>
 &rarr; `Combinaison de la compilation native et bytecode pour offrir portabilité et performance.`
 
-### Difficulté
-- Choix de la structure de data (AST)
-- Décomposit° en étape intermédiaire
-- Bonne connaissance du lang. cible
-- Gestion des erreurs
+### Difficultées
+:children_crossing: Choix de la structure de data (AST)
+:children_crossing: Décomposit° en étape intermédiaire
+:children_crossing: Bonne connaissance du lang. cible
+:children_crossing: Gestion des erreurs
 
 ### Attentes d'un compilateur
-- :bulb: **Correction** &rarr; le prog. traduit fait ce qu'on att. de lui)
-- :bulb: **Efficacité**
+:triangular_flag_on_post: **Correction** &rarr; le prog. traduit fait ce qu'on att. de lui)
+:triangular_flag_on_post: **Efficacité**
 
 ## Programme
 * Compilat° native (+opti. | lang. c)
 * Compilat° bytecode (+portable | lang. Java)
 
 ## Le langage
-*[Voir diapo 14 - intro.pdf]*
+*Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN104/cours/intro.pdf "cours d'introduction HMIN104")*
 
-:100: le langage utilisé est Turing-complet.
+:fire: Le langage utilisé est Turing-complet.
 
