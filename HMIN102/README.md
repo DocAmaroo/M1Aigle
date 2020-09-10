@@ -26,31 +26,42 @@
 Ensemble de *théories, méthodes, techniques, outils* permettant de *récupérer, étendre*, **adapter à de nouveaux contextes**. <small> (si possible, sans modification du code déjà existant) </small>
 
 ### 2.1 Définitions
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">extensibilité</em> &rarr; capacité d'ajouter de nouvelles f°nalités.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">adaptabilité</em> &rarr; capacité de modifier ses f°nalités.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">entité générique</em> &rarr; entité apte à être utilisé dans plusieurs concept.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">variabilité</em> &rarr; néologisme dénotant la façon dont un système est susceptible de founir des f°nalités pouvant varier.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">paramètre (param)</em> &rarr; nom dénotant un el. var. d'un système/calcul.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">fonction (f°)</em> &rarr; composition d'op. permettant sa réa. sans recopie.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">procédure (proc)</em> &rarr; suite d'instruct° permettant sa réa. sans recopie.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">f°/proc. avec paramètre(s)</em> &rarr; composition d'opé./suites d'instruct° des val.s de ses params. .
-    ```scheme
-    ;exemple d'une fonction paramétré
-    (define (carre x) (* x x))
-    ```
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">application</em> &rarr; *liason des params. formels* aux *params actuels* puis execute la f° dans l'env. résultant.
-    ```scheme
-    ;exemple d'application
-    (carre 2)
-    = 4
-    ```
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">composition de f°</em> &rarr; les fonctions peuvent être composables par enchainement d'appel.
-    ```scheme
-    ;exemple de composition
-    (sqrt(square(9)))
-    = 9
-    ```
-    <small>*NB : les procédures ne sont pas composables*</small>
+
+:bulb: extensibilité *&rarr; `capacité d'ajouter de nouvelles f°nalités.`*
+
+:bulb: adaptabilité &rarr; *`capacité de modifier ses f°nalités.`*
+
+:bulb: entité générique &rarr; *`entité apte à être utilisé dans plusieurs concept.`*
+
+:bulb: variabilité &rarr; *`néologisme dénotant la façon dont un système est susceptible de founir des f°nalités pouvant varier.`*
+
+:bulb: paramètre (param) &rarr; *`nom dénotant un el. var. d'un système/calcul.`*
+
+:bulb: fonction (f°) &rarr; *`composition d'op. permettant sa réa. sans recopie.`*
+
+:bulb: procédure (proc) &rarr; *`suite d'instruct° permettant sa réa. sans recopie.`*
+
+:bulb: f°/proc. avec paramètre(s) &rarr; *`composition d'opé./suites d'instruct° des val.s de ses params. .`*
+```scheme
+;exemple d'une fonction paramétré
+(define (carre x) (* x x))
+```
+
+:bulb: application &rarr; *`liason des params. formels aux params. actuels puis execute la f° dans l'env. résultant.`*
+```scheme
+;exemple d'application
+(carre 2)
+= 4
+```
+
+:bulb: composition de f° &rarr; *`les fonctions peuvent être composables par enchainement d'appel.`*
+```scheme
+;exemple de composition
+(sqrt(square(9)))
+= 9
+```
+<small>*NB : les procédures ne sont pas composables*</small>
+
 ### 2.2 Généralisation
 #### Décomposer & paramétrer
 1. **Décomposer en éléments.**
