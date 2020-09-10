@@ -84,13 +84,20 @@ Ensemble de *théories, méthodes, techniques, outils* permettant de *récupére
 
 ## 3. Schémas avancés de paramétrage
 ### 3.1 Définitions
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">polymorphe</em> &rarr; qui peut se présenter sous &#8800; formes.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">lang. monomorphe</em> &rarr; lang. où f°/procé., **toutes var. et val.** ont un **type unique**.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">lang. polymorphe</em> &rarr; lang. où f°/procé., **toutes var. et val.** peuvent avoir **plusieurs types**.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">type polymorphe</em> &rarr; type dt les opé. st applicables à des val. de type &#8800; où à des val. ayant plusieurs type.
+
+:bulb: lang. monomorphe &rarr; *`lang. où f°/procé., toutes var. et val. ont un type unique.`*
+
+:bulb: polymorphe &rarr; *`qui peut se présenter sous diff. formes.`*
+
+:bulb: lang. polymorphe &rarr; *`lang. où f°/procé., toutes var. et val. peuvent avoir plusieurs types.`*
+
+:bulb: type polymorphe &rarr; *`type dt les opé. st applicables à des val. de type diff. où à des val. ayant plusieurs type.`*
+
 ### 3.2 Entités d'ordre supérieur
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">entité paramétrée d’ordre sup.</em> &rarr; entité ayant un param. pouvant évoluer par une entité du même type qu'elle même.
-- [ ] <em style="color:rgba(46, 170, 57, 0.8);">f° d’ordre sup.</em> &rarr;  f° qui accepte une f° en arg. et/ou rend une f° en valeur *(callback)*.
+
+:bulb: entité paramétrée d’ordre sup. &rarr; *`entité ayant un param. pouvant évoluer par une entité du même type qu'elle même.`*
+
+:bulb: f° d’ordre sup. &rarr; *`f° qui accepte une f° en arg. et/ou rend une f° en valeur`* <small> *(callback)* </small>
 
 #### 3.2.1  Paramétrage d’une fonction par une autre
 Les itérateurs par exemple :
