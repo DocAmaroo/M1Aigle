@@ -27,40 +27,40 @@ Ensemble de *théories, méthodes, techniques, outils* permettant de *récupére
 
 ### 2.1 Définitions
 
-:bulb: extensibilité *&rarr; `capacité d'ajouter de nouvelles f°nalités.`*
+:bulb: extensibilité &rarr; `capacité d'ajouter de nouvelles f°nalités.`
 
-:bulb: adaptabilité &rarr; *`capacité de modifier ses f°nalités.`*
+:bulb: adaptabilité &rarr; `capacité de modifier ses f°nalités.`
 
-:bulb: entité générique &rarr; *`entité apte à être utilisé dans plusieurs concept.`*
+:bulb: entité générique &rarr; `entité apte à être utilisé dans plusieurs concept.`
 
-:bulb: variabilité &rarr; *`néologisme dénotant la façon dont un système est susceptible de founir des f°nalités pouvant varier.`*
+:bulb: variabilité &rarr; `néologisme dénotant la façon dont un système est susceptible de founir des f°nalités pouvant varier.`
 
-:bulb: paramètre (param) &rarr; *`nom dénotant un el. var. d'un système/calcul.`*
+:bulb: paramètre (param) &rarr; `nom dénotant un el. var. d'un système/calcul.`
 
-:bulb: fonction (f°) &rarr; *`composition d'op. permettant sa réa. sans recopie.`*
+:bulb: fonction (f°) &rarr; `composition d'op. permettant sa réa. sans recopie.`
 
-:bulb: procédure (proc) &rarr; *`suite d'instruct° permettant sa réa. sans recopie.`*
+:bulb: procédure (proc) &rarr; `suite d'instruct° permettant sa réa. sans recopie.`
 
-:bulb: f°/proc. avec paramètre(s) &rarr; *`composition d'opé./suites d'instruct° des val.s de ses params. .`*
+:bulb: f°/proc. avec paramètre(s) &rarr; `composition d'opé./suites d'instruct° des val.s de ses params. .`
 ```scheme
 ;exemple d'une fonction paramétré
 (define (carre x) (* x x))
 ```
 
-:bulb: application &rarr; *`liason des params. formels aux params. actuels puis execute la f° dans l'env. résultant.`*
+:bulb: application &rarr; `liason des params. formels aux params. actuels puis execute la f° dans l'env. résultant.`
 ```scheme
 ;exemple d'application
 (carre 2)
 = 4
 ```
 
-:bulb: composition de f° &rarr; *`les fonctions peuvent être composables par enchainement d'appel.`*
+:bulb: composition de f° &rarr; `les fonctions peuvent être composables par enchainement d'appel.`
 ```scheme
 ;exemple de composition
 (sqrt(square(9)))
 = 9
 ```
-<small>*NB : les procédures ne sont pas composables*</small>
+*<small>NB : les procédures ne sont pas composables</small>*
 
 ### 2.2 Généralisation
 #### Décomposer & paramétrer
@@ -85,19 +85,19 @@ Ensemble de *théories, méthodes, techniques, outils* permettant de *récupére
 ## 3. Schémas avancés de paramétrage
 ### 3.1 Définitions
 
-:bulb: lang. monomorphe &rarr; *`lang. où f°/procé., toutes var. et val. ont un type unique.`*
+:bulb: lang. monomorphe &rarr; `lang. où f°/procé., toutes var. et val. ont un type unique.`
 
-:bulb: polymorphe &rarr; *`qui peut se présenter sous diff. formes.`*
+:bulb: polymorphe &rarr; `qui peut se présenter sous diff. formes.`
 
-:bulb: lang. polymorphe &rarr; *`lang. où f°/procé., toutes var. et val. peuvent avoir plusieurs types.`*
+:bulb: lang. polymorphe &rarr; `lang. où f°/procé., toutes var. et val. peuvent avoir plusieurs types.`
 
-:bulb: type polymorphe &rarr; *`type dt les opé. st applicables à des val. de type diff. où à des val. ayant plusieurs type.`*
+:bulb: type polymorphe &rarr; `type dt les opé. st applicables à des val. de type diff. où à des val. ayant plusieurs type.`
 
 ### 3.2 Entités d'ordre supérieur
 
-:bulb: entité paramétrée d’ordre sup. &rarr; *`entité ayant un param. pouvant évoluer par une entité du même type qu'elle même.`*
+:bulb: entité paramétrée d’ordre sup. &rarr; `entité ayant un param. pouvant évoluer par une entité du même type qu'elle même.`
 
-:bulb: f° d’ordre sup. &rarr; *`f° qui accepte une f° en arg. et/ou rend une f° en valeur`* <small> *(callback)* </small>
+:bulb: f° d’ordre sup. &rarr; `f° qui accepte une f° en arg. et/ou rend une f° en valeur`* <small> *(callback)* </small>
 
 #### 3.2.1  Paramétrage d’une fonction par une autre
 Les itérateurs par exemple :

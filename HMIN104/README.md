@@ -18,8 +18,7 @@
 
 :bulb: analyse syntax. &rarr; `passer du txt. à une structure arborescente sur laquelle on peut travailler.`
 
-:bulb: compilat° à la volée <small>*('Just-In-Time' JIT)*</small>
-&rarr; `Combinaison de la compilation native et bytecode pour offrir portabilité et performance.`
+:bulb: compilat° à la volée <small>*('Just-In-Time' JIT)*</small> &rarr; `Combinaison de la compilation native et bytecode pour offrir portabilité et performance.`
 
 ### Difficultées
 :children_crossing: Choix de la structure de data (AST)
@@ -40,8 +39,7 @@
 * Compilat° bytecode (+portable | lang. Java)
 
 ## Le langage
-*Voir diapos 14 &rarr;
-[intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN104/cours/intro.pdf "cours d'introduction HMIN104")*
+*Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN104/cours/intro.pdf "cours d'introduction HMIN104")*
 
 :fire: Le langage utilisé est Turing-complet.
 
