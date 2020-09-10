@@ -1,5 +1,5 @@
 # HMIN102 - Compilation et interprétation
-*"D. Delahaye <3"*
+*"D. Delahaye :heart:"*
 
 ## Sommaire
 * [Liens utiles](#liens-utiles)
