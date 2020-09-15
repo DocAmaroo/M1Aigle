@@ -1,4 +1,4 @@
--- DROP TABLE IF EXISTS `mot_clé`;
+-- DROP TABLE IF EXISTS `keyword`;
 -- DROP TABLE IF EXISTS `tag`;
 -- DROP TABLE IF EXISTS `commentaire`;
 -- DROP TABLE IF EXISTS `discussion`;
@@ -39,36 +39,36 @@ CREATE TABLE conf (
     distanceFocal FLOAT(5),
 );
 
-CREATE TABLE mot_clé  (
+CREATE TABLE keyword (
     mot VARCHAR(20)
 );
 
-CREATE TABLE tag  (
+CREATE TABLE tag (
     mot VARCHAR(20)
 );
 
-CREATE TABLE albu (
+CREATE TABLE album (
     idAlbum NUMBER,
     idPhoto NUMBER,
     CONSTRAINT PK_IDALBUM PRIMARY KEY idAlbum,
     CONSTRAINT FK_ALBUM FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto)
 );
 
-CREATE TABLE galerie  (
+CREATE TABLE galerie (
     idGalerie NUMBER,
     idPhoto NUMBER,
     CONSTRAINT PK_IDGALERIE PRIMARY KEY idGalerie,
     CONSTRAINT FK_GALERIE FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
 );
 
-CREATE TABLE discussi (
+CREATE TABLE discussion (
     idDisc NUMBER,
     idPhoto NUMBER,
     CONSTRAINT PK_IDDISCUSSION PRIMARY KEY idDisc,
     CONSTRAINT FK_DISCUSSION FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
 );
 
-CREATE TABLE commentaire  (
+CREATE TABLE commentaire (
     idCom NUMBER,
     idPhoto NUMBER,
     CONSTRAINT PK_IDCOMMENTAIRE PRIMARY KEY idCom,
