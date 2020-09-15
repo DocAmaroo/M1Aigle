@@ -1,12 +1,12 @@
--- DROP TABLE IF EXISTS `keyword`;
--- DROP TABLE IF EXISTS `tag`;
--- DROP TABLE IF EXISTS `commentaire`;
--- DROP TABLE IF EXISTS `discussion`;
--- DROP TABLE IF EXISTS `album`;
--- DROP TABLE IF EXISTS `galerie`;
--- DROP TABLE IF EXISTS `configuration`;
--- DROP TABLE IF EXISTS `appareil`;
--- DROP TABLE IF EXISTS `utilisateur`;
+DROP TABLE IF EXISTS `keyword`;
+DROP TABLE IF EXISTS `tag`;
+DROP TABLE IF EXISTS `commentaire`;
+DROP TABLE IF EXISTS `discussion`;
+DROP TABLE IF EXISTS `album`;
+DROP TABLE IF EXISTS `galerie`;
+DROP TABLE IF EXISTS `configuration`;
+DROP TABLE IF EXISTS `appareil`;
+DROP TABLE IF EXISTS `utilisateur`;
 
 CREATE TABLE utilisateur  (
     idUser NUMBER,
