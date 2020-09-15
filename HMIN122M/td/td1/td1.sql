@@ -5,7 +5,7 @@
 -- DROP TABLE IF EXISTS `album`;
 -- DROP TABLE IF EXISTS `galerie`;
 -- DROP TABLE IF EXISTS `configuration`;
--- DROP TABLE IF EXISTS `appareil_photo`;
+-- DROP TABLE IF EXISTS `appareil`;
 -- DROP TABLE IF EXISTS `utilisateur`;
 
 CREATE TABLE utilisateur  (
@@ -23,7 +23,7 @@ CREATE TABLE photographie (
     CONSTRAINT FK_PHOTO_IDUSER FOREIGN KEY (idUser) REFERENCES utilisateur (idUser)
 );
 
-CREATE TABLE appareil_photo (
+CREATE TABLE appareil (
     idAppPhoto NUMBER,
     datePrise DATE,
     coordonnee VARCHAR(20),
