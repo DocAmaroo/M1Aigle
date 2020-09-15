@@ -18,14 +18,16 @@ CREATE TABLE photographie (
     licence VARCHAR2(15),
     datePublication DATE,
     nbLike NUMBER,
+    idUser NUMBER,
     CONSTRAINT PK_IDPHOTO PRIMARY KEY (idPhoto),
     CONSTRAINT FK_PHOTO_IDUSER FOREIGN KEY (idUser) REFERENCES utilisateur (idUser)
 );
 
-CREATE TABLE appareil_pho (
+CREATE TABLE appareil_photo (
     idAppPhoto NUMBER,
     datePrise DATE,
     coordonnee VARCHAR(20),
+    idUser NUMBER,
     CONSTRAINT PK_IDAPPPHOTO PRIMARY KEY (idAppPhoto),
     CONSTRAINT FK_APPPHOTO FOREIGN KEY (idUser) REFERENCES utilisateur (idUser) 
 );
@@ -46,25 +48,29 @@ CREATE TABLE tag  (
 );
 
 CREATE TABLE albu (
-    idAlbum INT,
+    idAlbum NUMBER,
+    idPhoto NUMBER,
     CONSTRAINT PK_IDALBUM PRIMARY KEY idAlbum,
     CONSTRAINT FK_ALBUM FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto)
 );
 
 CREATE TABLE galerie  (
-    idGalerie INT,
+    idGalerie NUMBER,
+    idPhoto NUMBER,
     CONSTRAINT PK_IDGALERIE PRIMARY KEY idGalerie,
     CONSTRAINT FK_GALERIE FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
 );
 
 CREATE TABLE discussi (
-    idDisc INT,
+    idDisc NUMBER,
+    idPhoto NUMBER,
     CONSTRAINT PK_IDDISCUSSION PRIMARY KEY idDisc,
     CONSTRAINT FK_DISCUSSION FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
 );
 
 CREATE TABLE commentaire  (
-    idCom INT,
+    idCom NUMBER,
+    idPhoto NUMBER,
     CONSTRAINT PK_IDCOMMENTAIRE PRIMARY KEY idCom,
     CONSTRAINT FK_COMMENTAIRE FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto)
 );
