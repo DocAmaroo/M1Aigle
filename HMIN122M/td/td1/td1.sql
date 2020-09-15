@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS `mot_clé`
+DROP TABLE IF EXISTS `tag`
+DROP TABLE IF EXISTS `commentaire`
+DROP TABLE IF EXISTS `discussion`
+DROP TABLE IF EXISTS `album`
+DROP TABLE IF EXISTS `galerie`
+DROP TABLE IF EXISTS `configuration`
+DROP TABLE IF EXISTS `appareil_photo`
+DROP TABLE IF EXISTS `utilisateur`
+
 CREATE TABLE `utilisateur` {
     idUser NUMBER,
     CONSTRAINT PK_IDUSER PRIMARY KEY (idUser)
