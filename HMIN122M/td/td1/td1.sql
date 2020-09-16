@@ -28,9 +28,9 @@ CREATE TABLE appareil (
     idAppPhoto NUMBER,
     datePrise DATE,
     coordonnee VARCHAR(20),
-    idUser NUMBER,
+    idPhoto NUMBER,
     CONSTRAINT PK_IDAPPPHOTO PRIMARY KEY (idAppPhoto),
-    CONSTRAINT FK_APPPHOTO FOREIGN KEY (idUser) REFERENCES utilisateur (idUser) 
+    CONSTRAINT FK_APPPHOTO FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
 );
 
 CREATE TABLE conf (
