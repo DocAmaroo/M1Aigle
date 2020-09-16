@@ -76,5 +76,7 @@ CREATE TABLE commentaire (
     CONSTRAINT FK_COMMENTAIRE FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto)
 );
 
-INSERT INTO utilisateur (idUser) VALUES (1); (2); (3);
+INSERT INTO utilisateur (idUser) VALUES (1);
+INSERT INTO utilisateur (idUser) VALUES (2); 
+INSERT INTO utilisateur (idUser) VALUES (3);
 
