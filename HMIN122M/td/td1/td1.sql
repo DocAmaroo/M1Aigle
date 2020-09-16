@@ -16,7 +16,7 @@ CREATE TABLE utilisateur  (
 
 CREATE TABLE photographie (
     idPhoto NUMBER,
-    licence VARCHAR(15),
+    licence VARCHAR(25),
     datePublication DATE,
     nbLike NUMBER,
     idUser NUMBER,
