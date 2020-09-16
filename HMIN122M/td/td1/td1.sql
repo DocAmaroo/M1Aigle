@@ -81,5 +81,5 @@ INSERT INTO utilisateur (idUser) VALUES (2);
 INSERT INTO utilisateur (idUser) VALUES (3);
 
 INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (1, 'TOUS_DROIT', DATE '2020-09-01', 10, 1);
-INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (2, "TOUT_DROITS", DATE '2020-09-02', 15, 2);
-INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (3, "TOUT_DROITS", DATE '2020-09-03', 50, 3);
+INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (2, 'TOUT_DROITS', DATE '2020-09-02', 15, 2);
+INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (3, 'TOUT_DROITS', DATE '2020-09-03', 50, 3);
