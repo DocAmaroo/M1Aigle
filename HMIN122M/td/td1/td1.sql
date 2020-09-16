@@ -6,6 +6,7 @@ DROP TABLE album;
 DROP TABLE galerie;
 DROP TABLE configuration;
 DROP TABLE appareil;
+DROP TABLE photographie;
 DROP TABLE utilisateur;
 
 CREATE TABLE utilisateur  (
