@@ -29,7 +29,7 @@ CREATE TABLE appareil (
     datePrise DATE,
     coordonnee VARCHAR(20),
     idPhoto NUMBER,
-    CONSTRAINT PK_IDAPPPHOTO PRIMARY KEY (idAppPhoto),
+    CONSTRAINT PK_IDAPPAREIL PRIMARY KEY (idAppPhoto),
     CONSTRAINT FK_APPPHOTO FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
 );
 
