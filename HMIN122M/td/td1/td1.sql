@@ -36,7 +36,7 @@ CREATE TABLE appareil (
 CREATE TABLE config (
     ouvertureFocal FLOAT(5),
     tempsExpo NUMBER,
-    flashActive BOOLEAN,
+    flashActive INT,
     distanceFocal FLOAT(5)
 );
 
