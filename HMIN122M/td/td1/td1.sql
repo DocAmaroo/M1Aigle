@@ -30,7 +30,7 @@ CREATE TABLE appareil (
     coordonnee VARCHAR(20),
     idPhoto NUMBER,
     CONSTRAINT PK_IDAPPAREIL PRIMARY KEY (idAppPhoto),
-    CONSTRAINT FK_APPPHOTO FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
+    CONSTRAINT FK_APPAREIL FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
 );
 
 CREATE TABLE config (
