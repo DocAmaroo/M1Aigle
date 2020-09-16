@@ -6,8 +6,8 @@ DROP TABLE album;
 DROP TABLE galerie;
 DROP TABLE config;
 DROP TABLE appareil;
-DROP TABLE utilisateur;
 DROP TABLE photographie;
+DROP TABLE utilisateur;
 
 CREATE TABLE utilisateur  (
     idUser NUMBER,
