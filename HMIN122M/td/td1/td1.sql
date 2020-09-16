@@ -84,9 +84,9 @@ INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VAL
 INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (2, 'UTILISATION_COMMERCIAL', DATE '2020-09-02', 15, 2);
 INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (3, 'TOUT_DROITS', DATE '2020-09-03', 50, 3);
 
-INSERT INTO appareil (idPhoto, datePrise, coordonee) VALUES (1, DATE '2020-05-25', '46.329, 35.298');
-INSERT INTO appareil (idPhoto, datePrise, coordonee) VALUES (2, DATE '2020-01-05', '44.168, 33.268');
-INSERT INTO appareil (idPhoto, datePrise, coordonee) VALUES (3, DATE '2020-03-12', '42.769, 32.988');
+INSERT INTO appareil (idPhoto, datePrise, coordonnee) VALUES (1, DATE '2020-05-25', '46.329, 35.298');
+INSERT INTO appareil (idPhoto, datePrise, coordonnee) VALUES (2, DATE '2020-01-05', '44.168, 33.268');
+INSERT INTO appareil (idPhoto, datePrise, coordonnee) VALUES (3, DATE '2020-03-12', '42.769, 32.988');
 
 INSERT INTO config (idPhoto, ouvertureFocal, tempsExpo, flashActive, distanceFocal) VALUES (1, 3.5, 2, 1, 2.98);
 INSERT INTO config (idPhoto, ouvertureFocal, tempsExpo, flashActive, distanceFocal) VALUES (2, 2.8, 1, 0, 1.75);
