@@ -16,7 +16,7 @@ CREATE TABLE utilisateur  (
 
 CREATE TABLE photographie (
     idPhoto NUMBER,
-    licence VARCHAR2(15),
+    licence VARCHAR(15),
     datePublication DATE,
     nbLike NUMBER,
     idUser NUMBER,
@@ -75,3 +75,4 @@ CREATE TABLE commentaire (
     CONSTRAINT PK_IDCOMMENTAIRE PRIMARY KEY (idCom),
     CONSTRAINT FK_COMMENTAIRE FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto)
 );
+
