@@ -4,7 +4,7 @@ DROP TABLE commentaire;
 DROP TABLE discussion;
 DROP TABLE album;
 DROP TABLE galerie;
-DROP TABLE configuration;
+DROP TABLE config;
 DROP TABLE appareil;
 DROP TABLE photographie;
 DROP TABLE utilisateur;
@@ -33,11 +33,11 @@ CREATE TABLE appareil (
     CONSTRAINT FK_APPPHOTO FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
 );
 
-CREATE TABLE conf (
+CREATE TABLE config (
     ouvertureFocal FLOAT(5),
     tempsExpo NUMBER,
     flashActive BOOLEAN,
-    distanceFocal FLOAT(5),
+    distanceFocal FLOAT(5)
 );
 
 CREATE TABLE keyword (
