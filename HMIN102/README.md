@@ -12,7 +12,10 @@
     * [3.2 Entités d'ordre supérieur](#32-entités-dordre-supérieur)
 * [4. Les schémas de réutilisation en PPO](#4-les-schémas-de-réutilisation-en-ppo)
     * [4.1 Rappels](#41-rappels)
-
+    * [4.2 Schéma de réutilisations](#42-schéma-de-réutilisations)
+    * [4.3 Paramétrage par spécialisation](#43-paramétrage-par-spécialisation)
+    * [4.4 Paramétrage par composition](#44-paramétrage-par-composition)
+* [5. Spécificités du typage statique en présence d’affectation polymorphique](#5-spécificités-du-typage-statique-en-présence-daffectation-polymorphique)
 ## Liens utiles :
 [*Accès au cours*](http://www.lirmm.fr/~dony/ "Accèder au cours") <small> ["UEs en cours"] </small>
 
@@ -136,10 +139,26 @@ class A{
 
 ### 4.1 Rappels
 :bulb: `envoi de message` &rarr; autre nom donné à l'appel de méth.
-:bulb: `receveur courant` &rarr; au sein d'une méth. *M*, le receveur <small>(accessible via `this`)</small> est l'obj. auquel a été envoyé le msg. ayant conduit à l'exec. de *M*. 
-:bulb: `liaison dynamique (ou tardive)` &rarr; l'appel de méth. se distingue de l'appel de f° pour savoir qu'elle méth. invoquer suite à un appel de méth. donnée, non décidable par analyse statique, mais nécessite la connaissance du type du receveur, connu à l'exec
+:bulb: `receveur courant` &rarr; au sein d'une méth. *M*, le receveur *<small>(accessible via `this`)</small>* est l'obj. auquel a été envoyé le msg. ayant conduit à l'exec. de *M*. 
+:bulb: `liaison dynamique (ou tardive)` &rarr; mécanisme distinct *<small>(bien qu'étroitement lié)</small>* de l'héritage. C'est le fait qu'un nom de fonction membre d'une classe de base peut être associé à une fonction membre d'une classe dérivée.
+*<small>NB : un même nom de fonction pourra correspondre à des réalisations différentes suivant les classes dérivées</small>*
 
-:bulb: `` &rarr; 
-:bulb: `` &rarr; 
-:bulb: `` &rarr; 
-:bulb: `` &rarr; 
+### 4.2 Schéma de réutilisations
+:bulb: `description différentielle` &rarr; permet l'ajout sur une nouvelle sous-classe, de nouvelles propriétés et la **spécialisation** de propriétés existantes, notamment des méth.
+:bulb: `spécialisation` &rarr; Définition d’une méth. M sur une sous-classe SC d’une classe C où une méth M est déjà définie. (*<small>`@Override`</small>*)
+:bulb: `masquage` &rarr; redéf. sur une classe C, masque, pour les instances de C, la méth. redéfinie.
+:bulb: `sémantique` &rarr; un appel à *`super`*, revient à envoyer un message au receveur courant mais en cherchant la méth. dans la surclasse dans laquelle la méth. a été trouvée.
+
+### 4.3 Paramétrage par spécialisation
+:triangular_flag_on_post: **But :** Adapter une méth. à de nouveaux contexte sans modif./duplicat° de son code. (*<small>`méth./classe abstraite`</small>*)
+
+### 4.4 Paramétrage par composition
+:bulb: `affectation polymorphique` &rarr; un type (T), peut être déf. comme un sous-type (ST) d'un autre.
+```java
+// exemple;
+Collection L = new ArrayList();
+// Collection : T
+// ArrayList() : ST
+```
+
+## 5. Spécificités du typage statique en présence d’affectation polymorphique
