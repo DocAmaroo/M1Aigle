@@ -37,7 +37,7 @@ ou encore
 <!DOCTYPE D [
     <!ELEMENT D (C*, E*, B*, C*, E)>
     <!ELEMENT C EMPTY>
-    <!ELEMENT D EMPTY>
+    <!ELEMENT B EMPTY>
     <!ELEMENT E EMPTY>
 ]>
 ```
