@@ -5,12 +5,13 @@
 * [Liens utiles](#liens-utiles)
 * [1. Programme](#1-programme)
 * [2. Réutilisation](#2-réutilisation)
-    * [2.1 - Définitions](#21-définitions)
-    * [2.2 - Généralisation](#22-généralisation)
+    * [2.1 Définitions](#21-définitions)
+    * [2.2 Généralisation](#22-généralisation)
 * [3. Schémas avancés de paramétrage](#3-schémas-avancés-de-paramétrage)
-    * [3.1 - Définitions](#31-définitions)
-    * [3.2 - Entités d'ordre supérieur](#32-entités-dordre-supérieur)
-        * [3.2.1 Paramétrage d’une fonction par une autre](#321-paramétrage-dune-fonction-par-une-autre)
+    * [3.1 Définitions](#31-définitions)
+    * [3.2 Entités d'ordre supérieur](#32-entités-dordre-supérieur)
+* [4. Les schémas de réutilisation en PPO](#4-les-schémas-de-réutilisation-en-ppo)
+    * [4.1 Rappels](#41-rappels)
 
 ## Liens utiles :
 [*Accès au cours*](http://www.lirmm.fr/~dony/ "Accèder au cours") <small> ["UEs en cours"] </small>
@@ -106,3 +107,39 @@ Les itérateurs par exemple :
 (map carre '(1 2 3))
 = (1 4 9)
 ```
+
+#### 3.2.2 Paramétrage d’une fonction par une fontion
+```scheme
+;exemple
+(tri '(4 3 1 2) <)
+= (1 2 3 4)
+```
+
+#### 3.2.3 Paramétrage d’un ensemble de fonctions par une fonction
+```scheme
+;exemple
+SC := SortedCollection sortBlock:[:a :b|a year<b year];
+SC add:(Date newDay:22year:2000);
+SC add:(Date newDay:22year:2000);
+```
+
+#### 3.2.4 Paramétrage d'un ensemble de fonctions par un autre ensemble de fonctions
+```c
+class A{
+    public int f1(C c) { return1 + c.g() + c.h(); }
+    public int f2(C c){ return2 ∗ c.g() ∗ c.h(); }
+```
+
+*<small>NB : Passer un obj. en arg. revient à passer =mt toutes les f° def. sur la classe</small>*
+
+## 4. Les schémas de réutilisation en PPO
+
+### 4.1 Rappels
+:bulb: `envoi de message` &rarr; autre nom donné à l'appel de méth.
+:bulb: `receveur courant` &rarr; au sein d'une méth. *M*, le receveur <small>(accessible via `this`)</small> est l'obj. auquel a été envoyé le msg. ayant conduit à l'exec. de *M*. 
+:bulb: `liaison dynamique (ou tardive)` &rarr; l'appel de méth. se distingue de l'appel de f° pour savoir qu'elle méth. invoquer suite à un appel de méth. donnée, non décidable par analyse statique, mais nécessite la connaissance du type du receveur, connu à l'exec
+
+:bulb: `` &rarr; 
+:bulb: `` &rarr; 
+:bulb: `` &rarr; 
+:bulb: `` &rarr; 

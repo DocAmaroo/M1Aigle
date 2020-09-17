@@ -139,7 +139,7 @@ ou encore
 <!DOCTYPE tweet [
 
     <!-- tweet -->
-    <!ELEMENT tweet (date, location, language, systeme, (text+ |hashtag* | ref_user*)*)>
+    <!ELEMENT tweet (date, location, language, system, url*, (text+ |hashtag* | ref_user*)*)>
     <!ATTLIST tweet id ID #REQUIRED>
     <!ATTLIST tweet retweet CDATA>
 
@@ -164,6 +164,10 @@ ou encore
 
     <!-- system -->
     <!ELEMENT system (#PCDATA)>
+
+    <!-- url -->
+    <!ELEMENT a (#PCDATA)>
+    <!ATTLIST a href CDATA #REQUIRED>
 
     <!-- text -->
     <!ELEMENT text (#PCDATA)>
