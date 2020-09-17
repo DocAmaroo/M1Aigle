@@ -139,14 +139,19 @@ class A{
 
 ### 4.1 Rappels
 :bulb: `envoi de message` &rarr; autre nom donné à l'appel de méth.
+
 :bulb: `receveur courant` &rarr; au sein d'une méth. *M*, le receveur *<small>(accessible via `this`)</small>* est l'obj. auquel a été envoyé le msg. ayant conduit à l'exec. de *M*. 
+
 :bulb: `liaison dynamique (ou tardive)` &rarr; mécanisme distinct *<small>(bien qu'étroitement lié)</small>* de l'héritage. C'est le fait qu'un nom de fonction membre d'une classe de base peut être associé à une fonction membre d'une classe dérivée.
 *<small>NB : un même nom de fonction pourra correspondre à des réalisations différentes suivant les classes dérivées</small>*
 
 ### 4.2 Schéma de réutilisations
 :bulb: `description différentielle` &rarr; permet l'ajout sur une nouvelle sous-classe, de nouvelles propriétés et la **spécialisation** de propriétés existantes, notamment des méth.
+
 :bulb: `spécialisation` &rarr; Définition d’une méth. M sur une sous-classe SC d’une classe C où une méth M est déjà définie. (*<small>`@Override`</small>*)
+
 :bulb: `masquage` &rarr; redéf. sur une classe C, masque, pour les instances de C, la méth. redéfinie.
+
 :bulb: `sémantique` &rarr; un appel à *`super`*, revient à envoyer un message au receveur courant mais en cherchant la méth. dans la surclasse dans laquelle la méth. a été trouvée.
 
 ### 4.3 Paramétrage par spécialisation
