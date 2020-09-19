@@ -40,4 +40,5 @@
 
 :triangular_flag_on_post: **HMIN122M** 
 
+- [ X ] Finir TD/TP 2
 :triangular_flag_on_post: **English** 
