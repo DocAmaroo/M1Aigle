@@ -30,6 +30,7 @@
 
 :triangular_flag_on_post: **HMIN103** 
 - [ ] faire mémoire sur partie XML/DTD
+- [ ] finir td/tp 2
 
 :triangular_flag_on_post: **HMIN104** 
 - [ ] faire mémoire assembleur + revoir td/tp
