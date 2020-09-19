@@ -39,6 +39,6 @@
 - [ ] faire mémoire threads + revoir td/tp
 
 :triangular_flag_on_post: **HMIN122M** 
+- [X] Mettre TD/TP 2 au propre
 
-- [ X ] Finir TD/TP 2
 :triangular_flag_on_post: **English** 
