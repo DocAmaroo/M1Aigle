@@ -18,6 +18,7 @@ CREATE TABLE photographie (
     idPhoto NUMBER,
     licence VARCHAR(25),
     datePublication DATE,
+    nbVue NUMBER,
     nbLike NUMBER,
     idUser NUMBER,
     CONSTRAINT PK_IDPHOTO PRIMARY KEY (idPhoto),
@@ -51,9 +52,15 @@ CREATE TABLE tag (
 
 CREATE TABLE album (
     idAlbum NUMBER,
+    idUser NUMBER,
     idPhoto NUMBER,
     CONSTRAINT PK_IDALBUM PRIMARY KEY (idAlbum),
-    CONSTRAINT FK_ALBUM FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto)
+    CONSTRAINT FK_ALBUM FOREIGN KEY (idPhoto) REFERENCES photographie (idUser, idPhoto)
+
+    -- vérifier que idUser.album == idUser.photographie
+    --CHECK ( 
+    --    idUser.album = idUser.photographie
+    --)
 );
 
 CREATE TABLE galerie (
@@ -65,25 +72,23 @@ CREATE TABLE galerie (
 
 CREATE TABLE discussion (
     idDisc NUMBER,
-    idPhoto NUMBER,
     CONSTRAINT PK_IDDISCUSSION PRIMARY KEY (idDisc),
-    CONSTRAINT FK_DISCUSSION FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto) 
+    CONSTRAINT FK_DISCUSSION FOREIGN KEY (idDisc) REFERENCES photographie (idPhoto) 
 );
 
 CREATE TABLE commentaire (
-    idCom NUMBER,
-    idPhoto NUMBER,
-    CONSTRAINT PK_IDCOMMENTAIRE PRIMARY KEY (idCom),
-    CONSTRAINT FK_COMMENTAIRE FOREIGN KEY (idPhoto) REFERENCES photographie (idPhoto)
+    comment VARCHAR(240),
+    idDisc NUMBER,
+    CONSTRAINT FK_COMMENTAIRE FOREIGN KEY (idDisc) REFERENCES discussion (idDisc)
 );
 
 INSERT INTO utilisateur (idUser) VALUES (1);
 INSERT INTO utilisateur (idUser) VALUES (2); 
 INSERT INTO utilisateur (idUser) VALUES (3);
 
-INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (1, 'TOUS_DROITS', DATE '2020-09-01', 10, 1);
-INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (2, 'UTILISATION_COMMERCIAL', DATE '2020-09-02', 15, 2);
-INSERT INTO photographie (idPhoto, licence, datePublication, nbLike, idUser) VALUES (3, 'TOUT_DROITS', DATE '2020-09-03', 50, 3);
+INSERT INTO photographie (idPhoto, licence, datePublication, nbVue, nbLike, idUser) VALUES (1, 'TOUS_DROITS', DATE '2020-09-01', 15, 10, 1);
+INSERT INTO photographie (idPhoto, licence, datePublication, nbVue, nbLike, idUser) VALUES (2, 'UTILISATION_COMMERCIAL', DATE '2020-09-02', 23, 15, 2);
+INSERT INTO photographie (idPhoto, licence, datePublication, nbVue, nbLike, idUser) VALUES (3, 'TOUT_DROITS', DATE '2020-09-03', 35, 50, 3);
 
 INSERT INTO appareil (idPhoto, datePrise, coordonnee) VALUES (1, DATE '2020-05-25', '46.329, 35.298');
 INSERT INTO appareil (idPhoto, datePrise, coordonnee) VALUES (2, DATE '2020-01-05', '44.168, 33.268');
