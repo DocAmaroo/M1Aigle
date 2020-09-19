@@ -104,6 +104,7 @@ Version final :
 / à refaire
 
 ## Exercice 4 : 
-r1 :
-r1# = (a1* | (b1|a1)) | (b2, (a2|c))
-FirstTag(r1#) = FirstTag( (a1* | (b1|a1)) ) U FirstTag((b2, (a2|c)))
+/ faire les first tag tout ça
+
+
+
