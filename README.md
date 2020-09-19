@@ -36,7 +36,7 @@
 - [ ] faire mémoire assembleur + revoir td/tp
 
 :triangular_flag_on_post: **HMIN105** 
-- [ ] faire mémoire assembleur + revoir td/tp
+- [ ] faire mémoire threads + revoir td/tp
 
 :triangular_flag_on_post: **HMIN122M** 
 
