@@ -27,6 +27,7 @@
 
 :triangular_flag_on_post: **HMIN102** 
 - [ ] lire suite du cours (5.)
+- [ ] finir td/tp
 
 :triangular_flag_on_post: **HMIN103** 
 - [ ] faire mémoire sur partie XML/DTD
