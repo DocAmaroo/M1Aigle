@@ -1,57 +1,59 @@
-<tweet_data>
-    <tweet id="1" os="computer">
+<twitter>
+    <profiles>
         <profile idUser="u63541351">
             <pseudo>MTV Music</pseudo>
-            <ref-user type="" size="" color="gray">@MTVMusicUK</ref-user>
+            <ref-user color="gray" idRef="u63541351">@MTVMusicUK</ref-user>
             <description>j'adore l'XML et la brandade de morue !</description>
-            <picture>https://imgur.com/gallery/WsUV4DK</picture>
-            <!-- 
-                on avait pensé à potentiellement faire quelque chose comme ça aussi :
-                <picture> <img src="https://imgur.com/gallery/WsUV4DK" alt="profile pic"/> </picture> 
-            -->
+            <picture src="https://imgur.com/gallery/WsUV4DK"></picture>
             <followers>
-                <follower idRef="u55458"/>
-                <follower idRef="u54934"/>
+                <follower idUser="u55458"/>
+                <follower idUser="u54934"/>
             </followers>
-            <follow>
-                <follow idRef="u68468"/>
-                <follow idRef="u4686"/>
-            </follow>
+            <follows>
+                <follow idUser="u68468"/>
+                <follow idUser="u4686"/>
+            </follows>
         </profile>
+    </profiles>
 
-        <date>
-            <day>18</day>
-            <month>09</month>
-            <year>2020</year>
-            <hour>07</hour>
-            <minute>01</minute>
-            <second>09</second>
-            <fuseau>UTC+1</fuseau>
-        </date>
+    <tweets>
+        <tweet id="1" idUser="u63541351" os="computer">
+            <date>
+                <day>18</day>
+                <month>09</month>
+                <year>2020</year>
+                <hour>07</hour>
+                <minute>01</minute>
+                <second>09</second>
+                <fuseau>UTC+1</fuseau>
+            </date>
 
-        <location>
-            <longitude>43.610658</longitude>
-            <latitude>3.876479</latitude>
-            <city>Montpellier</city>
-            <country>France</country>
-        </location>
+            <location>
+                <longitude>43.610658</longitude>
+                <latitude>3.876479</latitude>
+                <city>Montpellier</city>
+                <country>France</country>
+            </location>
 
-        <corps language="en">
-            <text>.</text>
-            <ref-user>@example</ref-user>
-            <text>absolutely smashed it at</text>
-            <hashtag>#mtvlivelockdown</hashtag>
-            <text>! Catch him at the official</text>
-            <ref-user>@clubmtvuk</ref-user>
-            <text>after party tonight @ 10pm</text>
-        </corps>
+            <corps language="en">
+                <text>.</text>
+                <ref-user idRef="u016818">@example</ref-user>
+                <text>absolutely smashed it at</text>
+                <hashtag>#mtvlivelockdown</hashtag>
+                <text>! Catch him at the official</text>
+                <ref-user idRef="u68684">@clubmtvuk</ref-user>
+                <text>after party tonight @ 10pm</text>
+            </corps>
 
-        <nbrRt>"??"</nbrRt>
+            <nbrRt>"??"</nbrRt>
 
-		<reponses>
-			<reponse idT="t1" language="en">
-				<txt >"Ok."</txt>
-			</reponse>
-		</reponses>
-    </tweet>
-</tweet_data>
+            <reponses>
+                <reponse idTweet="t1">
+                    <corps language="en">
+                        <text>Insane !</text>
+                    </corps>
+                </reponse>
+            </reponses>
+        </tweet>
+    </tweets>
+<twitter>
