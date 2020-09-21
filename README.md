@@ -21,3 +21,25 @@
 # Semestre 2
 
 :construction:
+
+
+# TODO LIST
+
+:triangular_flag_on_post: **HMIN102** 
+- [ ] lire suite du cours (5.)
+- [ ] finir td/tp
+
+:triangular_flag_on_post: **HMIN103** 
+- [ ] faire mémoire sur partie XML/DTD
+- [ ] finir td/tp 2
+
+:triangular_flag_on_post: **HMIN104** 
+- [ ] faire mémoire assembleur + revoir td/tp
+
+:triangular_flag_on_post: **HMIN105** 
+- [ ] faire mémoire threads + revoir td/tp
+
+:triangular_flag_on_post: **HMIN122M** 
+- [X] Mettre TD/TP 2 au propre
+
+:triangular_flag_on_post: **English** 

@@ -5,13 +5,17 @@
 * [Liens utiles](#liens-utiles)
 * [1. Programme](#1-programme)
 * [2. Réutilisation](#2-réutilisation)
-    * [2.1 - Définitions](#21-définitions)
-    * [2.2 - Généralisation](#22-généralisation)
+    * [2.1 Définitions](#21-définitions)
+    * [2.2 Généralisation](#22-généralisation)
 * [3. Schémas avancés de paramétrage](#3-schémas-avancés-de-paramétrage)
-    * [3.1 - Définitions](#31-définitions)
-    * [3.2 - Entités d'ordre supérieur](#32-entités-dordre-supérieur)
-        * [3.2.1 Paramétrage d’une fonction par une autre](#321-paramétrage-dune-fonction-par-une-autre)
-
+    * [3.1 Définitions](#31-définitions)
+    * [3.2 Entités d'ordre supérieur](#32-entités-dordre-supérieur)
+* [4. Les schémas de réutilisation en PPO](#4-les-schémas-de-réutilisation-en-ppo)
+    * [4.1 Rappels](#41-rappels)
+    * [4.2 Schéma de réutilisations](#42-schéma-de-réutilisations)
+    * [4.3 Paramétrage par spécialisation](#43-paramétrage-par-spécialisation)
+    * [4.4 Paramétrage par composition](#44-paramétrage-par-composition)
+* [5. Spécificités du typage statique en présence d’affectation polymorphique](#5-spécificités-du-typage-statique-en-présence-daffectation-polymorphique)
 ## Liens utiles :
 [*Accès au cours*](http://www.lirmm.fr/~dony/ "Accèder au cours") <small> ["UEs en cours"] </small>
 
@@ -106,3 +110,60 @@ Les itérateurs par exemple :
 (map carre '(1 2 3))
 = (1 4 9)
 ```
+
+#### 3.2.2 Paramétrage d’une fonction par une fontion
+```scheme
+;exemple
+(tri '(4 3 1 2) <)
+= (1 2 3 4)
+```
+
+#### 3.2.3 Paramétrage d’un ensemble de fonctions par une fonction
+```scheme
+;exemple
+SC := SortedCollection sortBlock:[:a :b|a year<b year];
+SC add:(Date newDay:22year:2000);
+SC add:(Date newDay:22year:2000);
+```
+
+#### 3.2.4 Paramétrage d'un ensemble de fonctions par un autre ensemble de fonctions
+```c
+class A{
+    public int f1(C c) { return1 + c.g() + c.h(); }
+    public int f2(C c){ return2 ∗ c.g() ∗ c.h(); }
+```
+
+*<small>NB : Passer un obj. en arg. revient à passer =mt toutes les f° def. sur la classe</small>*
+
+## 4. Les schémas de réutilisation en PPO
+
+### 4.1 Rappels
+:bulb: `envoi de message` &rarr; autre nom donné à l'appel de méth.
+
+:bulb: `receveur courant` &rarr; au sein d'une méth. *M*, le receveur *<small>(accessible via `this`)</small>* est l'obj. auquel a été envoyé le msg. ayant conduit à l'exec. de *M*. 
+
+:bulb: `liaison dynamique (ou tardive)` &rarr; mécanisme distinct *<small>(bien qu'étroitement lié)</small>* de l'héritage. C'est le fait qu'un nom de fonction membre d'une classe de base peut être associé à une fonction membre d'une classe dérivée.
+*<small>NB : un même nom de fonction pourra correspondre à des réalisations différentes suivant les classes dérivées</small>*
+
+### 4.2 Schéma de réutilisations
+:bulb: `description différentielle` &rarr; permet l'ajout sur une nouvelle sous-classe, de nouvelles propriétés et la **spécialisation** de propriétés existantes, notamment des méth.
+
+:bulb: `spécialisation` &rarr; Définition d’une méth. M sur une sous-classe SC d’une classe C où une méth M est déjà définie. (*<small>`@Override`</small>*)
+
+:bulb: `masquage` &rarr; redéf. sur une classe C, masque, pour les instances de C, la méth. redéfinie.
+
+:bulb: `sémantique` &rarr; un appel à *`super`*, revient à envoyer un message au receveur courant mais en cherchant la méth. dans la surclasse dans laquelle la méth. a été trouvée.
+
+### 4.3 Paramétrage par spécialisation
+:triangular_flag_on_post: **But :** Adapter une méth. à de nouveaux contexte sans modif./duplicat° de son code. (*<small>`méth./classe abstraite`</small>*)
+
+### 4.4 Paramétrage par composition
+:bulb: `affectation polymorphique` &rarr; un type (T), peut être déf. comme un sous-type (ST) d'un autre.
+```java
+// exemple;
+Collection L = new ArrayList();
+// Collection : T
+// ArrayList() : ST
+```
+
+## 5. Spécificités du typage statique en présence d’affectation polymorphique

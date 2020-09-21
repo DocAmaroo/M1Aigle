@@ -37,7 +37,7 @@ ou encore
 <!DOCTYPE D [
     <!ELEMENT D (C*, E*, B*, C*, E)>
     <!ELEMENT C EMPTY>
-    <!ELEMENT D EMPTY>
+    <!ELEMENT B EMPTY>
     <!ELEMENT E EMPTY>
 ]>
 ```
@@ -138,10 +138,15 @@ ou encore
 ```xml
 <!DOCTYPE tweet [
 
+    <!-- tweet_data -->
+    <!ELEMENT tweet_data (tweet)*>
+
     <!-- tweet -->
-    <!ELEMENT tweet (date, location, language, systeme, (text+ |hashtag* | ref_user*)*)>
+    <!ELEMENT tweet (date, location, language, system, corps*) >
     <!ATTLIST tweet id ID #REQUIRED>
-    <!ATTLIST tweet retweet CDATA>
+    <!ATTLIST nb_retweet CDATA>
+    <!ATTLIST system CDATA>
+    <!ATTLIST language CDATA>
 
     <!-- date -->
     <!ELEMENT date (day, month, year, hour, minute, second)>
@@ -159,29 +164,26 @@ ou encore
     <!ELEMENT city (#PCDATA)>
     <!ELEMENT country (#PCDATA)>
 
-    <!-- language -->
-    <!ELEMENT language (#PCDATA)>
-
-    <!-- system -->
-    <!ELEMENT system (#PCDATA)>
+    <!-- corps -->
+    <!ELEMENT corps (text | hashtag | ref_user)+>
 
     <!-- text -->
     <!ELEMENT text (#PCDATA)>
-    <!ATTLIST text font_type CDATA #REQUIRED>
-    <!ATTLIST text font_size CDATA #REQUIRED>
-    <!ATTLIST text font_color CDATA #REQUIRED>
+    <!ATTLIST text type CDATA "serif">
+    <!ATTLIST text size CDATA "12">
+    <!ATTLIST text color CDATA "black">
 
     <!-- hashtag -->
     <!ELEMENT hashtag (#PCDATA)>
-    <!ATTLIST hashtag font_type CDATA #REQUIRED>
-    <!ATTLIST hashtag font_size CDATA #REQUIRED>
-    <!ATTLIST hashtag font_color CDATA #REQUIRED>
+    <!ATTLIST hashtag type CDATA "serif">
+    <!ATTLIST hashtag size CDATA "12">
+    <!ATTLIST hashtag color CDATA "blue">
 
     <!-- ref_user -->    
     <!ELEMENT ref_user (#PCDATA)>
-    <!ATTLIST ref_user font_type CDATA #REQUIRED>
-    <!ATTLIST ref_user font_size CDATA #REQUIRED>
-    <!ATTLIST ref_user font_color CDATA #REQUIRED>
+    <!ATTLIST ref_user type CDATA "serif">
+    <!ATTLIST ref_user size CDATA "12">
+    <!ATTLIST ref_user color CDATA "blue">
 
     <!-- retweet -->
     <!ELEMENT retweet (tweet)>
@@ -191,6 +193,7 @@ ou encore
 
     <!-- profile -->
     <!ELEMENT profile (description, pp, followers, follow)>
+    <!ATTLIST profile idUser ID #REQUIRED>
     <!ELEMENT description (#PCDATA) #REQUIRED>
     <!ELEMENT pp (#PCDATA) #REQUIRED>
     <!ELEMENT followers (#PCDATA)>
