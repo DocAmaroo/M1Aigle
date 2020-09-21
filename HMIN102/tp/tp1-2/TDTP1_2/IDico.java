@@ -1,4 +1,4 @@
-package dico;
+package TDTP1_2;
 
 public interface IDico {
 	public Object get(Object key);

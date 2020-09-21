@@ -1,4 +1,4 @@
-package dico;
+package TDTP1_2;
 
 public abstract class AbstractDico implements IDico {
 	protected Object keys[];
