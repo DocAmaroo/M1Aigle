@@ -5,7 +5,7 @@ public class FastDico extends AbstractDico{
 	public FastDico(int length) {
 		super(length);
 	}
-	
+
 	@Override
 	public int size() {
 		int result = 0;
@@ -17,57 +17,66 @@ public class FastDico extends AbstractDico{
 		
 		return result;
 	}
-	
+
 	public boolean mustGrown() {
-		return this.size() >= 3/4*(keys.length-1);
+		return this.size() >= (int)(3/4*(keys.length));
 	}
 
 	public void grow() {
-		while (this.mustGrown()) {
-			Object tmpKeys[] = new Object[this.size()+1];
-			Object tmpValues[] = new Object[this.size()+1];
-			
-			int index = 0;
-			while( index < this.size() ) {
-				tmpKeys[index] = keys[index];
-				tmpValues[index] = values[index];
-				
-				keys = tmpKeys;
-				values = tmpValues;
-			}
+		int length = keys.length;
+		Object[] newKeys = new Object[length + (int) Math.ceil(length/4)];
+		Object[] newValues = new Object[length + (int) Math.ceil(length/4)];
+
+		int size = this.size();
+
+		for (int i = 0; i < keys.length; i++) {
+			this.put(newKeys[i], newValues[i]);
 		}
+
+		this.keys = newKeys;
+		this.values = newValues;
 	}
-	
+
+
 	@Override
 	public int indexOf(Object key) {
-		return key.hashCode()%keys.length;
+		int hashkey = key.hashCode()%keys.length;
+		if (hashkey < 0) {
+			hashkey = hashkey*-1;
+		}
+
+		if( values[hashkey] == null) {
+			return hashkey;
+		}
+        else return -1;
 	}
-	
-	public IDico put(Object key, Object value) {
-		this.grow();
-		int size = keys.length;
-		int index = this.indexOf(key);
-		int i=0;
-		while(i < size) {
-			int tmp = index + i;
-			if (tmp >= size) {
-				tmp = tmp - size;
+
+	@Override
+	public int newIndexOf(Object key) {
+		if (this.mustGrown()) {
+			this.grow();
+		};
+
+		int length = keys.length;
+		int hashkey = key.hashCode()%length;
+		int cpt = 0;
+		int index = 0;
+
+		while(cpt < length) {
+			index = hashkey + cpt;
+
+			if(index >= length) {
+				// on retourne au début du tableau
+				index = index - length;
 			}
-			if (keys[tmp] == null) {
-				i = size;
-				keys[tmp] = key;
-				values[tmp] = value;
+
+			if(values[index] == null) {
+				cpt = length;
 			} else {
-				i++;
+				cpt++;
 			}
 		}
-		
-		return this;
-		
-	}
-	
-	public int newIndexOf(Object key) {
-		//appelle grow
-		return 0;
+
+		return index;
 	}
 }

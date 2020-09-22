@@ -3,43 +3,50 @@ package TDTP1_2;
 public abstract class AbstractDico implements IDico {
 	protected Object keys[];
 	protected Object values[];
-	private int length;
 	
 	public AbstractDico(int length) {
 		this.keys = new Object[length];
 		this.values = new Object[length];
-		this.length = length;
 	}
 	
 	public int size() {
-		return length;
+		return keys.length;
 	}
 	
 	public boolean isEmpty() {
-		return length == 0;
+		return this.size() == 0;
 	}
 	
 	public Object get(Object key) {
 		int index=0;
-		while( !(keys[index].equals(key)) ) {
+		while( !(key.equals(keys[index])) ) {
 			index++;
 		}
 		return values[index];
 	}
 	
-	public IDico put(Object key, Object value) {
-		return null;
-	}
-	
 	public boolean containsKey(Object key) {
 		for( int i=0; i<this.size(); i++) {
-			if ( keys[i].equals(key) ) {
+			if ( key.equals(keys[i]) ) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
+	public IDico put(Object key, Object value){
+		int index = this.indexOf(key);
+		if (index == -1) {
+			int i = this.newIndexOf(key);
+			keys[i] = key;
+			values[i] = value;
+		} else {
+			keys[index] = key;
+			values[index] = value;
+		}
+		return this;
+	}
+
 	public abstract int indexOf(Object key);
 	public abstract int newIndexOf(Object key);
 }

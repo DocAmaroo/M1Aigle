@@ -6,6 +6,13 @@ public class SortedDico extends AbstractDico{
 		super(length);
 	}
 
+	public boolean mustGrown() {
+		return false;
+	}
+
+	public void grow() {
+	}
+
 	@Override
 	public int indexOf(Object key) {
 		return 0;
