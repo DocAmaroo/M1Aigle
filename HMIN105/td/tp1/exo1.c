@@ -19,7 +19,7 @@ void* fonctionThread (){
 
 	//struct paramsFonctionThread * args = (struct paramsFonctionThread *) params;
     pthread_t thread = pthread_self();
-	printf("Création d'un thread (n°%i)----", test);
+	printf("Création d'un thread");
     
 	printf("\nid : %ld\nproc : %i\n", thread, getpid());
 
@@ -50,11 +50,6 @@ int main(int argc, char * argv[]){
 		// permet d'attendre la fin de l'éxécution du précédent thread
 		pthread_join(threads[i], NULL);
 	}
-
-	//garder cette saisie et modifier le code en temps venu (mise en attente)
-	char c;
-	printf("Appuyez sur entrée pour stopper le programme");
-	scanf("%c", &c);
 
 	//
 	//... compléter
