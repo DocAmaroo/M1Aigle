@@ -37,7 +37,7 @@
 - [ ] finir parser
 
 :triangular_flag_on_post: **HMIN105** 
-- [ ] faire mémoire threads + revoir td/tp
+- [ ] faire mémoire thread + revoir td/tp
 
 :triangular_flag_on_post: **HMIN122M** 
 
