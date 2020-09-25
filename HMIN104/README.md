@@ -42,5 +42,3 @@
 *Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN104/cours/intro.pdf "cours d'introduction HMIN104")*
 
 :fire: Le langage utilisé est Turing-complet.
-
-
