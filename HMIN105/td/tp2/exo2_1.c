@@ -1,4 +1,4 @@
-// ligne de compil : gcc -Wall exo1.c -o exo1 -lpthread
+// ligne de compil : gcc -Wall exo2_1.c -o exo2_1 -lpthread
 #include <string.h>
 #include <stdio.h>//perror
 #include <sys/types.h>

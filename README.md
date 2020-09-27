@@ -34,7 +34,6 @@
 
 :triangular_flag_on_post: **HMIN104** 
 - [ ] faire mémoire assembleur + revoir td/tp
-- [ ] finir parser
 
 :triangular_flag_on_post: **HMIN105** 
 - [ ] faire mémoire thread + revoir td/tp
