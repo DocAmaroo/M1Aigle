@@ -39,5 +39,6 @@
 - [ ] faire mémoire thread + revoir td/tp
 
 :triangular_flag_on_post: **HMIN122M** 
+- [ ] OVERLEAF : changer le n° du plan - 2 au lieu de 4 - et rajouter une remarquer entre le plan 2 et 3 - plan 2 +opti en ligne mais le plan 3 +opti sur la minimisation des row finale
 
 :triangular_flag_on_post: **English** 

@@ -8,24 +8,24 @@
 
 
 struct thread_param {
-	int i1;
-	int i2;
-	int res;
+	int arg1;
+	int arg2;
+	int index;
 };
 
 void* scalaire (void* ptr){
-
+	
 	struct thread_param *param = (struct thread_param*) ptr;
-	int a = param->i1;
-	int b = param->i2;
+    printf("scalaire() - [THREAD %i] : CREE !\n", param->index);
 
-    pthread_t thread = pthread_self();
-	printf("\nid : %ld | proc : %i\n", thread, getpid());
-	printf("multiplication entre %i et %i : %i\n", a, b, a*b);
+    // initialisation
+    int* result = malloc(sizeof(int)); 
+    *result = param->arg1 * param->arg2;
 
-	param->res += a*b;
+	printf("scalaire() - [THREAD %i] : %i*%i = %i\n", param->index, param->arg1, param->arg2, *result);
+	printf("FIN DU THREAD %i\n", param->index);
 
-    pthread_exit(NULL);
+	pthread_exit(result);
 }
 
 
@@ -40,11 +40,14 @@ int main(int argc, char * argv[]){
 		printf("Donner une valeur > 1");
 	}
 
+	// initialisation
 	int* v1 = malloc(sizeof(int)*atoi(argv[1]));
 	int* v2 = malloc(sizeof(int)*atoi(argv[1]));
+	int* response = 0;
+	int cpt=0;
+    int result = 0;
 
 	printf("Donner les valeurs du 1er vecteur :\n");
-	int cpt = 0;
 	while(cpt < atoi(argv[1])){
 		printf("arg %i ? ", cpt);
 		scanf("%i", &v1[cpt]);
@@ -52,26 +55,27 @@ int main(int argc, char * argv[]){
 	}
 
 	printf("Donner les valeurs du 2nd vecteur :\n");
-	cpt = 0;
-	while(cpt < atoi(argv[1])){
+	cpt = 0; while(cpt < atoi(argv[1])){
 		printf("arg %i ? ", cpt);
 		scanf("%i", &v2[cpt]);
 		cpt++;
 	}
 
-	int result = 0;
+	printf("\n----- START -----\n");
 
-	struct thread_param** list_param = malloc(sizeof(struct thread_param*)*atoi(argv[1]));
-
-	pthread_t threads[atoi(argv[1])];
+	// tableau de threads
+	pthread_t* threads = malloc(sizeof(pthread_t)*atoi(argv[1]));
 
 	// création des threads -------------------------
 	for (int i = 0; i < atoi(argv[1]); i++){
-		// def struct for the thread param
+
+		// definition des param de la structure
 		struct thread_param *param = malloc(sizeof(struct thread_param));
-		list_param[i] = param;
-		param->i1 = v1[i];
-		param->i2 = v2[i];
+		param->arg1 = v1[i];
+		param->arg2 = v2[i];
+		param->index = i;
+
+		// création d'un thread
 		if (pthread_create(&threads[i], NULL, scalaire, (void*) param) != 0){
 			perror("erreur creation thread");
 			exit(1);
@@ -79,16 +83,18 @@ int main(int argc, char * argv[]){
 	}
 
 	for (int i=0; i < atoi(argv[1]); i++) {
-		pthread_join(threads[i], NULL);
+		pthread_join(threads[i], (void**) &response);
+        result += *response;
 	}
 
-	printf("----------- \n\nTout les threads sont terminées !\n");
-
-	for (int i=0; i < atoi(argv[1]); i++) {
-		result += list_param[i]->res;
-	}
+	printf("\nmain() : tout les threads sont terminés\n");
 
 	printf("Résultat du produit scalaire : %i\n", result);
+
+	// free memory
+	free(v1);
+	free(v2);
+	free(threads);
+	printf("\n----- END -----\n");
 	return 0;
 }
-
