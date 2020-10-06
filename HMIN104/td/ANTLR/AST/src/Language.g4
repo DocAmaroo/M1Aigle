@@ -38,16 +38,16 @@ proc returns [Proc prc] :
 
 instruction returns [Inst i]:
     n=Name ':=' e1=expression {$i = new AffectVar($n.text, $e1.e);}
+    | itern=ternaryCond {$i = $itern.t;}
+    | ifonc=fonctionIns {$i = $ifonc.fi;}
     | e1=expression '[' e2=expression '] := ' e3=expression {$i = new AffectArray($e1.e, $e2.e, $e3.e);}
-    | ternaryCond
     | 'while' e=expression 'do' i2=instruction {$i = new While($e.e, $i2.i);}
-    | fonction
     | 'skip' {$i = new Skip();}
     | i1=instruction';'i2=instruction {$i = new SequenceInstruc($i1.i, $i2.i);};
 
 expression returns [Expr e]:
-    constante
-    | Name
+    c=constante {$e = $c.e;}
+    | n=Name {$e = new Name($n.text);}
     // unaryOp
     | '-' e1=expression {$e = new UMinus($e1.e);}
     | 'not' e1=expression {$e = new UNeg($e1.e);}
@@ -65,14 +65,14 @@ expression returns [Expr e]:
     | e1=expression '>=' e2=expression {$e = new BSupEgal($e1.e, $e2.e);}
     | e1=expression '>' e2=expression {$e = new BSup($e1.e, $e2.e);}
     // fonction
-    | fonction
+    | efonc=fonctionExpr {$e = $efonc.fe;}
     // array access
     | e1=expression '['e2=expression']' {$e = new ArrayGet($e1.e, $e2.e);}
     // newArray
     | 'new array of' t=type '['e1=expression']' {$e = new NewArray($t.t, $e1.e);};
 
 ternaryCond returns [TernaryCond t]:
-    'if' e=expression 'then' i1=instruction+ 'else' i2=instruction+ {$t = new TernaryCond($e.e, $i1.i, $i2.i);};
+    'if' e=expression 'then' i1=instruction 'else' i2=instruction {$t = new TernaryCond($e.e, $i1.i, $i2.i);};
 
 // CIBLE D'APPEL
 appel returns [Appel a]:
@@ -81,9 +81,13 @@ appel returns [Appel a]:
     | name=Name {$a = new Function($name.text);};
 
 // APPEL AU FONCTION
-fonction returns [AppelFonction f]:
-    a=appel ' (' le=listExpr ') ' {$f = new AppelFonction($a.a, $le.l_expr);}
-    | a=appel '()' {$f = new AppelFonction($a.a);};
+fonctionExpr returns [AppelFonctionExpr fe]:
+    a=appel '(' le=listExpr ')' {$fe = new AppelFonctionExpr($a.a, $le.l_expr);}
+    | a=appel '()' {$fe = new AppelFonctionExpr($a.a);};
+
+fonctionIns returns [AppelFonctionInst fi]:
+    a=appel '(' le=listExpr ')' {$fi = new AppelFonctionInst($a.a, $le.l_expr);}
+    | a=appel '()' {$fi = new AppelFonctionInst($a.a);};
 
 // PARAM
 param returns [Param p]:

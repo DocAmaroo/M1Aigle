@@ -6,7 +6,7 @@ abstract class Type {
 }
 class TypeInt extends Type {
     public void print() {
-        System.out.print("integer ");
+        System.out.print("integer");
     }
 }
 class TypeBool extends Type {
@@ -32,6 +32,16 @@ abstract class Expr {
     public abstract void print();
 }
 
+class Name extends Expr {
+    protected String name;
+    public Name(String name) {
+        this.name = name;
+    }
+    public void print(){
+        System.out.print(name);
+    }
+}
+
 // CONSTANTES
 abstract class Cst extends Expr {}
 class CstInt extends Cst {
@@ -40,17 +50,17 @@ class CstInt extends Cst {
         this.n = n;
     }
     public void print() {
-        System.out.print(this.n + " ");
+        System.out.print(this.n);
     }
 }
 class CstTrue extends Cst {
     public void print() {
-        System.out.print("true ");
+        System.out.print("true");
     }
 }
 class CstFalse extends Cst {
     public void print() {
-        System.out.print("false ");
+        System.out.print("false");
     }
 }
 
@@ -243,26 +253,6 @@ class NewArray extends Expr {
         System.out.print("]");
     }
 }
-class AppelFonction extends Expr {
-    protected Appel a;
-    protected ArrayList<Expr> args;
-    public AppelFonction(Appel a) {
-        this.a = a;
-        this.args = null;
-    }
-    public AppelFonction(Appel a, ArrayList<Expr> args) {
-        this.a = a;
-        this.args = args;
-    }
-    public void print(){
-        this.a.print();
-        System.out.print("(");
-        for (Expr e : args){
-            e.print();
-        }
-        System.out.print(")");
-    }
-}
 
 // INSTRUCTIONS
 abstract class Inst {
@@ -278,16 +268,22 @@ class Param extends Inst {
     }
 
     public void print(){
-        System.out.print(this.name+ ": ");
+        System.out.print(" " + this.name+ " : ");
         this.t.print();
     }
 }
 class Variable extends Inst {
-    protected ArrayList<Param> af;
-    public Variable(ArrayList<Param> af) {
-        this.af = af;
+    protected ArrayList<Param> listParam;
+    public Variable(ArrayList<Param> listParam) {
+        this.listParam = listParam;
     }
-    public void print() {}
+    public void print() {
+        System.out.print("var");
+        for (Param listParam : listParam){
+            listParam.print();
+        }
+        System.out.println(" ");
+    }
 }
 class AffectVar extends Inst {
     protected String var;
@@ -297,7 +293,7 @@ class AffectVar extends Inst {
         this.e = e;
     }
     public void print() {
-        System.out.print(var + " := ");
+        System.out.print(var+" := ");
         e.print();
     }
 }
@@ -330,11 +326,11 @@ class TernaryCond extends Inst{
     public void print(){
         System.out.print("if (");
         this.e1.print();
-        System.out.print(") then (");
+        System.out.println(") then");
         this.i2.print();
-        System.out.print(") else (");
+        System.out.println("\nelse");
         this.i3.print();
-        System.out.print(")\n");
+        System.out.println("");
     }
 }
 class Skip extends Inst{
@@ -352,9 +348,8 @@ class While extends Inst{
     public void print() {
         System.out.print("while (");
         this.e.print();
-        System.out.print(") do (");
+        System.out.println(") do");
         this.i.print();
-        System.out.print(")");
     }
 }
 class SequenceInstruc extends Inst{
@@ -365,11 +360,53 @@ class SequenceInstruc extends Inst{
     }
     public void print() {
         this.i1.print();
-        System.out.print("; ");
+        System.out.println(";");
         this.i2.print();
     }
 }
 
+class AppelFonctionInst extends Inst{
+    protected Appel a;
+    protected ArrayList<Expr> args;
+    public AppelFonctionInst(Appel a) {
+        this.a = a;
+        this.args = null;
+    }
+    public AppelFonctionInst(Appel a, ArrayList<Expr> args) {
+        this.a = a;
+        this.args = args;
+    }
+    public void print(){
+        this.a.print();
+        System.out.print("(");
+        for (Expr e : args){
+            e.print();
+        }
+        System.out.print(")");
+    }
+}
+class AppelFonctionExpr extends Expr{
+    protected Appel a;
+    protected ArrayList<Expr> args;
+    public AppelFonctionExpr(Appel a) {
+        this.a = a;
+        this.args = null;
+    }
+    public AppelFonctionExpr(Appel a, ArrayList<Expr> args) {
+        this.a = a;
+        this.args = args;
+    }
+    public void print(){
+        this.a.print();
+        System.out.print("(");
+        if (args != null) {
+            for (Expr e : args) {
+                e.print();
+            }
+        }
+        System.out.print(")");
+    }
+}
 
 // CIBLE D'APPEL
 abstract class Appel {
@@ -465,6 +502,26 @@ class Proc {
         this.listVar = null;
         this.i = i;
     }
+
+    public void print() {
+        System.out.print(n);
+        if ( listParam != null ) {
+            System.out.print('(');
+            for (Param p : listParam) {
+                p.print();
+            }
+            System.out.print(')');
+        }
+        System.out.print(" : ");
+        if ( t != null ) { t.print(); }
+        System.out.println("");
+        if ( listVar != null ) {
+            for (Variable v : listVar) {
+                v.print();
+            }
+        }
+        i.print();
+    }
 }
 
 // PROGRAMME
@@ -493,12 +550,12 @@ class Program {
         this.i = i;
     }
     public void print() {
-        this.listVar.print();
-        String args = "";
-        for (Proc proc : this.listProc) {
-            args += proc.toString();
+        if ( listVar != null ) { listVar.print(); }
+        if ( listProc != null ) {
+            for (Proc p : listProc) {
+                p.print();
+            }
         }
-        System.out.print(args);
-        this.i.print();
+        i.print();
     }
 }
