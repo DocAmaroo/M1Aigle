@@ -42,3 +42,27 @@
 *Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN104/cours/intro.pdf "cours d'introduction HMIN104")*
 
 :fire: Le langage utilisé est Turing-complet.
+
+
+## De UPP vers PP
+### UPP
+- type supprimé
+- variable global distinguées par leur adresses (même nom / offset)
+- accès aux tableaux en utilisant `lw` et `sw`
+```mips
+// Allocation de taille e
+alloc (4*e)
+
+// Accès array -- e1[e2]
+lw( e1 + 4*e2 )
+
+// Affect array -- e1[e2] := e3
+sw( e1 + 4*e2 ) e3
+```
+- op. arith. utilise ceux de MIPS
+- toute variable = 4 octets (32 bits)
+
+### RTL (Register Transfer Language)
+- Expression et instruction sont décomposées en inst. élémentaire.
+- Var. local deviennent des pseudos registres *(nbr. infinis)*
+- Notion d'arbre **IMPORTANTE**
