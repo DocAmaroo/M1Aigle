@@ -43,12 +43,12 @@ void* hello(void* param) {
 
 int main(int argc, char * argv[]){
 
-    int size = atoi(argv[1]);
     if (argc < 2){
         printf("utilisation: %s  nombres_de_threads  \n", argv[0]);
         return 1;
     }
 
+    int size = atoi(argv[1]);
     if ( size < 1) {
         printf("Donner une valeur > 1");
     }
@@ -94,10 +94,6 @@ int main(int argc, char * argv[]){
 
 
     // free memory
-    free(param->count);
-    free(param->nbThread);
-    free(param->mutex);
-    free(param->cond);
     free(param);
     return 0;
 }
