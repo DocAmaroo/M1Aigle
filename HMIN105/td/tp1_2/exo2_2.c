@@ -3,7 +3,6 @@
 #include <stdio.h>//perror
 #include <sys/types.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <pthread.h>
 
 
@@ -17,17 +16,18 @@ struct thread_param {
 void* scalaire (void* ptr){
 	
 	struct thread_param *param = (struct thread_param*) ptr;
-	
+
+    int mult = param->arg1*param->arg2;
+    printf("scalaire() - [THREAD %i] : %i*%i = %i\n", param->index, param->arg1, param->arg2, mult);
+
 	printf("scalaire() - [THREAD %i] : asking mutex\n", param->index);
 	pthread_mutex_lock(param->mutex);
 
 	int* result = malloc(sizeof(int));
-	*result = param->arg1 * param->arg2;
+	*result = mult;
 
 	pthread_mutex_unlock(param->mutex);
 	printf("scalaire() - [THREAD %i] : unlock mutex\n", param->index);
-
-	printf("scalaire() - [THREAD %i] : %i*%i = %i\n", param->index, param->arg1, param->arg2, *result);
 	printf("FIN DU THREAD %i\n", param->index);
 	pthread_exit(result);
 }

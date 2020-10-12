@@ -3,7 +3,6 @@
 #include <stdio.h>//perror
 #include <sys/types.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <pthread.h>
 
 
@@ -92,9 +91,9 @@ int main(int argc, char * argv[]){
 	printf("Résultat du produit scalaire : %i\n", result);
 
 	// free memory
-	free(v1);
-	free(v2);
-	free(threads);
-	printf("\n----- END -----\n");
+    free(v1);
+    free(v2);
+    free(threads);
+    printf("\n----- END -----\n");
 	return 0;
 }

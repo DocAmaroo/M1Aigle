@@ -61,5 +61,5 @@
 
     <!ELEMENT responses (response)>
     <!ELEMENT response (corps)>
-    <!ATTLIST response idTweet IDREF>
+    <!ATTLIST response idUser IDREF>
 ]>

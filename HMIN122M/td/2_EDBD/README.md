@@ -75,3 +75,40 @@ SELECT id_produit, id_ville, id_date, SUM(montant_journalier) FROM ventes_monopr
 ```
 
 Les options ROLLUP et CUBE permettrait d'enlever la plupart des requetes puisqu'elles effectueraient les différentes combinaisons.
+
+4.
+4.1 : Un fait (j,p,c,m,x) existe lorsqu’un produit p est acheté par un client c le jour j au magasin m. La mesure x correspond au prix total.
+a. Il s'agit d'un fait transactionnel car si c'était un snapshot il y aurait énormément de ligne qui valent zéro (les jours où il n'achete pas).
+b. La mesure est additive car l'on peut ajouter les différentes dépenses.
+
+4.2 : Un  fait (j,p,m,x) existe lorsqu’un produit p est acheté le jour j au magasin m. La mesure correspond au chiffre d’affaires.
+a. Il s'agit d'un fait snapshot 
+b. La mesure est additive
+
+4.3 : Un fait (j,p,m,x) existe pour chaque combinaison de produit p, magasin m et jour j. La mesure x correspond au stock de p en m le jour j. 
+a. Il s'agit d'un fait snapshot
+b. La mesure est semi-additive, une mesure additive ici ne serait pas pertinante car on veut le nombre d'éléments par jour, il est pas nécessaire de les additioner
+
+4.4 : Un fait (j,p,m,x) existe pour chaque combinaison de produit p, magasin m et jour j. La mesure x correspond au nombre de ventes de p en m cumulées depuis le début de l’année jusqu’au jour j.
+a. Il s'agit d'un fait snapshot
+b. La mesure est non additive
+
+4.5 : Un fait (c,e,j) existe lorsqu’un appel du client c le jour j est traité par l’employée. Aucune mesure n’existe.
+a. Il s'agit d'un fait transactionnel
+b. Il n'y a pas de mesure
+
+4.6 : Un fait (c,j,x) existe lorsqu’un client c le jour j laisse une note sur un produit acheté. La mesure x est la note donnée par le client.
+a. Il s'agit d'un fait transactionnel
+b. La mesure est semi-additive
+
+4.7 : Un fait (c,e,j,x) existe lorsqu’un appel du client c le jour j est traité par l’employée. La mesure x est la durée de l’appel en secondes.
+a. Il s'agit d'un fait transactionnel
+b. La mesure est semi-additive
+
+4.8 : Un fait (m,b,j,x) existe lorsque la monnaie m est changée à la banque b le jour j. La mesure x est le montant total de la monnaie changée en euros.
+a. Il s'agit d'un fait snapshot
+b. La mesure est additive
+
+4.9 : Un fait (m,b,j,x) existe lorsque la monnaie m est changée à la banque b le jour j. La mesure x est le cours de change moyen de m en euros pour toutes les transactions du jour j.
+a. Il s'agit d'un fait snapshot
+b. La mesure est non-additive

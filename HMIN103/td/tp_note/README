@@ -1,0 +1,98 @@
+\mysection{Question 1}
+\begin{lstlisting}
+let $tweets := //tweets/tweet return count($tweets)
+\end{lstlisting}
+
+\mysection{Question 2}
+\begin{lstlisting}
+//hashtag
+\end{lstlisting}
+
+\mysection{Question 3}
+\begin{lstlisting}
+for $user in //profile
+    for $tweet in //tweet where $tweet/@idUser = $user/@idUser
+        return <result> {$user,$tweet} </result>
+\end{lstlisting}
+
+\mysection{Question 4}
+\begin{lstlisting}
+for $user in //profile
+    let $res :=
+        for $tweet in //tweet 
+            where $tweet/@idUser = $user/@idUser
+                return $tweet/date
+    return <result>{$user/pseudo,$res}</result>
+\end{lstlisting}
+
+\mysection{Question 5}
+\begin{lstlisting}
+let $id := //profile/@idUser/string() 
+    for $x in //tweet[@idUser=$id and nbrRt/text() > 0] 
+        return $x
+\end{lstlisting}
+
+\mysection{Question 6}
+\begin{lstlisting}
+for $x in //tweet/responses 
+    return 
+        if ( count($x//response) = 0 ) 
+        then <responses><nonRetwitted/></responses>
+        else 
+            if ( count($x//response) = 1 ) 
+            then $x//response 
+            else ($x//response[position() = last()-1], $x//response[last()])
+\end{lstlisting}
+
+\mysection{Question 7}
+\begin{lstlisting}
+for $user in //profile/pseudo/text() order by $user
+    return $user
+\end{lstlisting}
+
+\mysection{Question 8}
+\begin{lstlisting}
+for $x in //tweet 
+  where exists($x//corps/hashtag[contains(., '#I&lt;3XML')]) 
+    return $x
+\end{lstlisting}
+
+\mysection{Question 9}
+\begin{lstlisting}
+for $x in //tweets order by $x//tweet/date/timestamp 
+    return ($x[position() = 1], $x[last()])
+\end{lstlisting}
+
+\mysection{Question 10}
+\begin{lstlisting}
+for $user in //profile 
+    let $hashtag := for $tweet in //tweet 
+        where $tweet/@idUser = $user/@idUser 
+            return $tweet//hashtag
+    return ($user/@idUser, $hashtag)
+\end{lstlisting}
+
+\mysection{Question 11}
+\begin{lstlisting}
+for $tweet in //tweet
+    where exists($tweet//corps/ref-user)
+    let $tweetref := for $x in $tweet
+            return $x//corps/ref-user
+    return ($tweet, $tweetref)
+\end{lstlisting}
+
+
+\mysection{Question 12}
+\begin{lstlisting}
+declare function local:aReponduAuTweet($ptweet as element(tweet)) {
+    if ( count($ptweet//response) = 0 )
+    then 
+        <noresponse/> 
+    else (
+        let $users := $ptweet//response/@idUser/string() 
+        return distinct-values($users)
+    )
+};
+
+local:aReponduAuTweet(//tweet[@id="tweet4"])
+\end{lstlisting}

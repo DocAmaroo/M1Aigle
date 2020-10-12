@@ -1,0 +1,64 @@
+<!-- DTD of tweet.xml -->
+<!-- Created by
+ * Canta Thomas (AIGLE)
+ * Gracia-Moulis Kevin (DECOL)
+-->
+<!ELEMENT twitter (profiles, tweets)>
+<!ELEMENT profiles (profile*)>
+<!ELEMENT profile (pseudo, ref-user, description, picture, followers, follows)>
+
+<!-- pseudo -->
+<!ELEMENT pseudo (#PCDATA)>
+
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT picture EMPTY>
+<!ATTLIST picture src CDATA "./anonymous.png">
+
+<!ELEMENT followers (follower+)>
+<!ELEMENT follower EMPTY>
+<!ATTLIST follower idUser IDREF>
+
+<!ELEMENT follows (follow+)>
+<!ELEMENT follow EMPTY>
+<!ATTLIST follow idUser IDREF #REQUIRED>
+
+<!ELEMENT tweets (tweet*)>
+<!ELEMENT tweet (date, location, corps, nbrRt, responses)>
+<!ATTLIST tweet id ID #REQUIRED>
+<!ATTLIST tweet idUser IDREF #REQUIRED>
+<!ATTLIST tweet system CDATA>
+
+<!ELEMENT date (timestamp, fuseau)>
+<!ELEMENT timestamp (#PCDATA) #REQUIRED>
+<!ELEMENT fuseau (#PCDATA) #REQUIRED>
+
+<!ELEMENT location (longitude, latitude, city, country)>
+<!ELEMENT longitude (#PCDATA)>
+<!ELEMENT latitude (#PCDATA)>
+<!ELEMENT city (#PCDATA)>
+<!ELEMENT country (#PCDATA)>
+
+<!ELEMENT corps (text* | hashtag* | ref-user*)+>
+<!ATTLIST corps language CDATA>
+
+<!ELEMENT text (#PCDATA)>
+<!ATTLIST text type CDATA "serif">
+<!ATTLIST text size CDATA "12">
+<!ATTLIST text color CDATA "black">
+
+<!ELEMENT ref-user (#PCDATA)>
+<!ATTLIST ref-user type CDATA "serif">
+<!ATTLIST ref-user size CDATA "12">
+<!ATTLIST ref-user color CDATA "blue">
+
+<!ELEMENT hashtag (#PCDATA)>
+<!ATTLIST hashtag type CDATA "serif">
+<!ATTLIST hashtag size CDATA "12">
+<!ATTLIST hashtag color CDATA "blue">
+
+<!ELEMENT nbRT (#PCDATA)>
+
+<!ELEMENT responses (response*)>
+<!ELEMENT response (corps)>
+<!ATTLIST response idUser IDREF #REQUIRED>
