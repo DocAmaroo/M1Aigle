@@ -96,3 +96,5 @@ declare function local:aReponduAuTweet($ptweet as element(tweet)) {
 
 local:aReponduAuTweet(//tweet[@id="tweet4"])
 \end{lstlisting}
+
+\mychapter{3. Propriétés des requêtes XPath}
