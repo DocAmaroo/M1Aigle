@@ -26,19 +26,19 @@
 # TODO LIST
 
 :triangular_flag_on_post: **HMIN102** 
-- [ ] lire suite du cours (5.)
-- [ ] faire sortedDico
+- [ ] finir tp sur les directory
 
 :triangular_flag_on_post: **HMIN103** 
 - [ ] faire mémoire sur partie XML/DTD
 
 :triangular_flag_on_post: **HMIN104** 
-- [ ] faire mémoire assembleur + revoir td/tp
+- [ ] revoir MIPS
 
 :triangular_flag_on_post: **HMIN105** 
-- [ ] faire mémoire thread + revoir td/tp
+- [ ] faire thread et files
+- [ ] faire des notes sur les threads et files
 
 :triangular_flag_on_post: **HMIN122M** 
-- [ ] OVERLEAF : changer le n° du plan - 2 au lieu de 4 - et rajouter une remarquer entre le plan 2 et 3 - plan 2 +opti en ligne mais le plan 3 +opti sur la minimisation des row finale
+
 
 :triangular_flag_on_post: **English** 
