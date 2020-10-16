@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS node
 DROP TABLE IF EXISTS dewey
 
 CREATE TABLE node(
-    begin INT,
+    begin INT PRIMARY KEY,
     end INT,
     parent INT,
     tag VARCHAR(30),
