@@ -6,6 +6,7 @@
 <!ELEMENT twitter (profiles, tweets)>
 <!ELEMENT profiles (profile*)>
 <!ELEMENT profile (pseudo, ref-user, description, picture, followers, follows)>
+<!ATTLIST profile idUser ID #REQUIRED>
 
 <!-- pseudo -->
 <!ELEMENT pseudo (#PCDATA)>
@@ -15,11 +16,11 @@
 <!ELEMENT picture EMPTY>
 <!ATTLIST picture src CDATA "./anonymous.png">
 
-<!ELEMENT followers (follower+)>
+<!ELEMENT followers (follower*)>
 <!ELEMENT follower EMPTY>
-<!ATTLIST follower idUser IDREF>
+<!ATTLIST follower idUser IDREF #REQUIRED>
 
-<!ELEMENT follows (follow+)>
+<!ELEMENT follows (follow*)>
 <!ELEMENT follow EMPTY>
 <!ATTLIST follow idUser IDREF #REQUIRED>
 
@@ -27,11 +28,11 @@
 <!ELEMENT tweet (date, location, corps, nbrRt, responses)>
 <!ATTLIST tweet id ID #REQUIRED>
 <!ATTLIST tweet idUser IDREF #REQUIRED>
-<!ATTLIST tweet system CDATA>
+<!ATTLIST tweet os CDATA #IMPLIED>
 
 <!ELEMENT date (timestamp, fuseau)>
-<!ELEMENT timestamp (#PCDATA) #REQUIRED>
-<!ELEMENT fuseau (#PCDATA) #REQUIRED>
+<!ELEMENT timestamp (#PCDATA)>
+<!ELEMENT fuseau (#PCDATA)>
 
 <!ELEMENT location (longitude, latitude, city, country)>
 <!ELEMENT longitude (#PCDATA)>
@@ -40,7 +41,7 @@
 <!ELEMENT country (#PCDATA)>
 
 <!ELEMENT corps (text* | hashtag* | ref-user*)+>
-<!ATTLIST corps language CDATA>
+<!ATTLIST corps language CDATA #IMPLIED>
 
 <!ELEMENT text (#PCDATA)>
 <!ATTLIST text type CDATA "serif">
@@ -48,6 +49,7 @@
 <!ATTLIST text color CDATA "black">
 
 <!ELEMENT ref-user (#PCDATA)>
+<!ATTLIST ref-user idRef IDREF #REQUIRED>
 <!ATTLIST ref-user type CDATA "serif">
 <!ATTLIST ref-user size CDATA "12">
 <!ATTLIST ref-user color CDATA "blue">
@@ -57,7 +59,7 @@
 <!ATTLIST hashtag size CDATA "12">
 <!ATTLIST hashtag color CDATA "blue">
 
-<!ELEMENT nbRT (#PCDATA)>
+<!ELEMENT nbrRt (#PCDATA)>
 
 <!ELEMENT responses (response*)>
 <!ELEMENT response (corps)>
