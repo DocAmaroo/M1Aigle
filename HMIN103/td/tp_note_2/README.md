@@ -70,11 +70,14 @@ SELECT pseudo, nom, prenom FROM journaliste WHERE anonymisation = "Formule1"
 ![prout](./diagram/exo3.png)
 voir [begin_end.sql](./sql/begin_end.sql)
 
-# Exo 3.3
+3.
 SELECT * FROM NODE WHERE parent = 29;
 SELECT * FROM NODE WHERE nodType = 'txt';
 SELECT * FROM NODE WHERE tag = 'pseudo';
 
-# Exo 3.4
+4.
 Avec affichage cela prend 9034 millisecondes.
 Sans affichage cela prend 842 millisecondes.
+
+5.
+voir [insert_prepost.sql](./sql/insert_prepost.sql)
