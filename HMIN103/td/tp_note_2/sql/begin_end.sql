@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS node;
-DROP TABLE IF EXISTS dewey;
+DROP TABLE node;
+DROP TABLE dewey;
 
 CREATE TABLE node(
     begin INT PRIMARY KEY,
