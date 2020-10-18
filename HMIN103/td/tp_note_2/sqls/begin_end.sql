@@ -2,7 +2,7 @@ DROP TABLE node;
 DROP TABLE dewey;
 
 CREATE TABLE node(
-    begin INT PRIMARY KEY,
+    begin INT UNIQUE,
     end INT,
     parent INT,
     tag VARCHAR(30),

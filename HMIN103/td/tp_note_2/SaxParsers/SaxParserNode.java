@@ -68,7 +68,7 @@ import java.io.*;
  * The present code is drawn from SAXLocalNameCount.java (2002-04-18 by Edwin Goei)
  */
 
-public class SaxParser extends DefaultHandler {
+public class SaxParserNode extends DefaultHandler {
     /** Constants used for JAXP 1.2 */
     static final String JAXP_SCHEMA_LANGUAGE =
         "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
@@ -80,50 +80,69 @@ public class SaxParser extends DefaultHandler {
     /** A Hashtable with tag names as keys and Integers as values */
     private Hashtable tags;
 
+    private ArrayList<Integer> cptrBegin;
+    private int cptr;
+    private int begin;
+    private int end;
+
     // Parser calls this once at the beginning of a document
     public void startDocument() throws SAXException {
+        cptrBegin = new ArrayList<Integer>();
+        cptr = 1;
+
+        begin = 0;
+        end = 0;
+
         tags = new Hashtable();
     }
 
     // Parser calls this for each opening of an element in a document
-    public void startElement(String namespaceURI, String localName,
-                             String qName, Attributes atts)
-	throws SAXException
-    {
-    	System.out.println("starting an element "+localName);
+    public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
+        this.cptrBegin.add(cptr);
+        this.cptr++;
     }
     
     // Parser calls this for each end of an element in a document
-    public void endElement(String namespaceURI, String localName,
-                             String qName)
-	throws SAXException
-    {
-    	System.out.println("ending an element "+localName);
-    	
+    public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
+        int endNum = this.cptr;
+        this.cptr++;
+        int beginNum = this.cptrBegin.get(this.cptrBegin.size()-1);
+        this.cptrBegin.remove(this.cptrBegin.size()-1);
+        int parentNum = 0;
+        if ( this.cptrBegin.size()-1 < 0 ) {
+            parentNum = 0;
+        }
+        else {
+            parentNum = this.cptrBegin.get(this.cptrBegin.size()-1);
+        }
+
+        System.out.println("INSERT INTO node(begin,end,parent,tag,type) VALUES("+beginNum+ ","+endNum+ ","+parentNum +","+"\""+localName+"\""+","+"\"elt\");");
     }
-    
+
+
     // Parser calls this once after parsing a document
     public void endDocument() throws SAXException {
-        
-            System.out.println("Bye bye");
-        
+            System.out.println("End ---");
     }
 
     // Parser calls after parsing a text node
-    public void characters(char[] ch, int start, int length) throws SAXException
-    {
-            
-            String str = new String(ch, start, length);
-            
-	    if (!str.trim().isEmpty())  // trim() eliminates leading and trailing spaces	
+    public void characters(char[] ch, int start, int length) throws SAXException {
+        String str = new String(ch, start, length);
+        if( !str.trim().isEmpty() ) {
 
-	       System.out.println(str);
+            System.out.print("INSERT INTO node(begin,end,parent,tag,type) VALUES("+
+                    this.cptr+" ,");
+            this.cptr++;
+            System.out.println(this.cptr+" ,"+ this.cptrBegin.get(this.cptrBegin.size()-1) +"," +"\""+str +"\""+ ","+"\"txt\");");
 
+            this.cptr++;
+        }
     }
 
-	
-	
-    
+
+
+
+
     /**
      * Convert from a filename to a file URL.
      */
@@ -172,7 +191,7 @@ public class SaxParser extends DefaultHandler {
         XMLReader xmlReader = saxParser.getXMLReader();
 
         // Set the ContentHandler of the XMLReader
-        xmlReader.setContentHandler(new SaxParser());
+        xmlReader.setContentHandler(new SaxParserNode());
 
         // Set an ErrorHandler before parsing
         xmlReader.setErrorHandler(new MyErrorHandler(System.err));
