@@ -1,10 +1,3 @@
-- Abonnement au mois
-   - Starter Pack (5€/mois)
-      - bonus de thune en fin de match (+2.5%)
-   - Pack VIP (50€/mois)
-      - bonus de victoire en fin de match (+5%)
-- Compétition locale / mondiale
-
 1. (~1 page)
 objectifs :
 - Amasser plus d'utilisateurs
@@ -43,6 +36,9 @@ infos utiles :
 /
 
 2. Indiquez les actions / opérations (e.g., ventes, livraisons) à tracer pour récupérer ces informations. 
+- transactions
+- pertes / gains
+
 
 3. Pour chaque action / opération, proposez au moins trois traitements possibles (i.e., requêtes analytiques) permettant d’aider à la prise de décision sur le sujet.
 
@@ -58,9 +54,6 @@ La conception de l’entrepôt dépendra exclusivement des traitements que vous 
 
 6. Pour chaque actions / opérations, concevez un data-mart indépendant (c’est à dire, un modèle en étoile)
 
-      -
--     joueurs     -
-   -     -
    a. Pour l’action / opération la plus importante, prévoyez une modélisation détaillée dans la table des faits.
 
    b. Pour la deuxième action, prévoyez une modélisation moins détaillée (snapshot, transactions, record-update)
