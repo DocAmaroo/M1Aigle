@@ -26,10 +26,8 @@
 # TODO LIST
 
 :triangular_flag_on_post: **HMIN102** 
-- [ ] finir tp sur les directory
 
 :triangular_flag_on_post: **HMIN103** 
-- [ ] faire mémoire sur partie XML/DTD
 
 :triangular_flag_on_post: **HMIN104** 
 - [ ] revoir MIPS
@@ -42,3 +40,4 @@
 
 
 :triangular_flag_on_post: **English** 
+- [ ] Exsports : faire la pubs
