@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2000-2002 The Apache Software Foundation.  All rights 
+ * Copyright (c) 2000-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -10,7 +10,7 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in
@@ -18,7 +18,7 @@
  *    distribution.
  *
  * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:  
+ *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
@@ -26,7 +26,7 @@
  *
  * 4. The names "Crimson" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
- *    software without prior written permission. For written 
+ *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
@@ -49,8 +49,8 @@
  *
  * This software consists of voluntary contributions made by many
  * individuals on behalf of the Apache Software Foundation and was
- * originally based on software copyright (c) 1999, Sun Microsystems, Inc., 
- * http://www.sun.com.  For more information on the Apache Software 
+ * originally based on software copyright (c) 1999, Sun Microsystems, Inc.,
+ * http://www.sun.com.  For more information on the Apache Software
  * Foundation, please see <http://www.apache.org/>.
  */
 
@@ -63,84 +63,82 @@ import java.util.*;
 import java.io.*;
 
 /**
- * Program to be modified to implement the begin/end schema encoding. 
- * 
+ * Program to be modified to implement the begin/end schema encoding.
+ *
  * The present code is drawn from SAXLocalNameCount.java (2002-04-18 by Edwin Goei)
  */
 
-public class SaxParserNode extends DefaultHandler {
+public class SaxParserXPath extends DefaultHandler {
+
+    private boolean in;
+    private int profondeur;
+    String alpha = "";
+
+    public static ArrayList<String[]> node = new ArrayList<String[]>();
     /** Constants used for JAXP 1.2 */
     static final String JAXP_SCHEMA_LANGUAGE =
-        "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+            "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
     static final String W3C_XML_SCHEMA =
-        "http://www.w3.org/2001/XMLSchema";
+            "http://www.w3.org/2001/XMLSchema";
     static final String JAXP_SCHEMA_SOURCE =
-        "http://java.sun.com/xml/jaxp/properties/schemaSource";
+            "http://java.sun.com/xml/jaxp/properties/schemaSource";
 
     /** A Hashtable with tag names as keys and Integers as values */
     private Hashtable tags;
 
-    private ArrayList<Integer> cptrBegin;
-    private int cptr;
-    private int begin;
-    private int end;
+    public void setAlpha(String a){ alpha = a; }
 
     // Parser calls this once at the beginning of a document
     public void startDocument() throws SAXException {
-        cptrBegin = new ArrayList<Integer>();
-        cptr = 1;
-
-        begin = 0;
-        end = 0;
-
         tags = new Hashtable();
+
+        in = false;
+        profondeur = 0;
     }
 
     // Parser calls this for each opening of an element in a document
     public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
-        this.cptrBegin.add(cptr);
-        this.cptr++;
+        if(qName.equals(alpha)) {
+            in = true;
+        }
+        if(in) {
+            for(int i=0;i<profondeur;i++)
+                System.out.print("\t");
+            profondeur++;
+            System.out.println("<"+qName+">");
+        }
     }
-    
+
     // Parser calls this for each end of an element in a document
     public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
-        int endNum = this.cptr;
-        this.cptr++;
-        int beginNum = this.cptrBegin.get(this.cptrBegin.size()-1);
-        this.cptrBegin.remove(this.cptrBegin.size()-1);
-        int parentNum = 0;
-        if ( this.cptrBegin.size()-1 < 0 ) {
-            parentNum = 0;
+        if(qName.equals(alpha)) {
+            in = false;
+            profondeur--;
+            for(int i=0;i<profondeur;i++)
+                System.out.print("\t");
+            System.out.println("</"+qName+">");
         }
-        else {
-            parentNum = this.cptrBegin.get(this.cptrBegin.size()-1);
+        if(in) {
+            profondeur--;
+            for(int i=0;i<profondeur;i++)
+                System.out.print("\t");
+            System.out.println("</"+qName+">");
         }
-
-        System.out.println("INSERT INTO node(begin,end,parent,tag,type) VALUES("+beginNum+ ","+endNum+ ","+parentNum +","+"\""+localName+"\""+","+"\"elt\");");
     }
-
 
     // Parser calls this once after parsing a document
     public void endDocument() throws SAXException {
-            System.out.println("End ---");
     }
 
     // Parser calls after parsing a text node
     public void characters(char[] ch, int start, int length) throws SAXException {
-        String str = new String(ch, start, length);
-        if( !str.trim().isEmpty() ) {
-
-            System.out.print("INSERT INTO node(begin,end,parent,tag,type) VALUES("+
-                    this.cptr+" ,");
-            this.cptr++;
-            System.out.println(this.cptr+" ,"+ this.cptrBegin.get(this.cptrBegin.size()-1) +"," +"\""+str +"\""+ ","+"\"txt\");");
-
-            this.cptr++;
+        if(in) {
+            for(int i=0;i<profondeur;i++)
+                System.out.print("\t");
+            String str = new String(ch, start, length);
+            System.out.println(str);
         }
     }
-
-
-
 
 
     /**
@@ -160,20 +158,21 @@ public class SaxParserNode extends DefaultHandler {
     }
 
     private static void usage() {
-        System.err.println("Usage: SAXLocalNameCount [-options] <file.xml>");
+        System.err.println("Usage: SAXLocalNameCount [-options] <file.xml> <alpha>");
         System.exit(1);
     }
 
     static public void main(String[] args) throws Exception {
-        String filename = null;
-        
-                if (args.length < 1) {
-                    usage();
-                }
-                else 
-                	filename = args[0];
 
-                
+        long startTime = System.currentTimeMillis();
+
+        String filename = "file";
+
+        if (args.length < 2) {
+            usage();
+        }
+        else
+            filename = args[0];
 
         // Create a JAXP SAXParserFactory and configure it
         SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -186,18 +185,24 @@ public class SaxParserNode extends DefaultHandler {
         // Create a JAXP SAXParser
         SAXParser saxParser = spf.newSAXParser();
 
-
         // Get the encapsulated SAX XMLReader
         XMLReader xmlReader = saxParser.getXMLReader();
 
+        SaxParserXPath sax = new SaxParserXPath();
+        sax.setAlpha(args[1]);
+
         // Set the ContentHandler of the XMLReader
-        xmlReader.setContentHandler(new SaxParserNode());
+        xmlReader.setContentHandler(sax);
 
         // Set an ErrorHandler before parsing
         xmlReader.setErrorHandler(new MyErrorHandler(System.err));
 
         // Tell the XMLReader to parse the XML document
         xmlReader.parse(convertToFileURL(filename));
+
+        long time = System.currentTimeMillis() - startTime;
+        System.out.println("Temps d'exécution : " + time + "ms");
+
     }
 
     // Error handler to report errors and warnings
@@ -218,8 +223,8 @@ public class SaxParserNode extends DefaultHandler {
                 systemId = "null";
             }
             String info = "URI=" + systemId +
-                " Line=" + spe.getLineNumber() +
-                ": " + spe.getMessage();
+                    " Line=" + spe.getLineNumber() +
+                    ": " + spe.getMessage();
             return info;
         }
 
@@ -229,7 +234,7 @@ public class SaxParserNode extends DefaultHandler {
         public void warning(SAXParseException spe) throws SAXException {
             out.println("Warning: " + getParseExceptionInfo(spe));
         }
-        
+
         public void error(SAXParseException spe) throws SAXException {
             String message = "Error: " + getParseExceptionInfo(spe);
             throw new SAXException(message);

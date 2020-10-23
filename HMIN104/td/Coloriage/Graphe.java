@@ -1,3 +1,14 @@
+// Compilation : javac Graphe.java
+// Execution : java Main nombre_couleurs
+
+/*!
+ * \brief Coloriage d'un graphe avec k couleurs
+ * \details Master AIGLE - [HMIN104] Compilation et inteprétation
+ * \author Canta Thomas (21607288)
+ * \author Fontaine Quentin (21611404)
+ * \date 21 oct. 2020
+ */
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -7,8 +18,6 @@ import java.util.ArrayList;
  * @param <L>
  * @param <R>
  */
-//
-//
 class Pair<L,R> {
 
     final L left;
@@ -67,12 +76,12 @@ class Sommet{
  */
 class Graphe{
     ArrayList<Sommet> vertices;
-    ArrayList<Pair<Sommet,Sommet>> inter;
-    ArrayList<Pair<Sommet,Sommet>> pref;
-    ArrayList<Pair<Sommet,Sommet>> edges = new ArrayList<>();
+    ArrayList<Pair<Sommet, Sommet>> inter;
+    ArrayList<Pair<Sommet, Sommet>> pref;
+    ArrayList<Pair<Sommet, Sommet>> edges = new ArrayList<>();
     int k;
 
-    public Graphe(ArrayList<Sommet> vertices, ArrayList<Pair<Sommet,Sommet>> inter,ArrayList<Pair<Sommet,Sommet>> pref,int k){
+    public Graphe(ArrayList<Sommet> vertices, ArrayList<Pair<Sommet, Sommet>> inter, ArrayList<Pair<Sommet, Sommet>> pref, int k){
         this.vertices = vertices;
         this.inter = inter;
         this.pref = pref;
@@ -121,9 +130,9 @@ class Graphe{
      * @param sommet
      * @return
      */
-    ArrayList<Pair<Sommet,Sommet>> removeEdges(ArrayList<Pair<Sommet,Sommet>> edges, Sommet sommet) {
-        ArrayList<Pair<Sommet,Sommet>> result = new ArrayList<>();
-        for (Pair<Sommet,Sommet> edge : edges){
+    ArrayList<Pair<Sommet, Sommet>> removeEdges(ArrayList<Pair<Sommet, Sommet>> edges, Sommet sommet) {
+        ArrayList<Pair<Sommet, Sommet>> result = new ArrayList<>();
+        for (Pair<Sommet, Sommet> edge : edges){
             if ( edge.left.name != sommet.name && edge.right.name != sommet.name ) { result.add(edge); }
             else if ( edge.left.name != sommet.name && edge.right.name == sommet.name) { edge.left.setDegree(edge.left.getDegree()-1); }
             else { edge.right.setDegree(edge.right.getDegree()-1); }
@@ -176,7 +185,7 @@ class Graphe{
      */
     ArrayList<Sommet> asPref(Sommet sommet) {
         ArrayList<Sommet> res = new ArrayList<>();
-        for (Pair<Sommet,Sommet> p : this.pref) {
+        for (Pair<Sommet, Sommet> p : this.pref) {
             if (p.left.name == sommet.getName()) { res.add(p.right); }
             if (p.right.name == sommet.getName()) { res.add(p.left); }
         }
@@ -190,7 +199,7 @@ class Graphe{
      */
     ArrayList<Sommet> getNeighbours(Sommet sommet){
         ArrayList<Sommet> result = new ArrayList<>();
-        for (Pair<Sommet,Sommet> p : this.edges) {
+        for (Pair<Sommet, Sommet> p : this.edges) {
             if (sommet == p.left) {
                 result.add(p.right);
             }
@@ -221,115 +230,154 @@ class Graphe{
      */
     void initColor() {
 
-        // recopie verticies
-        ArrayList<Sommet> verticescpy = new ArrayList<>();
-        for(Sommet s : this.vertices) { verticescpy.add(s); }
-
-        // recopies interferences
-        ArrayList<Pair<Sommet,Sommet>> edgescpy = new ArrayList<>();
-        for(Pair<Sommet,Sommet> p : this.inter) { edgescpy.add(p); }
-
-        // steps permettra de conserver à chaque décomposition du graphe
-        // de conserver à chaque étape le noeud qui à été supprimé/spill.
-        // Permettant ainsi de refaire l'arbre en marche arrière
-        ArrayList<Sommet> steps = new ArrayList<>();
-
-        //on déconstruit l'arbre
-        while (verticescpy.size() > 1){
-            Sommet sommet = getSommetDegreeMin(verticescpy);
-            if (sommet == null) {
-
-
-                sommet = getSommetDegreeMax(verticescpy);
-                sommet.setColor(-1);
-
-                // ajoute une étape
-                steps.add(sommet);
-
-                // supprime le sommet et les arêtes
-                verticescpy = removeSommet(verticescpy, sommet);
-                edgescpy = removeEdges(edgescpy, sommet);
-            }
-            else {
-                // ajoute le sommet dans une pile maison
-                steps.add(sommet);
-
-                // supprime le sommet et les arêtes
-                verticescpy = removeSommet(verticescpy, sommet);
-                edgescpy = removeEdges(edgescpy, sommet);
-            }
-
-            // Debug
-            //this.printDegree(verticescpy);
-            //this.printEdges(edgescpy);
-        }
-
-
-        // set couleur du dernier sommet
-        Sommet sommet = verticescpy.get(0);
-        sommet.setColor(1);
-
-        // si sommet préférence => pour chacun des sommets avec qui il est on associe la même couleur
-        if (asPref(sommet).size() != 0) {
-            for (Sommet s : asPref(sommet)){
-                s.setColor(sommet.getColor());
+        boolean bondegre = true;
+        for (Sommet d : this.vertices) {
+            if (d.getDegree() != 2){
+                bondegre = false;
             }
         }
+        if (this.vertices.size() % 2 == 0 && bondegre){
+            ArrayList<Sommet> coloried = new ArrayList<Sommet>();
+            this.inter.get(0).left.setColor(1);
+            coloried.add(this.inter.get(0).left);
+            this.inter.get(0).right.setColor(2);
+            coloried.add(this.inter.get(0).right);
 
-
-        //on recontruit l'arbre
-        for (int i=steps.size()-1; i > -1; i--) {
-
-            sommet = steps.get(i);
-
-            // si a été spillé
-            if (sommet.getColor() == -1){
-                //Debug
-                //System.out.println("Ce sommet a été spill");
-            }
-
-            // si aucune couleur définis
-            if (sommet.getColor() >= 0) {
-
-                // Si notre sommet est déjà colorié est qu'il est dans les préférences
-                if (sommet.getColor() > 0 && asPref(sommet) != null){
-
-                    // on récupère les couleurs de chaques sommets lié au sommet traité sauf ceux de préférences
-                    ArrayList<Integer> viewColors = new ArrayList<>();
-                    for (Sommet s : this.getNeighbours(sommet)) {
-                        if (s.getColor() > 0 && !asPref(sommet).contains(s)) {
-                            viewColors.add(s.getColor());
+            while (coloried.size() < this.vertices.size()){
+                for (Pair<Sommet, Sommet> e : this.inter) {
+                    if (coloried.contains(e.left) && !coloried.contains(e.right)){
+                        if (e.left.getColor() == 1){
+                            e.right.setColor(2);
+                        }else{
+                            e.right.setColor(1);
                         }
+                        coloried.add(e.right);
                     }
-
-                    sommet.setColor(this.getNewColor(viewColors));
-                } else {
-
-                    // on récupère les couleurs de chaques sommets du sommet traité
-                    ArrayList<Integer> viewColors = new ArrayList<>();
-                    for (Sommet s : this.getNeighbours(sommet)) {
-                        if (s.getColor() > 0) {
-                            viewColors.add(s.getColor());
+                    if (!coloried.contains(e.left) && coloried.contains(e.right)){
+                        if (e.right.getColor() == 1){
+                            e.left.setColor(2);
+                        }else{
+                            e.left.setColor(1);
                         }
-                    }
-
-                    // on donne une nouvelle couleur possible à notre sommet
-                    sommet.setColor(this.getNewColor(viewColors));
-
-                    // si sommet préférence, on donne la même couleur sommet avec qui il est relié
-                    if (asPref(sommet).size() != 0) {
-                        for (Sommet s : asPref(sommet)) {
-                            s.setColor(sommet.getColor());
-                        }
+                        coloried.add(e.left);
                     }
                 }
             }
+        }else {
 
-            //on rajoute le sommet
-            verticescpy.add(sommet);
+            // recopie verticies
+            ArrayList<Sommet> verticescpy = new ArrayList<>();
+            for (Sommet s : this.vertices) {
+                verticescpy.add(s);
+            }
 
-            //DEBUG
-            //this.printColor();
+            // recopies interferences
+            ArrayList<Pair<Sommet, Sommet>> edgescpy = new ArrayList<>();
+            for (Pair<Sommet, Sommet> p : this.inter) {
+                edgescpy.add(p);
+            }
+
+            // steps permettra de conserver à chaque décomposition du graphe
+            // de conserver à chaque étape le noeud qui à été supprimé/spill.
+            // Permettant ainsi de refaire l'arbre en marche arrière
+            ArrayList<Sommet> steps = new ArrayList<>();
+
+            //on déconstruit l'arbre
+            while (verticescpy.size() > 1) {
+                Sommet sommet = getSommetDegreeMin(verticescpy);
+                if (sommet == null) {
+
+
+                    sommet = getSommetDegreeMax(verticescpy);
+                    sommet.setColor(-1);
+
+                    // ajoute une étape
+                    steps.add(sommet);
+
+                    // supprime le sommet et les arêtes
+                    verticescpy = removeSommet(verticescpy, sommet);
+                    edgescpy = removeEdges(edgescpy, sommet);
+                } else {
+                    // ajoute le sommet dans une pile maison
+                    steps.add(sommet);
+
+                    // supprime le sommet et les arêtes
+                    verticescpy = removeSommet(verticescpy, sommet);
+                    edgescpy = removeEdges(edgescpy, sommet);
+                }
+
+                // Debug
+                //this.printDegree(verticescpy);
+                //this.printEdges(edgescpy);
+            }
+
+
+            // set couleur du dernier sommet
+            Sommet sommet = verticescpy.get(0);
+            sommet.setColor(1);
+
+            // si sommet préférence => pour chacun des sommets avec qui il est on associe la même couleur
+            if (asPref(sommet).size() != 0) {
+                for (Sommet s : asPref(sommet)) {
+                    s.setColor(sommet.getColor());
+                }
+            }
+
+
+            //on recontruit l'arbre
+            for (int i = steps.size() - 1; i > -1; i--) {
+
+                sommet = steps.get(i);
+
+                // si a été spillé
+                if (sommet.getColor() == -1) {
+                    //Debug
+                    //System.out.println("Ce sommet a été spill");
+                }
+
+                // si aucune couleur définis
+                if (sommet.getColor() >= 0) {
+
+                    // Si notre sommet est déjà colorié est qu'il est dans les préférences
+                    if (sommet.getColor() > 0 && asPref(sommet) != null) {
+
+                        // on récupère les couleurs de chaques sommets lié au sommet traité sauf ceux de préférences
+                        ArrayList<Integer> viewColors = new ArrayList<>();
+                        for (Sommet s : this.getNeighbours(sommet)) {
+                            if (s.getColor() > 0 && !asPref(sommet).contains(s)) {
+                                viewColors.add(s.getColor());
+                            }
+                        }
+
+                        sommet.setColor(this.getNewColor(viewColors));
+                    } else {
+
+                        // on récupère les couleurs de chaques sommets du sommet traité
+                        ArrayList<Integer> viewColors = new ArrayList<>();
+                        for (Sommet s : this.getNeighbours(sommet)) {
+                            if (s.getColor() > 0) {
+                                viewColors.add(s.getColor());
+                            }
+                        }
+
+                        // on donne une nouvelle couleur possible à notre sommet
+                        sommet.setColor(this.getNewColor(viewColors));
+
+                        // si sommet préférence, on donne la même couleur sommet avec qui il est relié
+                        if (asPref(sommet).size() != 0) {
+                            for (Sommet s : asPref(sommet)) {
+                                s.setColor(sommet.getColor());
+                            }
+                        }
+                    }
+                }
+
+                //on rajoute le sommet
+                verticescpy.add(sommet);
+
+                //DEBUG
+                //this.printColor();
+            }
         }
 
         // Fin du traitement on affiche le résultat
@@ -349,9 +397,9 @@ class Graphe{
      * Affiche les arêtes du graphe
      * @param edges
      */
-    void printEdges(ArrayList<Pair<Sommet,Sommet>> edges) {
+    void printEdges(ArrayList<Pair<Sommet, Sommet>> edges) {
         System.out.print("Edges -> ");
-        for (Pair<Sommet,Sommet> p : edges) { System.out.print("(" + p.left.name + "," + p.right.name + ") "); }
+        for (Pair<Sommet, Sommet> p : edges) { System.out.print("(" + p.left.name + "," + p.right.name + ") "); }
         System.out.println("");
     }
 
@@ -367,6 +415,45 @@ class Graphe{
 class Main {
     public static void main(String[] args) {
 
+        if (args.length == 0){
+            System.out.println("Utilisation : java Graphe nb_couleurs");
+            System.exit(0);
+        }
+
+        // ----- Graphe 1 ----- //
+        // Création des sommets
+        Sommet a = new Sommet("a");
+        Sommet b = new Sommet("b");
+        Sommet c = new Sommet("c");
+        Sommet d = new Sommet("d");
+
+        // Ajout des sommets dans un tableau
+        ArrayList<Sommet> vertices1 = new ArrayList<Sommet>();
+        vertices1.add(a);
+        vertices1.add(b);
+        vertices1.add(c);
+        vertices1.add(d);
+
+        // Création des arêtes d'interférences
+        ArrayList<Pair<Sommet, Sommet>> inter1 = new ArrayList<Pair<Sommet, Sommet>>();
+        inter1.add(new Pair(a,b));
+        inter1.add(new Pair(b,c));
+        inter1.add(new Pair(c,d));
+        inter1.add(new Pair(d,a));
+
+        // Création des arêtes de préférences
+        ArrayList<Pair<Sommet, Sommet>> pref1 = new ArrayList<Pair<Sommet, Sommet>>();
+
+        // Création du graphe
+        Graphe g1 = new Graphe(vertices1, inter1, pref1, Integer.parseInt(args[0]));
+
+        // Colorisation du graphe
+        g1.initColor();
+
+        // Affichage des couleurs
+        g1.printColor();
+
+        // ----- GRAPHE 2 ----- //
         // Création des sommets
         Sommet u = new Sommet("u");
         Sommet v = new Sommet("v");
@@ -376,35 +463,35 @@ class Main {
         Sommet z = new Sommet("z");
 
         // Ajout des sommets dans un tableau
-        ArrayList<Sommet> vertices = new ArrayList<Sommet>();
-        vertices.add(u);
-        vertices.add(v);
-        vertices.add(t);
-        vertices.add(x);
-        vertices.add(y);
-        vertices.add(z);
+        ArrayList<Sommet> vertices2 = new ArrayList<Sommet>();
+        vertices2.add(u);
+        vertices2.add(v);
+        vertices2.add(t);
+        vertices2.add(x);
+        vertices2.add(y);
+        vertices2.add(z);
 
         // Création des arêtes d'interférences
-        ArrayList<Pair<Sommet,Sommet>> inter = new ArrayList<Pair<Sommet,Sommet>>();
-        inter.add(new Pair(u,x));
-        inter.add(new Pair(u,y));
-        inter.add(new Pair(v,x));
-        inter.add(new Pair(v,z));
-        inter.add(new Pair(v,t));
-        inter.add(new Pair(y,x));
-        inter.add(new Pair(y,t));
+        ArrayList<Pair<Sommet, Sommet>> inter2 = new ArrayList<Pair<Sommet, Sommet>>();
+        inter2.add(new Pair(u,x));
+        inter2.add(new Pair(u,y));
+        inter2.add(new Pair(v,x));
+        inter2.add(new Pair(v,z));
+        inter2.add(new Pair(v,t));
+        inter2.add(new Pair(y,x));
+        inter2.add(new Pair(y,t));
 
         // Création des arêtes de préférences
-        ArrayList<Pair<Sommet,Sommet>> pref = new ArrayList<Pair<Sommet,Sommet>>();
-        pref.add(new Pair(u,t));
+        ArrayList<Pair<Sommet, Sommet>> pref2 = new ArrayList<Pair<Sommet, Sommet>>();
+        pref2.add(new Pair(u,t));
 
         // Création du graphe
-        Graphe g = new Graphe(vertices,inter,pref, Integer.parseInt(args[0]));
+        Graphe g2 = new Graphe(vertices2, inter2, pref2, Integer.parseInt(args[0]));
 
         // Colorisation du graphe
-        g.initColor();
+        g2.initColor();
 
         // Affichage des couleurs
-        g.printColor();
+        g2.printColor();
     }
 }

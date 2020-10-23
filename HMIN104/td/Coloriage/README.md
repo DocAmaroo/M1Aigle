@@ -1,13 +1,8 @@
-\+ main() :
-- demander le nombre de couleur
-- ArrayList\<Sommet>
+# Compilation & Execution
+```bash
+#Compilation
+javac Graphe.java
 
-\+ sommet() :
-- int : couleur
-- String : nom
-- ArrayList\<Sommet> : (voisins)
-
-\+ graphe() :
-- ArrayList\<Sommet>
-- ArrayList\<arete>
-
+#Execution
+java Main nombre_couleurs
+```

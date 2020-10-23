@@ -55,16 +55,12 @@
  */
 
 // JAXP packages
-
+import javax.xml.parsers.*;
 import org.xml.sax.*;
-import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.*;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.File;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.*;
+import java.io.*;
 
 /**
  * Program to be modified to implement the begin/end schema encoding. 
@@ -72,7 +68,7 @@ import java.util.Hashtable;
  * The present code is drawn from SAXLocalNameCount.java (2002-04-18 by Edwin Goei)
  */
 
-public class SaxParserPrePost extends DefaultHandler {
+public class SaxParserBeginEnd extends DefaultHandler {
     /** Constants used for JAXP 1.2 */
     static final String JAXP_SCHEMA_LANGUAGE =
         "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
@@ -102,14 +98,14 @@ public class SaxParserPrePost extends DefaultHandler {
 
     // Parser calls this for each opening of an element in a document
     public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
-        cptrBegin.add(begin);
-        begin++;
+        this.cptrBegin.add(cptr);
+        this.cptr++;
     }
     
     // Parser calls this for each end of an element in a document
     public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
-        int endNum = end;
-        end++;
+        int endNum = this.cptr;
+        this.cptr++;
         int beginNum = this.cptrBegin.get(this.cptrBegin.size()-1);
         this.cptrBegin.remove(this.cptrBegin.size()-1);
         int parentNum = 0;
@@ -134,14 +130,13 @@ public class SaxParserPrePost extends DefaultHandler {
         String str = new String(ch, start, length);
         if( !str.trim().isEmpty() ) {
 
-            System.out.print("INSERT INTO node(begin,end,parent,tag,type) VALUES("+this.begin+" ,");
-            this.begin++;
-            System.out.println(this.end+" ,"+ this.cptrBegin.get(this.cptrBegin.size()-1) +"," +"\""+str +"\""+ ","+"\"txt\");");
+            System.out.print("INSERT INTO node(begin,end,parent,tag,type) VALUES("+this.cptr+" ,");
+            this.cptr++;
+            System.out.println(this.cptr+" ,"+ this.cptrBegin.get(this.cptrBegin.size()-1) +"," +"\""+str +"\""+ ","+"\"txt\");");
 
-            this.end++;
+            this.cptr++;
         }
     }
-
 
 
     /**
@@ -177,7 +172,6 @@ public class SaxParserPrePost extends DefaultHandler {
         else
             filename = args[0];
 
-
         // Create a JAXP SAXParserFactory and configure it
         SAXParserFactory spf = SAXParserFactory.newInstance();
 
@@ -194,7 +188,7 @@ public class SaxParserPrePost extends DefaultHandler {
         XMLReader xmlReader = saxParser.getXMLReader();
 
         // Set the ContentHandler of the XMLReader
-        xmlReader.setContentHandler(new SaxParserPrePost());
+        xmlReader.setContentHandler(new SaxParserBeginEnd());
 
         // Set an ErrorHandler before parsing
         xmlReader.setErrorHandler(new MyErrorHandler(System.err));
