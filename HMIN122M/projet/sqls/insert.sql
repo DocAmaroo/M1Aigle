@@ -26,7 +26,7 @@ INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
 INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
 (1, TO_DATE('2020/10/28:13:32:47', 'YYYY/MM/DD:HH24:MI:SS'), 1);
 INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
-(2, TO_DATE('2020/10/29:00:00:00', 'HH24:MI:SS'), 0);
+(2, TO_DATE('2020/10/29:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), 0);
 INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
 (3, TO_DATE('2020/11/29:23:59:59', 'YYYY/MM/DD:HH24:MI:SS'), 0);
 INSERT INTO Dates (id_date, timestamp, fuseau) VALUES

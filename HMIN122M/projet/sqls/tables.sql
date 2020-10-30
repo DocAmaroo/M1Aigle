@@ -35,7 +35,7 @@ CREATE TABLE Formats (
 
 CREATE TABLE Dates (
     id_date NUMBER(7),
-    timestamp DATE,
+    timestamp TIMESTAMP,
     -- secondes NUMBER(2),
     -- minutes NUMBER(2),
     -- heures NUMBER
