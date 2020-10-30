@@ -60,6 +60,10 @@ INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin
 (2, 'Promotion de Noel', 0.5, 'reduction', 8, 9);
 INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
 (3, 'Inscription gratuite au evenement pour VIP', 0, 'reduction'); 
+INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
+(4, 'Bonus dépôt VIP', 0.1, 'bonus'); 
+INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
+(5, 'Bonus dépôt VIP Premium', 0.15, 'bonus');
 
 -- INSERT PAIEMENTS
 INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
