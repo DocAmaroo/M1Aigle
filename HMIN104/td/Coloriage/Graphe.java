@@ -76,12 +76,12 @@ class Sommet{
  */
 class Graphe{
     ArrayList<Sommet> vertices;
-    ArrayList<Pair<Sommet, Sommet>> inter;
-    ArrayList<Pair<Sommet, Sommet>> pref;
-    ArrayList<Pair<Sommet, Sommet>> edges = new ArrayList<>();
+    ArrayList<Pair<Sommet,Sommet>> inter;
+    ArrayList<Pair<Sommet,Sommet>> pref;
+    ArrayList<Pair<Sommet,Sommet>> edges = new ArrayList<>();
     int k;
 
-    public Graphe(ArrayList<Sommet> vertices, ArrayList<Pair<Sommet, Sommet>> inter, ArrayList<Pair<Sommet, Sommet>> pref, int k){
+    public Graphe(ArrayList<Sommet> vertices, ArrayList<Pair<Sommet,Sommet>> inter,ArrayList<Pair<Sommet,Sommet>> pref,int k){
         this.vertices = vertices;
         this.inter = inter;
         this.pref = pref;
@@ -130,9 +130,9 @@ class Graphe{
      * @param sommet
      * @return
      */
-    ArrayList<Pair<Sommet, Sommet>> removeEdges(ArrayList<Pair<Sommet, Sommet>> edges, Sommet sommet) {
-        ArrayList<Pair<Sommet, Sommet>> result = new ArrayList<>();
-        for (Pair<Sommet, Sommet> edge : edges){
+    ArrayList<Pair<Sommet,Sommet>> removeEdges(ArrayList<Pair<Sommet,Sommet>> edges, Sommet sommet) {
+        ArrayList<Pair<Sommet,Sommet>> result = new ArrayList<>();
+        for (Pair<Sommet,Sommet> edge : edges){
             if ( edge.left.name != sommet.name && edge.right.name != sommet.name ) { result.add(edge); }
             else if ( edge.left.name != sommet.name && edge.right.name == sommet.name) { edge.left.setDegree(edge.left.getDegree()-1); }
             else { edge.right.setDegree(edge.right.getDegree()-1); }
@@ -185,7 +185,7 @@ class Graphe{
      */
     ArrayList<Sommet> asPref(Sommet sommet) {
         ArrayList<Sommet> res = new ArrayList<>();
-        for (Pair<Sommet, Sommet> p : this.pref) {
+        for (Pair<Sommet,Sommet> p : this.pref) {
             if (p.left.name == sommet.getName()) { res.add(p.right); }
             if (p.right.name == sommet.getName()) { res.add(p.left); }
         }
@@ -199,7 +199,7 @@ class Graphe{
      */
     ArrayList<Sommet> getNeighbours(Sommet sommet){
         ArrayList<Sommet> result = new ArrayList<>();
-        for (Pair<Sommet, Sommet> p : this.edges) {
+        for (Pair<Sommet,Sommet> p : this.edges) {
             if (sommet == p.left) {
                 result.add(p.right);
             }
@@ -244,7 +244,7 @@ class Graphe{
             coloried.add(this.inter.get(0).right);
 
             while (coloried.size() < this.vertices.size()){
-                for (Pair<Sommet, Sommet> e : this.inter) {
+                for (Pair<Sommet,Sommet> e : this.inter) {
                     if (coloried.contains(e.left) && !coloried.contains(e.right)){
                         if (e.left.getColor() == 1){
                             e.right.setColor(2);
@@ -381,7 +381,7 @@ class Graphe{
         }
 
         // Fin du traitement on affiche le résultat
-        System.out.println("\nLe coloriage est terminé...");
+        System.out.println("Le coloriage est terminé...");
     }
 
 
@@ -397,9 +397,9 @@ class Graphe{
      * Affiche les arêtes du graphe
      * @param edges
      */
-    void printEdges(ArrayList<Pair<Sommet, Sommet>> edges) {
+    void printEdges(ArrayList<Pair<Sommet,Sommet>> edges) {
         System.out.print("Edges -> ");
-        for (Pair<Sommet, Sommet> p : edges) { System.out.print("(" + p.left.name + "," + p.right.name + ") "); }
+        for (Pair<Sommet,Sommet> p : edges) { System.out.print("(" + p.left.name + "," + p.right.name + ") "); }
         System.out.println("");
     }
 
@@ -447,6 +447,7 @@ class Main {
         // Création du graphe
         Graphe g1 = new Graphe(vertices1, inter1, pref1, Integer.parseInt(args[0]));
 
+        System.out.println("--- Graphe #1 ---");
         // Colorisation du graphe
         g1.initColor();
 
@@ -488,6 +489,7 @@ class Main {
         // Création du graphe
         Graphe g2 = new Graphe(vertices2, inter2, pref2, Integer.parseInt(args[0]));
 
+        System.out.println("\n--- Graphe #2 ---");
         // Colorisation du graphe
         g2.initColor();
 
