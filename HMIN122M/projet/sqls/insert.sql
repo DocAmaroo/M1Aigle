@@ -21,30 +21,30 @@ INSERT INTO Formats (id_format, type, taxe, montant_min, montant_max) VALUES
 (5, 'PaysafeCard', 0.05, 5, 3000);
 
 -- INSERT DATES
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(0, TO_DATE('13:31:45', 'HH24:MI:SS'), 28, 10, 2020,  1);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(1, TO_DATE('13:32:47', 'HH24:MI:SS'), 28, 10, 2020, 1);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(2, TO_DATE('00:00:00', 'HH24:MI:SS'), 29, 10, 2020, 0);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(3, TO_DATE('23:59:59', 'HH24:MI:SS'), 29, 11, 2020, 0);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(4, TO_DATE('08:04:57', 'HH24:MI:SS'), 29, 10, 2020, -10);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(5, TO_DATE('08:05:17', 'HH24:MI:SS'), 29, 10, 2020, -5);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(6, TO_DATE('09:17:06', 'HH24:MI:SS'), 29, 10, 2020, 2);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(7, TO_DATE('09:17:06', 'HH24:MI:SS'), 05, 11, 2020, 2);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(8, TO_DATE('00:00:00', 'HH24:MI:SS'), 01, 12, 2020, 0);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(9, TO_DATE('23:59:59', 'HH24:MI:SS'), 31, 12, 2020, 0);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(10, TO_DATE('08:00:00', 'HH24:MI:SS'), 02, 10, 2020, 0);
-INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
-(11, TO_DATE('17:00:00', 'HH24:MI:SS'), 02, 10, 2020, 0);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(0, TO_DATE('2020/10/28:13:31:45', 'YYYY/MM/DD:HH24:MI:SS'), 1);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(1, TO_DATE('2020/10/28:13:32:47', 'YYYY/MM/DD:HH24:MI:SS'), 1);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(2, TO_DATE('2020/10/29:00:00:00', 'HH24:MI:SS'), 0);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(3, TO_DATE('2020/11/29:23:59:59', 'YYYY/MM/DD:HH24:MI:SS'), 0);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(4, TO_DATE('2020/10/29:08:04:57', 'YYYY/MM/DD:HH24:MI:SS'), -10);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(5, TO_DATE('2020/10/29:08:05:17', 'YYYY/MM/DD:HH24:MI:SS'), -5);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(6, TO_DATE('2020/10/29:09:17:06', 'YYYY/MM/DD:HH24:MI:SS'), 2);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(7, TO_DATE('2020/11/05:09:17:06', 'YYYY/MM/DD:HH24:MI:SS'), 2);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(8, TO_DATE('2020/12/01:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), 0);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(9, TO_DATE('2020/12/31:23:59:59', 'YYYY/MM/DD:HH24:MI:SS'), 0);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(10, TO_DATE('2020/10/02:08:00:00', 'YYYY/MM/DD:HH24:MI:SS'), 0);
+INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
+(11, TO_DATE('2020/10/02:17:00:00', 'YYYY/MM/DD:HH24:MI:SS'), 0);
 
 -- INSERT EVENEMENTS
 INSERT INTO Evenements (id_evenement, organisateur, inscrit, inscrit_max, cashprize, date_debut, date_fin) VALUES
@@ -72,3 +72,31 @@ INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 -- INSERT INSCRIPTION
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription) VALUES
 (0, 0, 3, 5, 20);
+
+
+
+-- ARCHIVES
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (0, TO_DATE('13:31:45', 'HH24:MI:SS'), 28, 10, 2020,  1);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (1, TO_DATE('13:32:47', 'HH24:MI:SS'), 28, 10, 2020, 1);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (2, TO_DATE('00:00:00', 'HH24:MI:SS'), 29, 10, 2020, 0);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (3, TO_DATE('23:59:59', 'HH24:MI:SS'), 29, 11, 2020, 0);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (4, TO_DATE('08:04:57', 'HH24:MI:SS'), 29, 10, 2020, -10);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (5, TO_DATE('08:05:17', 'HH24:MI:SS'), 29, 10, 2020, -5);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (6, TO_DATE('09:17:06', 'HH24:MI:SS'), 29, 10, 2020, 2);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (7, TO_DATE('09:17:06', 'HH24:MI:SS'), 05, 11, 2020, 2);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (8, TO_DATE('00:00:00', 'HH24:MI:SS'), 01, 12, 2020, 0);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (9, TO_DATE('23:59:59', 'HH24:MI:SS'), 31, 12, 2020, 0);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (10, TO_DATE('08:00:00', 'HH24:MI:SS'), 02, 10, 2020, 0);
+-- INSERT INTO Dates (id_date, timestamp, jour, mois, annee, fuseau) VALUES
+-- (11, TO_DATE('17:00:00', 'HH24:MI:SS'), 02, 10, 2020, 0);

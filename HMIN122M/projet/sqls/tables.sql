@@ -36,9 +36,12 @@ CREATE TABLE Formats (
 CREATE TABLE Dates (
     id_date NUMBER(7),
     timestamp DATE,
-    jour NUMBER(2),
-    mois NUMBER(2),
-    annee NUMBER(4),
+    -- secondes NUMBER(2),
+    -- minutes NUMBER(2),
+    -- heures NUMBER
+    -- jour NUMBER(2),
+    -- mois NUMBER(2),
+    -- annee NUMBER(4),
     fuseau NUMBER(2),
     CONSTRAINT PK_ID_DATE PRIMARY KEY (id_date)
 );
