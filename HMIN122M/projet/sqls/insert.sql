@@ -8,17 +8,17 @@ INSERT INTO Joueurs(id_joueur, nom, prenom, pseudo, solde, type, email, date_nai
 
 -- INSERT FORMATS
 INSERT INTO Formats (id_format, type, taxe, montant_min, montant_max) VALUES 
-(0, "Paypal", 0.05, 5, 1500);
+(0, 'Paypal', 0.05, 5, 1500);
 INSERT INTO Formats (id_format, type, taxe, montant_min, montant_max) VALUES 
-(1, "Skrill", 0.05, 5, 1500);
+(1, 'Skrill', 0.05, 5, 1500);
 INSERT INTO Formats (id_format, type, taxe, montant_min, montant_max) VALUES 
-(2, "Virement Bancaire", 0.05, 5, 3000);
+(2, 'Virement Bancaire', 0.05, 5, 3000);
 INSERT INTO Formats (id_format, type, taxe, montant_min, montant_max) VALUES 
-(3, "Carte Bancaire", 0.05, 5, 3000);
+(3, 'Carte Bancaire', 0.05, 5, 3000);
 INSERT INTO Formats (id_format, type, taxe, montant_min, montant_max) VALUES 
-(4, "CashLib", 0.05, 2, 200);
+(4, 'CashLib', 0.05, 2, 200);
 INSERT INTO Formats (id_format, type, taxe, montant_min, montant_max) VALUES 
-(4, "PaysafeCard", 0.05, 5, 3000);
+(4, 'PaysafeCard', 0.05, 5, 3000);
 
 -- INSERT DATES
 INSERT INTO Dates (id_date, timestamp, fuseau) VALUES
@@ -48,18 +48,18 @@ INSERT INTO Dates (id_date, timestamp, mois, annee, fuseau) VALUES
 
 -- INSERT EVENEMENTS
 INSERT INTO Evenements (id_evenement, organisateur, inscrit, inscrit_max, cashprize, date_debut, date_fin) VALUES
-(0, "FDS Montpellier", 1, 50, 1000, 10, 11);
+(0, 'FDS Montpellier', 1, 50, 1000, 10, 11);
 
 
 -- INSERT PROMOTIONS
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
-(0, "Black Friday", 0.25, "reduction", 2, 3); 
+(0, 'Black Friday', 0.25, 'reduction', 2, 3); 
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
-(1, "Ticket VIP", 50, "remise", 6, 7); 
+(1, 'Ticket VIP', 50, 'remise', 6, 7); 
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
-(2, "Promotion de Noêl", 0.5, "reduction", 8, 9);
+(2, 'Promotion de Noêl', 0.5, 'reduction', 8, 9);
 INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
-(3, "Inscription gratuite au évènement pour VIP", 0, "reduction"); 
+(3, 'Inscription gratuite au évènement pour VIP', 0, 'reduction'); 
 
 -- INSERT PAIEMENTS
 INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
