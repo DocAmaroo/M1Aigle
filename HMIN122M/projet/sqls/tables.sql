@@ -15,6 +15,7 @@ CREATE TABLE Joueurs (
     type NUMBER(1),
     email VARCHAR(255),
     date_naissance DATE,
+    age NUMBER(3),
     adresse VARCHAR(255),
     ville VARCHAR(255),
     pays VARCHAR(255),
