@@ -10,7 +10,7 @@ CREATE TABLE Joueurs (
     nom VARCHAR(40),
     prenom VARCHAR(40),
     pseudo VARCHAR(40),
-    solde NUMBER(8),
+    solde FLOAT(8),
     type NUMBER(1),
     email VARCHAR(255),
     date_naissance Date,

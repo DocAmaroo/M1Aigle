@@ -1,0 +1,4 @@
+INSERT INTO Joueurs(id_joueur, nom, prenom, pseudo, solde, type, email, date_naissance, adresse, ville, pays, haut_fait, coord_bancaire) VALUES
+(0, 'Astley', 'Rick', 'Rickou', 1650.52, 1, 'nerver.gonna@giveyou.up', TO_DATE('1966/02/06', 'yyyy/mm/dd'), '75 avenue du rick rolled', 'Warrington', 'Angleterre', 'Boss ultime', 'FR068480684384'),
+(1, 'Canta', 'Thomas', 'Thominou', 250.21, 0, 'thomas.canta@etu.umontpellier.fr', TO_DATE('1998/09/28', 'yyyy/mm/dd'), '250 avenue des amandiers',  'Montpellier', 'France', 'Débutant', 'FR81385041350'),
+(2, 'Gracia-Moulis', 'Kevin', 'Kevinou', 3523.24, 1, 'gracia-moulis.kevin@etu.umontpellier.fr', TO_DATE('1998/09/25', 'yyyy/mm/dd'), '35 rue black desert online',  'Montpellier', 'France', 'Expert', 'FR68486443');
