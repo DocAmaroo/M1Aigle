@@ -5,31 +5,6 @@ DROP TABLE Formats;
 DROP TABLE Promotions;
 DROP TABLE Dates;
 
-CREATE TABLE Paiements (
-    id_joueur NUMBER(7),
-    id_format NUMBER(7),
-    id_promotion NUMBER(7),
-    id_date NUMBER(7),
-    quantite NUMBER(7),
-    type NUMBER(1),
-    CONSTRAINT FK_PAIEMENT_JOUEUR FOREIGN KEY (id_joueur) REFERENCES Joueurs (id_joueur),
-    CONSTRAINT FK_PAIEMENT_FORMAT FOREIGN KEY (id_format) REFERENCES Formats (id_format),
-    CONSTRAINT FK_PAIEMENT_PROMOTION FOREIGN KEY (id_promotion) REFERENCES Promotions (id_promotion),
-    CONSTRAINT FK_PAIEMENT_DATE FOREIGN KEY (id_date) REFERENCES Dates (id_date)
-);
-
-CREATE TABLE Inscriptions (
-    id_joueur NUMBER(7),
-    id_format NUMBER(7),
-    id_promotion NUMBER(7),
-    id_date NUMBER(7),
-    prix_inscription NUMBER(7),
-    CONSTRAINT FK_PAIEMENT_JOUEUR FOREIGN KEY (id_joueur) REFERENCES Joueurs (id_joueur),
-    CONSTRAINT FK_PAIEMENT_FORMAT FOREIGN KEY (id_format) REFERENCES Formats (id_format),
-    CONSTRAINT FK_PAIEMENT_PROMOTION FOREIGN KEY (id_promotion) REFERENCES Promotions (id_promotion),
-    CONSTRAINT FK_PAIEMENT_DATE FOREIGN KEY (id_date) REFERENCES Dates (id_date)
-);
-
 CREATE TABLE Joueurs (
     id_joueur NUMBER(7),
     nom VARCHAR(40),
@@ -57,6 +32,15 @@ CREATE TABLE Formats (
     CONSTRAINT PK_ID_FORMAT PRIMARY KEY (id_format)
 );
 
+CREATE TABLE Dates (
+    id_date NUMBER(7),
+    timestamp Date,
+    mois NUMBER(2),
+    annee NUMBER(4),
+    fuseau NUMBER(2),
+    CONSTRAINT PK_ID_DATE PRIMARY KEY (id_date)
+);
+
 CREATE TABLE Promotions (
     id_promotion NUMBER(7),
     nom VARCHAR(255),
@@ -69,11 +53,29 @@ CREATE TABLE Promotions (
     CONSTRAINT FK_PROMOTION_DATE_FIN FOREIGN KEY (date_fin) REFERENCES Dates (id_date)
 );
 
-CREATE TABLE Dates (
+
+CREATE TABLE Paiements (
+    id_joueur NUMBER(7),
+    id_format NUMBER(7),
+    id_promotion NUMBER(7),
     id_date NUMBER(7),
-    timestamp Date,
-    mois NUMBER(2),
-    annee NUMBER(4),
-    fuseau NUMBER(2),
-    CONSTRAINT PK_ID_DATE PRIMARY KEY (id_date)
+    quantite NUMBER(7),
+    type NUMBER(1),
+    CONSTRAINT FK_PAIEMENT_JOUEUR FOREIGN KEY (id_joueur) REFERENCES Joueurs (id_joueur),
+    CONSTRAINT FK_PAIEMENT_FORMAT FOREIGN KEY (id_format) REFERENCES Formats (id_format),
+    CONSTRAINT FK_PAIEMENT_PROMOTION FOREIGN KEY (id_promotion) REFERENCES Promotions (id_promotion),
+    CONSTRAINT FK_PAIEMENT_DATE FOREIGN KEY (id_date) REFERENCES Dates (id_date)
 );
+
+CREATE TABLE Inscriptions (
+    id_joueur NUMBER(7),
+    id_format NUMBER(7),
+    id_promotion NUMBER(7),
+    id_date NUMBER(7),
+    prix_inscription NUMBER(7),
+    CONSTRAINT FK_PAIEMENT_JOUEUR FOREIGN KEY (id_joueur) REFERENCES Joueurs (id_joueur),
+    CONSTRAINT FK_PAIEMENT_FORMAT FOREIGN KEY (id_format) REFERENCES Formats (id_format),
+    CONSTRAINT FK_PAIEMENT_PROMOTION FOREIGN KEY (id_promotion) REFERENCES Promotions (id_promotion),
+    CONSTRAINT FK_PAIEMENT_DATE FOREIGN KEY (id_date) REFERENCES Dates (id_date)
+);
+
