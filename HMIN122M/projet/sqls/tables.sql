@@ -44,7 +44,7 @@ CREATE TABLE Dates (
     -- annee NUMBER(4),
     fuseau NUMBER(2),
     CONSTRAINT PK_ID_DATE PRIMARY KEY (id_date)
-);
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE Evenements (
     id_evenement NUMBER(7),
