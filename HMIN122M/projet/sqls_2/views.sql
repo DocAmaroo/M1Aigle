@@ -5,6 +5,7 @@ DROP VIEW CountDepotPromo0View;
 DROP VIEW CountInscritEvent0View;
 DROP VIEW AvgInscritView;
 DROP VIEW CountInscritThisMonthView;
+DROP VIEW JoueurInscritAUnEvenementUnJourDAvecPromo;
 
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici octobre 2020)
 CREATE VIEW 
