@@ -82,19 +82,19 @@ INSERT INTO Evenements (id_evenement, organisateur, description, inscrit_max, ca
 
 -- INSERT PROMOTIONS
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
-(0, 'Black Friday - 25%', 0.25, 'reduction', TO_DATE('2020/10/29:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/29:23:59:59', 'YYYY/MM/DD:HH24:MI:SS')); 
+(0, 'Black Friday - 25 pourcent', 0.25, 'reduction', TO_DATE('2020/10/29:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/29:23:59:59', 'YYYY/MM/DD:HH24:MI:SS')); 
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
-(1, 'Ticket VIP - 50€ remises', 50, 'remise', TO_DATE('2020/10/29:09:17:06', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/05:09:17:06', 'YYYY/MM/DD:HH24:MI:SS')); 
+(1, 'Ticket VIP - 50 euros remises', 50, 'remise', TO_DATE('2020/10/29:09:17:06', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/05:09:17:06', 'YYYY/MM/DD:HH24:MI:SS')); 
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
-(2, 'Promotion de Noel - 5%', 0.5, 'reduction', TO_DATE('2020/12/01:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/12/31:23:59:59', 'YYYY/MM/DD:HH24:MI:SS'));
+(2, 'Promotion de Noel - 5 pourcent', 0.5, 'reduction', TO_DATE('2020/12/01:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/12/31:23:59:59', 'YYYY/MM/DD:HH24:MI:SS'));
 INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
 (3, 'Inscription gratuite au evenement pour VIP', 0, 'reduction'); 
 INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
-(4, 'Bonus 10€ dépôt VIP', 0.1, 'bonus'); 
+(4, 'Bonus 10 euros dépôt VIP', 0.1, 'bonus'); 
 INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
-(5, 'Bonus 15€ sur dépôt VIP Premium', 0.15, 'bonus');
+(5, 'Bonus 15 euros sur dépôt VIP Premium', 0.15, 'bonus');
 INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
-(6, 'Code Promo anniversaire - 10€ remises', 10, 'remise');
+(6, 'Code Promo anniversaire - 10 euros remises', 10, 'remise');
 
 -- INSERT PAIEMENTS
 INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
