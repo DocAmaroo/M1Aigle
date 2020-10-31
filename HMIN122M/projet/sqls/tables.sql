@@ -37,26 +37,18 @@ CREATE TABLE Formats (
 CREATE TABLE Dates (
     id_date NUMBER(7),
     timestamp TIMESTAMP,
-    -- secondes NUMBER(2),
-    -- minutes NUMBER(2),
-    -- heures NUMBER
-    -- jour NUMBER(2),
-    -- mois NUMBER(2),
-    -- annee NUMBER(4),
-    fuseau NUMBER(2),
     CONSTRAINT PK_ID_DATE PRIMARY KEY (id_date)
 );
 
 CREATE TABLE Evenements (
     id_evenement NUMBER(7),
     organisateur VARCHAR(255),
-    inscrit NUMBER(5),
+    description VARCHAR(255),
     inscrit_max NUMBER(5),
     cashprize NUMBER(7),
-    date_debut NUMBER(7),
-    date_fin NUMBER(7),
-    CONSTRAINT FK_EVENEMENT_DATE_DEBUT FOREIGN KEY (date_debut) REFERENCES Dates (id_date),
-    CONSTRAINT FK_EVENEMENT_DATE_FIN FOREIGN KEY (date_fin) REFERENCES Dates (id_date)
+    date_debut TIMESTAMP,
+    date_fin TIMESTAMP,
+    CONSTRAINT PK_ID_EVENEMENT PRIMARY KEY (id_evenement)
 );
 
 CREATE TABLE Promotions (
@@ -64,11 +56,9 @@ CREATE TABLE Promotions (
     nom VARCHAR(255),
     reduction DECIMAL(3),
     type VARCHAR(127),
-    date_debut NUMBER(7),
-    date_fin NUMBER(7),
-    CONSTRAINT PK_ID_PROMOTION PRIMARY KEY (id_promotion),
-    CONSTRAINT FK_PROMOTION_DATE_DEBUT FOREIGN KEY (date_debut) REFERENCES Dates (id_date),
-    CONSTRAINT FK_PROMOTION_DATE_FIN FOREIGN KEY (date_fin) REFERENCES Dates (id_date)
+    date_debut TIMESTAMP,
+    date_fin TIMESTAMP,
+    CONSTRAINT PK_ID_PROMOTION PRIMARY KEY (id_promotion)
 );
 
 CREATE TABLE Paiements (
@@ -90,8 +80,9 @@ CREATE TABLE Inscriptions (
     id_promotion NUMBER(7),
     id_date NUMBER(7),
     prix_inscription NUMBER(7),
+    gain NUMBER(7),
     CONSTRAINT FK_INSCRIPTION_JOUEUR FOREIGN KEY (id_joueur) REFERENCES Joueurs (id_joueur),
-    CONSTRAINT FK_INSCRIPTION_EVENEMENT FOREIGN KEY (id_evenement) REFERENCES Formats (id_format),
+    CONSTRAINT FK_INSCRIPTION_EVENEMENT FOREIGN KEY (id_evenement) REFERENCES Evenements (id_evenement),
     CONSTRAINT FK_INSCRIPTION_PROMOTION FOREIGN KEY (id_promotion) REFERENCES Promotions (id_promotion),
     CONSTRAINT FK_INSCRIPTION_DATE FOREIGN KEY (id_date) REFERENCES Dates (id_date)
 );
