@@ -5,7 +5,7 @@ DROP VIEW CountDepotPromo0View;
 DROP VIEW CountInscritEvent0View;
 DROP VIEW AvgInscritView;
 DROP VIEW CountInscritThisMonthView;
-DROP VIEW JoueurInscritAtEventADayD;
+DROP VIEW JoueurInscritAtEventADayDView;
 
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici octobre 2020)
 CREATE VIEW 
@@ -113,7 +113,7 @@ WHERE
 
 -- Liste des joueurs qui se sont inscrit à la date d à un evenement à l'aide d'une promotion p
 CREATE VIEW
-    JoueurInscritAtEventADayD (InscritJjEventeDaydWithPromo)
+    JoueurInscritAtEventADayDView (InscritJjEventeDaydWithPromo)
 AS
 SELECT
     j.nom, j.prenom, e.description, p.nom
@@ -136,4 +136,4 @@ SELECT * FROM CountDepotPromo0View;
 SELECT * FROM AvgInscritView;
 SELECT * FROM CountInscritEvent0View;
 SELECT * FROM CountInscritThisMonthView;
-SELECT * FROM JoueurInscritAtEventADayD;
+SELECT * FROM JoueurInscritAtEventADayDView;
