@@ -6,8 +6,8 @@ FROM
 WHERE 
     p.id_date = d.id_date 
     AND p.type = 0 
-    AND EXTRACT(MONTH FROM d.timestamp) = 10 
-    AND EXTRACT(YEAR FROM d.timestamp) = 2020 
+    AND EXTRACT(MONTH FROM d.timestamp) = '10' 
+    AND EXTRACT(YEAR FROM d.timestamp) = '2020' 
 GROUP BY 
     id_joueur;
 
@@ -83,7 +83,7 @@ WHERE
 
 -- Liste des joueurs qui se sont inscrit à la date d à un evenement à l'aide d'une promotion p
 SELECT
-    i.id_joueur, e.description, p.type
+    j.nom, j.prenom, e.description, p.nom
 FROM
     Inscriptions i, Dates d, Joueurs j, Promotions p, Evenements e
 WHERE
@@ -91,8 +91,6 @@ WHERE
     AND i.id_joueur = j.id_joueur
     AND i.id_evenement = e.id_evenement
     AND i.id_promotion = p.id_promotion
-    AND i.id_evenement = 1
-    AND i.id_promotion = 3
     AND EXTRACT(DAY FROM d.timestamp) = '30'
     AND EXTRACT(MONTH FROM d.timestamp) = '10'
     AND EXTRACT(YEAR FROM d.timestamp) = '2020';
