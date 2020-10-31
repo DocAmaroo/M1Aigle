@@ -113,7 +113,7 @@ WHERE
 
 -- Liste des joueurs qui se sont inscrit à la date d à un evenement à l'aide d'une promotion p
 CREATE VIEW
-    JoueurInscritAtEventADayDView (InscritJjEventeDaydWithPromo)
+    JoueurInscritAtEventADayDView (joueur_nom, joueur_prenom, event_description, promo_nom)
 AS
 SELECT
     j.nom, j.prenom, e.description, p.nom
