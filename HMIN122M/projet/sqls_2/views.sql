@@ -110,6 +110,22 @@ WHERE
     AND EXTRACT(MONTH FROM d.timestamp) = EXTRACT(MONTH FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
+-- Liste des joueurs qui se sont inscrit à la date d à un evenement à l'aide d'une promotion p
+CREATE VIEW
+    JoueurInscritAUnEvenementUnJourDAvecPromo (JoueurInscritAUnEvenementUnJourDAvecPromo)
+SELECT
+    j.nom, j.prenom, e.description, p.nom
+FROM
+    Inscriptions i, Dates d, Joueurs j, Promotions p, Evenements e
+WHERE
+    i.id_date = d.id_date
+    AND i.id_joueur = j.id_joueur
+    AND i.id_evenement = e.id_evenement
+    AND i.id_promotion = p.id_promotion
+    AND EXTRACT(DAY FROM d.timestamp) = '30'
+    AND EXTRACT(MONTH FROM d.timestamp) = '10'
+    AND EXTRACT(YEAR FROM d.timestamp) = '2020';
+
 -- EXEX DES VIEWS
 SELECT * FROM SumDepotNov2020View;
 SELECT * FROM AvgDepotAnnuel22yoView;
@@ -118,3 +134,4 @@ SELECT * FROM CountDepotPromo0View;
 SELECT * FROM AvgInscritView;
 SELECT * FROM CountInscritEvent0View;
 SELECT * FROM CountInscritThisMonthView;
+SELECT * FROM JoueurInscritAUnEvenementUnJourDAvecPromo;
