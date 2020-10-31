@@ -48,8 +48,7 @@ CREATE TABLE Evenements (
     cashprize NUMBER(7),
     date_debut TIMESTAMP,
     date_fin TIMESTAMP,
-    CONSTRAINT FK_EVENEMENT_DATE_DEBUT FOREIGN KEY (date_debut) REFERENCES Dates (id_date),
-    CONSTRAINT FK_EVENEMENT_DATE_FIN FOREIGN KEY (date_fin) REFERENCES Dates (id_date)
+    CONSTRAINT PK_ID_EVENEMENT PRIMARY KEY (id_evenement)
 );
 
 CREATE TABLE Promotions (
@@ -59,9 +58,7 @@ CREATE TABLE Promotions (
     type VARCHAR(127),
     date_debut TIMESTAMP,
     date_fin TIMESTAMP,
-    CONSTRAINT PK_ID_PROMOTION PRIMARY KEY (id_promotion),
-    CONSTRAINT FK_PROMOTION_DATE_DEBUT FOREIGN KEY (date_debut) REFERENCES Dates (id_date),
-    CONSTRAINT FK_PROMOTION_DATE_FIN FOREIGN KEY (date_fin) REFERENCES Dates (id_date)
+    CONSTRAINT PK_ID_PROMOTION PRIMARY KEY (id_promotion)
 );
 
 CREATE TABLE Paiements (
@@ -85,7 +82,7 @@ CREATE TABLE Inscriptions (
     prix_inscription NUMBER(7),
     gain NUMBER(7),
     CONSTRAINT FK_INSCRIPTION_JOUEUR FOREIGN KEY (id_joueur) REFERENCES Joueurs (id_joueur),
-    CONSTRAINT FK_INSCRIPTION_EVENEMENT FOREIGN KEY (id_evenement) REFERENCES Formats (id_format),
+    CONSTRAINT FK_INSCRIPTION_EVENEMENT FOREIGN KEY (id_evenement) REFERENCES Evenement (id_evenement),
     CONSTRAINT FK_INSCRIPTION_PROMOTION FOREIGN KEY (id_promotion) REFERENCES Promotions (id_promotion),
     CONSTRAINT FK_INSCRIPTION_DATE FOREIGN KEY (id_date) REFERENCES Dates (id_date)
 );
