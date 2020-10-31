@@ -82,7 +82,7 @@ CREATE TABLE Inscriptions (
     prix_inscription NUMBER(7),
     gain NUMBER(7),
     CONSTRAINT FK_INSCRIPTION_JOUEUR FOREIGN KEY (id_joueur) REFERENCES Joueurs (id_joueur),
-    CONSTRAINT FK_INSCRIPTION_EVENEMENT FOREIGN KEY (id_evenement) REFERENCES Evenement (id_evenement),
+    CONSTRAINT FK_INSCRIPTION_EVENEMENT FOREIGN KEY (id_evenement) REFERENCES Evenements (id_evenement),
     CONSTRAINT FK_INSCRIPTION_PROMOTION FOREIGN KEY (id_promotion) REFERENCES Promotions (id_promotion),
     CONSTRAINT FK_INSCRIPTION_DATE FOREIGN KEY (id_date) REFERENCES Dates (id_date)
 );
