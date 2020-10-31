@@ -70,6 +70,8 @@ INSERT INTO Dates (id_date, timestamp) VALUES
 (17, TO_DATE('2020/10/30:20:53:02', 'YYYY/MM/DD:HH24:MI:SS'));
 INSERT INTO Dates (id_date, timestamp) VALUES
 (18, TO_DATE('2020/08/10:21:02:42', 'YYYY/MM/DD:HH24:MI:SS'));
+INSERT INTO Dates (id_date, timestamp) VALUES
+(19, TO_DATE('2020/10/30:16:23:25', 'YYYY/MM/DD:HH24:MI:SS'));
 
 -- INSERT EVENEMENTS
 INSERT INTO Evenements (id_evenement, organisateur, description, inscrit_max, cashprize, date_debut, date_fin) VALUES
@@ -91,6 +93,8 @@ INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
 (4, 'Bonus dépôt VIP', 0.1, 'bonus'); 
 INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
 (5, 'Bonus dépôt VIP Premium', 0.15, 'bonus');
+INSERT INTO Promotions (id_promotion, nom, reduction, type) VALUES
+(6, 'Code Promo Halloween', 10, 'remise');
 
 -- INSERT PAIEMENTS
 INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
@@ -133,3 +137,5 @@ INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_i
 (3, 1, 3, 17, 70, 200);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
 (4, 0, 3, 18, 20, 0);
+INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
+(5, 0, 6, 19, 20, 20);
