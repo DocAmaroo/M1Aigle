@@ -46,8 +46,8 @@ CREATE TABLE Evenements (
     inscrit NUMBER(5),
     inscrit_max NUMBER(5),
     cashprize NUMBER(7),
-    date_debut NUMBER(7),
-    date_fin NUMBER(7),
+    date_debut TIMESTAMP,
+    date_fin TIMESTAMP,
     CONSTRAINT FK_EVENEMENT_DATE_DEBUT FOREIGN KEY (date_debut) REFERENCES Dates (id_date),
     CONSTRAINT FK_EVENEMENT_DATE_FIN FOREIGN KEY (date_fin) REFERENCES Dates (id_date)
 );
@@ -57,8 +57,8 @@ CREATE TABLE Promotions (
     nom VARCHAR(255),
     reduction DECIMAL(3),
     type VARCHAR(127),
-    date_debut NUMBER(7),
-    date_fin NUMBER(7),
+    date_debut TIMESTAMP,
+    date_fin TIMESTAMP,
     CONSTRAINT PK_ID_PROMOTION PRIMARY KEY (id_promotion),
     CONSTRAINT FK_PROMOTION_DATE_DEBUT FOREIGN KEY (date_debut) REFERENCES Dates (id_date),
     CONSTRAINT FK_PROMOTION_DATE_FIN FOREIGN KEY (date_fin) REFERENCES Dates (id_date)
