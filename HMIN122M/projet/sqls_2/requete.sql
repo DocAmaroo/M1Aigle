@@ -51,8 +51,8 @@ WHERE
     p.id_promotion = 0
     AND p.id_date = d.id_date
     AND p.id_promotion = pr.id_promotion
-    AND d.timestamp >= (SELECT timestamp FROM Dates d WHERE d.id_date = pr.date_debut)
-    AND d.timestamp <= (SELECT timestamp FROM Dates d WHERE d.id_date = pr.date_fin);
+    AND d.timestamp >= pr.date_debut
+    AND d.timestamp <= pr.date_fin;
 
 -- Sélection du nombre de joueur total inscrit sur un événement(tournoi, table, pari) précis
 SELECT
@@ -80,4 +80,20 @@ WHERE
     i.id_date = d.id_date
     AND EXTRACT(MONTH FROM d.timestamp) = EXTRACT(MONTH FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
+
+-- Liste des joueurs qui se sont inscrit à la date d à un evenement à l'aide d'une promotion p
+SELECT
+    i.id_joueur
+FROM
+    Inscriptions i, Dates d, Joueurs j, Evenements e, Promotions p
+WHERE
+    i.id_date = d.id_date
+    AND i.id_joueur = j.id_joueur
+    AND i.id_evenement = e.id_evenement
+    AND i.id_promotion = p.id_promotion
+    AND EXTRACT(DAY FROM i.timestamp) = '29'
+    AND EXTRACT(MONTH FROM i.timestamp) = '10'
+    AND EXTRACT(YEAR FROM i.timestamp) = '2020'
+    AND i.id_evenement = 0
+    AND i.id_promotion = 0;
 
