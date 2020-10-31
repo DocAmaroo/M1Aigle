@@ -62,3 +62,22 @@ FROM
 WHERE
     i.id_evenement = 0
     AND i.id_evenement = e.id_evenement;
+
+-- Moyenne du nombre de joueur inscrit aux événements
+SELECT
+    AVG(COUNT(id_joueur))
+FROM
+    Inscriptions
+GROUP BY
+    id_evenement;
+
+-- Nombre total des inscription ce mois-ci
+SELECT
+    COUNT(i.id_joueur)
+FROM
+    Inscriptions i, Dates d
+WHERE
+    i.id_date = d.id_date
+    AND EXTRACT(MONTH FROM d.timestamp) = EXTRACT(MONTH FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
+    AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
+
