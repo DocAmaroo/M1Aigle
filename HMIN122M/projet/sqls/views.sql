@@ -14,10 +14,10 @@ DROP VIEW JoueurInscritAtEventAcPromoView;
 -- _______________________________ --
 
 CREATE VIEW 
-    DepotNov2020View (id_joueur, nom, prenom, pays, quantite)
+    DepotNov2020View (id_joueur, nom, prenom, age, pays, quantite)
 AS
 SELECT 
-    p.id_joueur, j.nom, j.prenom, j.pays, p.quantite
+    p.id_joueur, j.nom, j.prenom, j.age, j.pays, p.quantite
 FROM 
     Paiements p, Dates d, Joueurs j
 WHERE 
