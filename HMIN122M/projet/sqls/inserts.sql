@@ -96,7 +96,7 @@ INSERT INTO Evenements (id_evenement, organisateur, description, type, cashprize
 
 -- INSERT PROMOTIONS
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
-(-1),
+(-1);
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
 (0, 'Black Friday - 25 pourcent', 0.25, 'reduction', TO_DATE('2020/10/29:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/29:23:59:59', 'YYYY/MM/DD:HH24:MI:SS')); 
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
