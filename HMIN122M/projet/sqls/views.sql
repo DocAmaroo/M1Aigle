@@ -17,7 +17,7 @@ CREATE VIEW
     DepotNov2020View (id_joueur, nom, prenom, pays, quantite)
 AS
 SELECT 
-    id_joueur, j.nom, j.prenom, j.pays, j.quantite
+    id_joueur, j.nom, j.prenom, j.pays, quantite
 FROM 
     Paiements p, Dates d, Joueurs j
 WHERE 
