@@ -11,7 +11,7 @@ CREATE TABLE Joueurs (
     nom VARCHAR(40),
     prenom VARCHAR(40),
     pseudo VARCHAR(40),
-    solde FLOAT(8),
+    solde DECIMAL(7,3),
     type NUMBER(1),
     email VARCHAR(64),
     date_naissance DATE,
@@ -28,7 +28,7 @@ CREATE TABLE Joueurs (
 CREATE TABLE Formats (
     id_format NUMBER(2),
     type VARCHAR(127),
-    taxe DECIMAL(3,2),
+    taxe DECIMAL(1,2),
     montant_min NUMBER(7),
     montant_max NUMBER(7),
     CONSTRAINT PK_ID_FORMAT PRIMARY KEY (id_format)
