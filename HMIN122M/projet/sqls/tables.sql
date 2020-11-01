@@ -44,7 +44,7 @@ CREATE TABLE Evenements (
     id_evenement NUMBER(7),
     organisateur VARCHAR(255),
     description VARCHAR(255),
-    type VARCHAR(127),
+    type VARCHAR(25),
     inscrit_max NUMBER(5),
     cashprize NUMBER(7),
     date_debut TIMESTAMP,

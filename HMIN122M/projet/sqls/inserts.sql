@@ -146,6 +146,6 @@ INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_i
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
 (5, 0, 6, 19, 20, 0);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_date, prix_inscription, gain) VALUES
-(6, 2, 20, 0, 20);
+(6, 2, 20, 5, 20);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_date, prix_inscription, gain) VALUES
-(6, 2, 21, 0, 300);
+(7, 2, 21, 10, 300);
