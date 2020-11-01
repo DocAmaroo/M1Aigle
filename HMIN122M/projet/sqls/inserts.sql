@@ -96,6 +96,8 @@ INSERT INTO Evenements (id_evenement, organisateur, description, type, cashprize
 
 -- INSERT PROMOTIONS
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
+(-1),
+INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
 (0, 'Black Friday - 25 pourcent', 0.25, 'reduction', TO_DATE('2020/10/29:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/29:23:59:59', 'YYYY/MM/DD:HH24:MI:SS')); 
 INSERT INTO Promotions (id_promotion, nom, reduction, type, date_debut, date_fin) VALUES
 (1, 'Ticket VIP - 50 euros remises', 50, 'remise', TO_DATE('2020/11/29:09:17:06', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/12/06:09:17:06', 'YYYY/MM/DD:HH24:MI:SS')); 
@@ -117,34 +119,34 @@ INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, ty
 (1, 1, 0, 1, 200, 1);
 INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
 (2, 2, 2, 0, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(3, 5, 7, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(3, 5, 8, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(4, 4, 9, 2000, 1);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(5, 1, 10, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(5, 1, 11, 250, 1);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(6, 1, 12, 200, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(6, 2, 13, 50, 1);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(6, 2, 14, 25, 1);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(7, 2, 15, 100, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(7, 2, 16, 100, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(0, 2, 22, 50, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(1, 2, 23, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(2, 2, 24, 100, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
-(3, 2, 25, 20, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(3, 5, -1, 7, 1000, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(3, 5, -1, 8, 1000, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(4, 4, -1, 9, 2000, 1);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(5, 1, -1, 10, 1000, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(5, 1, -1, 11, 250, 1);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(6, 1, -1, 12, 200, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(6, 2, -1, 13, 50, 1);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(6, 2, -1, 14, 25, 1);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(7, 2, -1, 15, 100, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(7, 2, -1, 16, 100, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(0, 2, -1, 22, 50, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(1, 2, -1, 23, 1000, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(2, 2, -1, 24, 100, 0);
+INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+(3, 2, -1, 25, 20, 0);
 
 -- INSERT INSCRIPTION
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
@@ -160,8 +162,8 @@ INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_i
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
 (4, 1, 3, 18, 20, 0);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
-(5, 0, 6, 19, 20, 0);
+(5, 0, -1, 6, 19, 20, 0);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
-(6, 2, 20, 5, 20);
+(6, 2, -1, 20, 5, 20);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
-(7, 2, 21, 10, 300);
+(7, 2, -1, 21, 10, 300);

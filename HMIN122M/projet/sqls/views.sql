@@ -12,6 +12,7 @@ DROP VIEW JoueurInscritAtEventAcPromoView;
 -- _______________________________ --
 
 -- TOUT LES PAIEMENTS DE CETTE ANNEE
+DROP VIEW Paiement2020View;
 CREATE VIEW 
     Paiement2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f, id_pm)
 AS
@@ -26,6 +27,7 @@ WHERE
     AND p.id_promotion = pm.id_promotion
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
+select id_pm from Paiement2020View;
 -- TOUT LES PAIEMENTS DU MOIS DE NOVEMBRE 2020
 CREATE VIEW 
     PaiementNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f)
