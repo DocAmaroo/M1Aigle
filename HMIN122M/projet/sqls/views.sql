@@ -1,4 +1,5 @@
-DROP VIEW DepotNov2020View;
+DROP VIEW Paiement2020View;
+DROP VIEW PaiementNov2020View;
 DROP VIEW CountDepotPromo0View;
 DROP VIEW CountInscritEvent0View;
 DROP VIEW AvgInscritView;
@@ -10,36 +11,31 @@ DROP VIEW JoueurInscritAtEventAcPromoView;
 -- __________ PAIEMENTS __________ --
 -- _______________________________ --
 
--- TOUT LES DEPOTS DU MOIS DE NOVEMBRE 2020
+-- TOUT LES PAIEMENTS DE CETTE ANNEE
 CREATE VIEW 
-    DepotNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, quantite, type_f)
+    Paiement2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f, id_pm)
 AS
 SELECT 
-    p.id_joueur, j.nom, j.prenom, j.type, j.age, j.pays, p.quantite, f.type
+    p.id_joueur, j.nom, j.prenom, j.type, j.age, j.pays, d.timestamp, p.quantite, p.type, f.type, f.taxe, pm.id_promotion
 FROM 
-    Paiements p, Dates d, Joueurs j, Formats f
+    Paiements p, Dates d, Joueurs j, Formats f, Promotions pm
 WHERE 
     p.id_date = d.id_date
     AND p.id_joueur = j.id_joueur
     AND p.id_format = f.id_format
-    AND p.type = 0 
-    AND EXTRACT(MONTH FROM d.timestamp) = '11' 
-    AND EXTRACT(YEAR FROM d.timestamp) = '2020';
+    AND p.id_promotion = pm.id_promotion
+    AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
--- Fréquence des dépôts lors d’une promotion (ici la promotion pour id 0)
+-- TOUT LES PAIEMENTS DU MOIS DE NOVEMBRE 2020
 CREATE VIEW 
-    CountDepotPromo0View (nbDepotAcPromo0)
+    PaiementNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f)
 AS
-SELECT
-    COUNT(p.id_promotion)
-FROM
-    Paiements p, Dates d, Promotions pr
-WHERE
-    p.id_promotion = 0
-    AND p.id_date = d.id_date
-    AND p.id_promotion = pr.id_promotion
-    AND d.timestamp >= pr.date_debut
-    AND d.timestamp <= pr.date_fin;
+SELECT 
+    p.id_joueur, j.nom, j.prenom, j.type, j.age, j.pays, d.timestamp, p.quantite, p.type, f.type, f.taxe
+FROM 
+    Paiement2020View
+WHERE 
+    EXTRACT(YEAR FROM timestamp_d) = '11';
 
 -- _______________________________ --
 -- ________ INSCRIPTIONS _________ --
@@ -112,9 +108,6 @@ WHERE
     AND i.id_promotion = p.id_promotion;
 
 -- EXEX DES VIEWS
---SELECT * FROM SumDepotNov2020View;
---SELECT * FROM AvgDepotAnnuel22yoView;
---SELECT * FROM SumDepotPaypalView;
 SELECT * FROM CountDepotPromo0View;
 SELECT * FROM AvgInscritView;
 SELECT * FROM CountInscritEvent0View;
@@ -123,14 +116,23 @@ SELECT * FROM CountInscritThisMonthByEventView;
 SELECT * FROM JoueurInscritAtEventAcPromoView;
 
 -- REQUESTS
+SELECT nom FROM Paiement2020View;
+
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici novembre 2020)
-SELECT id_j, nom_j, prenom_j, SUM(quantite) FROM DepotNov2020View GROUP BY id_j, nom_j, prenom_j;
+SELECT id_j, nom_j, prenom_j, SUM(quantite) FROM PaiementNov2020View WHERE type = 0 GROUP BY id_j, nom_j, prenom_j;
 
 -- Moyenne des dépôts effectué par les joueurs de 22 ans pendant le mois de novembre
-SELECT id_j, nom_j, prenom_j, AVG(quantite) FROM DepotNov2020View WHERE age_j = 22 GROUP BY id_j, nom_j, prenom_j;
+SELECT id_j, nom_j, prenom_j, AVG(quantite) FROM PaiementNov2020View WHERE age_j = 22 AND type = 0 GROUP BY id_j, nom_j, prenom_j;
 
 -- Somme de la quantite des dépôt effectué par chaque type de paiement
-SELECT type_f, SUM(quantite) FROM DepotNov2020View GROUP BY type_f;
+SELECT type_f, taxe_f, SUM(quantite) FROM PaiementNov2020View GROUP BY type_f;
+
+-- Fréquence des dépôts lors d’une promotion (ici la promotion pour id 0)
+SELECT COUNT(*) FROM PaiementNov2020View WHERE
+    p.id_promotion = 0
+    AND p.id_promotion = pr.id_promotion
+    AND timestamp_d >= pr.date_debut
+    AND timestamp_d <= pr.date_fin;
 
 
 
