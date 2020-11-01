@@ -6,7 +6,11 @@ DROP VIEW CountInscritEvent0View;
 DROP VIEW AvgInscritView;
 DROP VIEW CountInscritThisMonthView;
 DROP VIEW CountInscritThisMonthByEventView;
-DROP VIEW JoueurInscritAtEventADayDView;
+DROP VIEW JoueurInscritAtEventAcPromoView;
+
+-- _______________________________ --
+-- __________ PAIEMENTS __________ --
+-- _______________________________ --
 
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici novembre 2020)
 CREATE VIEW 
@@ -76,6 +80,10 @@ WHERE
     AND d.timestamp >= pr.date_debut
     AND d.timestamp <= pr.date_fin;
 
+-- _______________________________ --
+-- ________ INSCRIPTIONS _________ --
+-- _______________________________ --
+
 -- Sélection du nombre de joueur total inscrit sur un événement(tournoi, table, pari) précis
 CREATE VIEW 
     CountInscritEvent0View (nbInscritEvent0)
@@ -131,20 +139,16 @@ GROUP BY
 
 -- Liste des joueurs qui se sont inscrit à la date d à un evenement à l'aide d'une promotion p
 CREATE VIEW
-    JoueurInscritAtEventADayDView (joueur_nom, joueur_prenom, event_description, promo_nom)
+    JoueurInscritAtEventAcPromoView (joueur_nom, joueur_prenom, event_description, promo_nom)
 AS
 SELECT
     j.nom, j.prenom, e.description, p.nom
 FROM
-    Inscriptions i, Dates d, Joueurs j, Promotions p, Evenements e
+    Inscriptions i, Joueurs j, Promotions p, Evenements e
 WHERE
-    i.id_date = d.id_date
-    AND i.id_joueur = j.id_joueur
+    i.id_joueur = j.id_joueur
     AND i.id_evenement = e.id_evenement
-    AND i.id_promotion = p.id_promotion
-    AND EXTRACT(DAY FROM d.timestamp) = '16'
-    AND EXTRACT(MONTH FROM d.timestamp) = '11'
-    AND EXTRACT(YEAR FROM d.timestamp) = '2020';
+    AND i.id_promotion = p.id_promotion;
 
 -- EXEX DES VIEWS
 SELECT * FROM SumDepotNov2020View;
@@ -155,4 +159,7 @@ SELECT * FROM AvgInscritView;
 SELECT * FROM CountInscritEvent0View;
 SELECT * FROM CountInscritThisMonthView;
 SELECT * FROM CountInscritThisMonthByEventView;
-SELECT * FROM JoueurInscritAtEventADayDView;
+SELECT * FROM JoueurInscritAtEventAcPromoView;
+
+-- MORE REQUEST
+SELECT nom, prenom FROM JoueurInscritAtEventAcPromoView WHERE id_promotion = 0 OR id_promotion = 1 OR id_promotion = 2;
