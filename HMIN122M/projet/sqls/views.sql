@@ -31,7 +31,7 @@ CREATE VIEW
     PaiementNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f)
 AS
 SELECT 
-    p.id_joueur, j.nom, j.prenom, j.type, j.age, j.pays, d.timestamp, p.quantite, p.type, f.type, f.taxe
+    id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f
 FROM 
     Paiement2020View
 WHERE 
