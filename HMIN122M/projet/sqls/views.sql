@@ -139,10 +139,10 @@ GROUP BY
 
 -- Liste des joueurs qui se sont inscrit à la date d à un evenement à l'aide d'une promotion p
 CREATE VIEW
-    JoueurInscritAtEventAcPromoView (joueur_nom, joueur_prenom, event_description, promo_nom)
+    JoueurInscritAtEventAcPromoView (nom, prenom, e_description, promo_nom, promo_id)
 AS
 SELECT
-    j.nom, j.prenom, e.description, p.nom
+    j.nom, j.prenom, e.description, p.nom, p.id_promotion
 FROM
     Inscriptions i, Joueurs j, Promotions p, Evenements e
 WHERE
