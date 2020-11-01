@@ -122,7 +122,7 @@ FROM
     Inscriptions i, Dates d, Evenements e
 WHERE
     i.id_date = d.id_date
-    i.id_evenement = e.id_evenement
+    AND i.id_evenement = e.id_evenement
     AND EXTRACT(MONTH FROM d.timestamp) = EXTRACT(MONTH FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
 GROUP BY
