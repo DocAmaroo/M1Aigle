@@ -5,6 +5,7 @@ DROP VIEW CountDepotPromo0View;
 DROP VIEW CountInscritEvent0View;
 DROP VIEW AvgInscritView;
 DROP VIEW CountInscritThisMonthView;
+DROP VIEW CountInscritThisMonthByEventView;
 DROP VIEW JoueurInscritAtEventADayDView;
 
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici octobre 2020)
@@ -111,6 +112,23 @@ WHERE
     AND EXTRACT(MONTH FROM d.timestamp) = EXTRACT(MONTH FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
+-- Nombre total des inscription ce mois-ci par type d'evenement
+CREATE VIEW 
+    CountInscritThisMonthByEventView (idEvent, typeEvent, nbInscritThisMonth)
+AS
+SELECT
+    e.id_evenement, e.type, COUNT(i.id_joueur) AS nbInscrit
+FROM
+    Inscriptions i, Dates d, Evenements e
+WHERE
+    i.id_date = d.id_date
+    i.id_evenement = e.id_evenement
+    AND EXTRACT(MONTH FROM d.timestamp) = EXTRACT(MONTH FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
+    AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
+GROUP BY
+    e.id_evenement;
+
+
 -- Liste des joueurs qui se sont inscrit à la date d à un evenement à l'aide d'une promotion p
 CREATE VIEW
     JoueurInscritAtEventADayDView (joueur_nom, joueur_prenom, event_description, promo_nom)
@@ -136,4 +154,5 @@ SELECT * FROM CountDepotPromo0View;
 SELECT * FROM AvgInscritView;
 SELECT * FROM CountInscritEvent0View;
 SELECT * FROM CountInscritThisMonthView;
+SELECT * FROM CountInscritThisMonthByEventView;
 SELECT * FROM JoueurInscritAtEventADayDView;

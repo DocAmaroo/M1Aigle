@@ -72,12 +72,18 @@ INSERT INTO Dates (id_date, timestamp) VALUES
 (18, TO_DATE('2020/08/10:21:02:42', 'YYYY/MM/DD:HH24:MI:SS'));
 INSERT INTO Dates (id_date, timestamp) VALUES
 (19, TO_DATE('2020/10/30:16:23:25', 'YYYY/MM/DD:HH24:MI:SS'));
+INSERT INTO Dates (id_date, timestamp) VALUES
+(20, TO_DATE('2020/02/10:15:35:16', 'YYYY/MM/DD:HH24:MI:SS'));
+INSERT INTO Dates (id_date, timestamp) VALUES
+(21, TO_DATE('2020/02/10:14:26:13', 'YYYY/MM/DD:HH24:MI:SS'));
 
 -- INSERT EVENEMENTS
-INSERT INTO Evenements (id_evenement, organisateur, description, inscrit_max, cashprize, date_debut, date_fin) VALUES
-(0, 'FDS Montpellier', 'Tournois de la faculte des sciences de montpellier !', 50, 1000, TO_DATE('2020/10/02:08:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/10/02:17:00:00', 'YYYY/MM/DD:HH24:MI:SS'));
-INSERT INTO Evenements (id_evenement, organisateur, description, inscrit_max, cashprize, date_debut, date_fin) VALUES
-(1, 'Halloween Party', 'Tournois Halloween annuel !', 5, 500, TO_DATE('2020/10/31:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/01:12:00:00', 'YYYY/MM/DD:HH24:MI:SS'));
+INSERT INTO Evenements (id_evenement, organisateur, description, type, inscrit_max, cashprize, date_debut, date_fin) VALUES
+(0, 'FDS Montpellier', 'Tournois de la faculte des sciences de montpellier !', "Poker", 50, 1000, TO_DATE('2020/10/02:08:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/10/02:17:00:00', 'YYYY/MM/DD:HH24:MI:SS'));
+INSERT INTO Evenements (id_evenement, organisateur, description, type, inscrit_max, cashprize, date_debut, date_fin) VALUES
+(1, 'Halloween Party', 'Tournois Halloween annuel !', "Poker", 5, 500, TO_DATE('2020/10/31:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/01:12:00:00', 'YYYY/MM/DD:HH24:MI:SS'));
+INSERT INTO Evenements (id_evenement, organisateur, description, type, inscrit_max, cashprize, date_debut, date_fin) VALUES
+(2, 'Match France - Brésil', 'Match France - Brésil ce soir à 21h', "Pari", 1000000, 5000, TO_DATE('2020/02/10:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/02/10:22:30:00', 'YYYY/MM/DD:HH24:MI:SS'));
 
 
 -- INSERT PROMOTIONS
@@ -126,16 +132,20 @@ INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 
 -- INSERT INSCRIPTION
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
-(0, 0, 3, 3, 20, 60);
+(0, 0, 3, 3, 20, 1000);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
 (0, 1, 1, 4, 70, 0);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
-(1, 1, 2, 5, 70, 30);
+(1, 1, 2, 5, 70, 0);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
-(2, 1, 3, 6, 70, 40);
+(2, 1, 3, 6, 70, 500);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
-(3, 1, 3, 17, 70, 200);
+(3, 1, 3, 17, 70, 0);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
 (4, 1, 3, 18, 20, 0);
 INSERT INTO Inscriptions (id_joueur, id_evenement, id_promotion, id_date, prix_inscription, gain) VALUES
-(5, 0, 6, 19, 20, 20);
+(5, 0, 6, 19, 20, 0);
+INSERT INTO Inscriptions (id_joueur, id_evenement, id_date, prix_inscription, gain) VALUES
+(6, 2, 20, 0, 20);
+INSERT INTO Inscriptions (id_joueur, id_evenement, id_date, prix_inscription, gain) VALUES
+(6, 2, 21, 0, 300);
