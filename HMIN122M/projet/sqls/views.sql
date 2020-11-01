@@ -1,7 +1,4 @@
 DROP VIEW DepotNov2020View;
-DROP VIEW SumDepotNov2020View;
-DROP VIEW AvgDepotAnnuel22yoView;
-DROP VIEW SumDepotPaypalView;
 DROP VIEW CountDepotPromo0View;
 DROP VIEW CountInscritEvent0View;
 DROP VIEW AvgInscritView;
@@ -13,72 +10,21 @@ DROP VIEW JoueurInscritAtEventAcPromoView;
 -- __________ PAIEMENTS __________ --
 -- _______________________________ --
 
+-- TOUT LES DEPOTS DU MOIS DE NOVEMBRE 2020
 CREATE VIEW 
-    DepotNov2020View (id_joueur, nom, prenom, age, pays, quantite)
+    DepotNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, quantite, type_f)
 AS
 SELECT 
-    p.id_joueur, j.nom, j.prenom, j.age, j.pays, p.quantite
+    p.id_joueur, j.nom, j.prenom, j.type, j.age, j.pays, p.quantite, f.type
 FROM 
-    Paiements p, Dates d, Joueurs j
+    Paiements p, Dates d, Joueurs j, Formats f
 WHERE 
     p.id_date = d.id_date
     AND p.id_joueur = j.id_joueur
+    AND p.id_format = f.id_format
     AND p.type = 0 
     AND EXTRACT(MONTH FROM d.timestamp) = '11' 
     AND EXTRACT(YEAR FROM d.timestamp) = '2020';
-
-
--- CREATE VIEW 
---     SumDepotNov2020View (id_joueur, sumDepotNov2020)
--- AS
--- SELECT 
---     id_joueur, SUM(quantite) 
--- FROM 
---     Paiements p, Dates d 
--- WHERE 
---     p.id_date = d.id_date 
---     AND p.type = 0 
---     AND EXTRACT(MONTH FROM d.timestamp) = '11' 
---     AND EXTRACT(YEAR FROM d.timestamp) = '2020' 
--- GROUP BY 
---     id_joueur;
-
--- Moyenne des dépôts annuels effectué par les joueurs de 22 ans
--- CREATE VIEW 
---     AvgDepotAnnuel22yoView (id_joueur, avgDepot22yo)
--- AS
--- SELECT 
---     p.id_joueur, AVG(quantite) 
--- FROM 
---     Paiements p, Dates d, Joueurs j 
--- WHERE 
---     p.id_joueur = j.id_joueur 
---     AND p.id_date = d.id_date 
---     AND p.type = 0 
---     AND EXTRACT(YEAR FROM d.timestamp) = '2020'
---     AND j.age = 22 
--- GROUP BY 
---     p.id_joueur;
-
--- Somme de la quantite des dépôt effectué via Paypal le jour j, avec une promotion p par joueur
-CREATE VIEW 
-    SumDepotPaypalView (id_joueur, sumDepot28Nov2020)
-AS
-SELECT
-    p.id_joueur, SUM(quantite)
-FROM
-    Paiements p, Joueurs j, Dates d, Formats f, Promotions pr
-WHERE
-    p.id_joueur = j.id_joueur
-    AND p.id_date = d.id_date
-    AND EXTRACT(DAY FROM d.timestamp) = '28'
-    AND EXTRACT(MONTH FROM d.timestamp) = '11'
-    AND EXTRACT(YEAR FROM d.timestamp) = '2020'
-    AND p.id_format = f.id_format
-    AND p.id_promotion = pr.id_promotion
-    AND p.type = 0
-GROUP BY
-    p.id_joueur;
 
 -- Fréquence des dépôts lors d’une promotion (ici la promotion pour id 0)
 CREATE VIEW 
@@ -167,8 +113,8 @@ WHERE
 
 -- EXEX DES VIEWS
 --SELECT * FROM SumDepotNov2020View;
--- SELECT * FROM AvgDepotAnnuel22yoView;
-SELECT * FROM SumDepotPaypalView;
+--SELECT * FROM AvgDepotAnnuel22yoView;
+--SELECT * FROM SumDepotPaypalView;
 SELECT * FROM CountDepotPromo0View;
 SELECT * FROM AvgInscritView;
 SELECT * FROM CountInscritEvent0View;
@@ -178,8 +124,15 @@ SELECT * FROM JoueurInscritAtEventAcPromoView;
 
 -- REQUESTS
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici novembre 2020)
-SELECT id_joueur, nom, prenom, SUM(quantite) FROM DepotNov2020View GROUP BY id_joueur, nom, prenom;
-SELECT id_joueur, nom, prenom, AVG(quantite) FROM DepotNov2020View WHERE age = 22 GROUP BY id_joueur, nom, prenom;
+SELECT id_j, nom_j, prenom_j, SUM(quantite) FROM DepotNov2020View GROUP BY id_j, nom_j, prenom_j;
+
+-- Moyenne des dépôts effectué par les joueurs de 22 ans pendant le mois de novembre
+SELECT id_j, nom_j, prenom_j, AVG(quantite) FROM DepotNov2020View WHERE age_j = 22 GROUP BY id_j, nom_j, prenom_j;
+
+-- Somme de la quantite des dépôt effectué par chaque type de paiement
+SELECT type_f, SUM(quantite) FROM DepotNov2020View GROUP BY type_f;
+
+
 
 -- nom et prénom des joueurs inscrit à un evenement avec une promotion d'id = (0 || 1 || 2)
 SELECT nom, prenom FROM JoueurInscritAtEventAcPromoView WHERE promo_id = 0 OR promo_id = 1 OR promo_id = 2;
