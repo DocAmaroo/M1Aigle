@@ -178,8 +178,8 @@ SELECT * FROM JoueurInscritAtEventAcPromoView;
 
 -- REQUESTS
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici novembre 2020)
-SELECT id_joueur, nom, prenom, SUM(quantite) AS TOTAL FROM DepotNov2020View GROUP BY id_joueur, nom, prenom;
-SELECT id_joueur, nom, prenom, AVG(quantite) AS TOTAL FROM DepotNov2020View WHERE age = 22 GROUP BY id_joueur, nom, prenom;
+SELECT id_joueur, nom, prenom, SUM(quantite) FROM DepotNov2020View GROUP BY id_joueur, nom, prenom;
+SELECT id_joueur, nom, prenom, AVG(quantite) FROM DepotNov2020View WHERE age = 22 GROUP BY id_joueur, nom, prenom;
 
 -- nom et prénom des joueurs inscrit à un evenement avec une promotion d'id = (0 || 1 || 2)
 SELECT nom, prenom FROM JoueurInscritAtEventAcPromoView WHERE promo_id = 0 OR promo_id = 1 OR promo_id = 2;

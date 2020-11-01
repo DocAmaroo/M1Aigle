@@ -14,7 +14,7 @@ INSERT INTO Joueurs(id_joueur, nom, prenom, pseudo, solde, type, email, date_nai
 INSERT INTO Joueurs(id_joueur, nom, prenom, pseudo, solde, type, email, date_naissance, age, adresse, ville, pays, forme_monetaire, haut_fait, coord_bancaire) VALUES
 (6, 'Senior', 'Parmentier', 'Bonenfant', 800.15, 0, 'SeniorParmentier@teleworm.us', TO_DATE('1988/03/22', 'yyyy/mm/dd'), 32, '72, rue du Général Ailleret',  'Lens', 'France', 'Euros', 'Débutant', 'FR436846877');
 INSERT INTO Joueurs(id_joueur, nom, prenom, pseudo, solde, type, email, date_naissance, age, adresse, ville, pays, forme_monetaire, haut_fait, coord_bancaire) VALUES
-(7, 'Sennet', 'Sacré', 'Larocque', 50.13, 0, 'SennetSacre@rhyta.com', TO_DATE('1944/10/28', 'yyyy/mm/dd'), 76, '57, rue des lieutemants Thomazo',  'Digne-les-bains', 'France', 'Euros', 'Débutant', 'FR644368468');
+(7, 'Sennet', 'Sacre', 'Larocque', 50.13, 0, 'SennetSacre@rhyta.com', TO_DATE('1944/10/28', 'yyyy/mm/dd'), 76, '57, rue des lieutemants Thomazo',  'Digne-les-bains', 'France', 'Euros', 'Débutant', 'FR644368468');
 
 
 -- INSERT FORMATS
