@@ -79,11 +79,11 @@ INSERT INTO Dates (id_date, timestamp) VALUES
 
 -- INSERT EVENEMENTS
 INSERT INTO Evenements (id_evenement, organisateur, description, type, inscrit_max, cashprize, date_debut, date_fin) VALUES
-(0, 'FDS Montpellier', 'Tournois de la faculte des sciences de montpellier !', "Poker", 50, 1000, TO_DATE('2020/10/02:08:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/10/02:17:00:00', 'YYYY/MM/DD:HH24:MI:SS'));
+(0, 'FDS Montpellier', 'Tournois de la faculte des sciences de montpellier !', 'Poker', 50, 1000, TO_DATE('2020/10/02:08:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/10/02:17:00:00', 'YYYY/MM/DD:HH24:MI:SS'));
 INSERT INTO Evenements (id_evenement, organisateur, description, type, inscrit_max, cashprize, date_debut, date_fin) VALUES
-(1, 'Halloween Party', 'Tournois Halloween annuel !', "Poker", 5, 500, TO_DATE('2020/10/31:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/01:12:00:00', 'YYYY/MM/DD:HH24:MI:SS'));
+(1, 'Halloween Party', 'Tournois Halloween annuel !', 'Poker', 5, 500, TO_DATE('2020/10/31:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/01:12:00:00', 'YYYY/MM/DD:HH24:MI:SS'));
 INSERT INTO Evenements (id_evenement, organisateur, description, type, inscrit_max, cashprize, date_debut, date_fin) VALUES
-(2, 'Match France - Brésil', 'Match France - Brésil ce soir à 21h', "Pari", 1000000, 5000, TO_DATE('2020/02/10:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/02/10:22:30:00', 'YYYY/MM/DD:HH24:MI:SS'));
+(2, 'Match France - Brésil', 'Match France - Brésil ce soir à 21h', 'Pari', 1000000, 5000, TO_DATE('2020/02/10:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/02/10:22:30:00', 'YYYY/MM/DD:HH24:MI:SS'));
 
 
 -- INSERT PROMOTIONS
