@@ -91,7 +91,7 @@ INSERT INTO Evenements (id_evenement, organisateur, description, type, inscrit_m
 INSERT INTO Evenements (id_evenement, organisateur, description, type, inscrit_max, cashprize, date_debut, date_fin) VALUES
 (1, 'Polytech', 'Tournois Halloween annuel !', 'Poker', 5, 500, TO_DATE('2020/10/31:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/01:12:00:00', 'YYYY/MM/DD:HH24:MI:SS'));
 INSERT INTO Evenements (id_evenement, organisateur, description, type, cashprize, date_debut, date_fin) VALUES
-(2, 'FDJ', 'Match France - Brésil ce soir à 21h', 'Pari', 5000, TO_DATE('2020/11/10:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/10:22:30:00', 'YYYY/MM/DD:HH24:MI:SS'));
+(2, 'FDJ', 'Match France - Bresil ce soir a 21h', 'Pari', 5000, TO_DATE('2020/11/10:00:00:00', 'YYYY/MM/DD:HH24:MI:SS'), TO_DATE('2020/11/10:22:30:00', 'YYYY/MM/DD:HH24:MI:SS'));
 
 
 -- INSERT PROMOTIONS

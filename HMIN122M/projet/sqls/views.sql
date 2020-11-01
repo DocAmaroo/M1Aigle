@@ -1,6 +1,5 @@
 DROP VIEW Paiement2020View;
 DROP VIEW PaiementNov2020View;
-DROP VIEW CountDepotPromo0View;
 DROP VIEW CountInscritEvent0View;
 DROP VIEW AvgInscritView;
 DROP VIEW CountInscritThisMonthView;
@@ -31,11 +30,11 @@ CREATE VIEW
     PaiementNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
-    id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f, id_pm, date_deb_pm, date_fin_pm
+    *
 FROM 
     Paiement2020View
 WHERE 
-    EXTRACT(YEAR FROM timestamp_d) = '11';
+    EXTRACT(MONTH FROM timestamp_d) = '11';
 
 -- _______________________________ --
 -- ________ INSCRIPTIONS _________ --
@@ -122,7 +121,7 @@ SELECT id_j, nom_j, prenom_j, SUM(quantite) FROM PaiementNov2020View WHERE type 
 SELECT id_j, nom_j, prenom_j, AVG(quantite) FROM PaiementNov2020View WHERE age_j = 22 AND type = 0 GROUP BY id_j, nom_j, prenom_j;
 
 -- Somme de la quantite des dépôt effectué par chaque type de paiement
-SELECT type_f, taxe_f, SUM(quantite) FROM PaiementNov2020View GROUP BY type_f;
+SELECT type_f, taxe_f, SUM(quantite) FROM PaiementNov2020View GROUP BY type_f, taxe_f;
 
 -- Fréquence des dépôts lors d’une promotion (ici la promotion pour id 0)
 SELECT COUNT(*) FROM PaiementNov2020View WHERE id_pm > 0 AND timestamp_d >= date_deb_pm AND timestamp_d <= date_fin_pm
