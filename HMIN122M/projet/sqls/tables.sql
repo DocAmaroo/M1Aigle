@@ -27,7 +27,7 @@ CREATE TABLE Joueurs (
 
 CREATE TABLE Formats (
     id_format NUMBER(2),
-    type VARCHAR(127),
+    type VARCHAR(32),
     taxe DECIMAL(3,2),
     montant_min NUMBER(7),
     montant_max NUMBER(7),
