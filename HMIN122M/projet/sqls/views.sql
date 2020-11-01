@@ -1,10 +1,10 @@
 DROP VIEW Paiement2020View;
 DROP VIEW PaiementNov2020View;
-DROP VIEW CountInscritEvent0View;
-DROP VIEW AvgInscritView;
-DROP VIEW CountInscritThisMonthView;
-DROP VIEW CountInscritThisMonthByEventView;
-DROP VIEW JoueurInscritAtEventAcPromoView;
+-- DROP VIEW CountInscritEvent0View;
+-- DROP VIEW AvgInscritView;
+-- DROP VIEW CountInscritThisMonthView;
+-- DROP VIEW CountInscritThisMonthByEventView;
+-- DROP VIEW JoueurInscritAtEventAcPromoView;
 
 -- _______________________________ --
 -- __________ PAIEMENTS __________ --
