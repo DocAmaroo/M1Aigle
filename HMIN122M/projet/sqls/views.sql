@@ -118,8 +118,8 @@ SELECT id_j, nom_j, prenom_j, AVG(quantite) FROM PaiementNov2020View WHERE age_j
 -- Somme de la quantite des dépôt effectué par chaque type de paiement
 SELECT type_f, taxe_f, SUM(quantite) FROM PaiementNov2020View GROUP BY type_f, taxe_f;
 
--- Fréquence des dépôts lors d’une promotion (ici la promotion pour id 0)
-SELECT COUNT(*) FROM PaiementNov2020View WHERE id_pm > 0 AND timestamp_d >= date_deb_pm AND timestamp_d <= date_fin_pm
+-- Fréquence des dépôts lors d’une promotion
+SELECT id_pm, COUNT(*) FROM PaiementNov2020View WHERE id_pm > -1 AND timestamp_d >= date_deb_pm AND timestamp_d <= date_fin_pm GROUP BY id_pm;
 
 
 
