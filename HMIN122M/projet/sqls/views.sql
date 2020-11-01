@@ -23,6 +23,7 @@ WHERE
     p.id_date = d.id_date
     AND p.id_joueur = j.id_joueur
     AND p.id_format = f.id_format
+    AND p.id_promotion = pm.id_promotion
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
 -- TOUT LES PAIEMENTS DU MOIS DE NOVEMBRE 2020
