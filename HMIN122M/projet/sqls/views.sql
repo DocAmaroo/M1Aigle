@@ -162,4 +162,4 @@ SELECT * FROM CountInscritThisMonthByEventView;
 SELECT * FROM JoueurInscritAtEventAcPromoView;
 
 -- MORE REQUEST
-SELECT nom, prenom FROM JoueurInscritAtEventAcPromoView WHERE id_promotion = 0 OR id_promotion = 1 OR id_promotion = 2;
+SELECT nom, prenom FROM JoueurInscritAtEventAcPromoView WHERE promo_id = 0 OR promo_id = 1 OR promo_id = 2;
