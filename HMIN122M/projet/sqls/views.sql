@@ -19,7 +19,7 @@ FROM
 WHERE 
     p.id_date = d.id_date 
     AND p.type = 0 
-    AND EXTRACT(MONTH FROM d.timestamp) = '10' 
+    AND EXTRACT(MONTH FROM d.timestamp) = '11' 
     AND EXTRACT(YEAR FROM d.timestamp) = '2020' 
 GROUP BY 
     id_joueur;
@@ -53,7 +53,7 @@ WHERE
     p.id_joueur = j.id_joueur
     AND p.id_date = d.id_date
     AND EXTRACT(DAY FROM d.timestamp) = '28'
-    AND EXTRACT(MONTH FROM d.timestamp) = '10'
+    AND EXTRACT(MONTH FROM d.timestamp) = '11'
     AND EXTRACT(YEAR FROM d.timestamp) = '2020'
     AND p.id_format = f.id_format
     AND p.id_promotion = pr.id_promotion
@@ -126,7 +126,7 @@ WHERE
     AND EXTRACT(MONTH FROM d.timestamp) = EXTRACT(MONTH FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL))
 GROUP BY
-    e.id_evenement;
+    e.id_evenement, e.type;
 
 
 -- Liste des joueurs qui se sont inscrit à la date d à un evenement à l'aide d'une promotion p
@@ -143,7 +143,7 @@ WHERE
     AND i.id_evenement = e.id_evenement
     AND i.id_promotion = p.id_promotion
     AND EXTRACT(DAY FROM d.timestamp) = '30'
-    AND EXTRACT(MONTH FROM d.timestamp) = '10'
+    AND EXTRACT(MONTH FROM d.timestamp) = '11'
     AND EXTRACT(YEAR FROM d.timestamp) = '2020';
 
 -- EXEX DES VIEWS
