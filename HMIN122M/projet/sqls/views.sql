@@ -8,9 +8,9 @@ DROP VIEW CountInscritThisMonthView;
 DROP VIEW CountInscritThisMonthByEventView;
 DROP VIEW JoueurInscritAtEventADayDView;
 
--- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici octobre 2020)
+-- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici novembre 2020)
 CREATE VIEW 
-    SumDepotNov2020View (id_joueur, sumDepotOct2020)
+    SumDepotNov2020View (id_joueur, sumDepotNov2020)
 AS
 SELECT 
     id_joueur, SUM(quantite) 
@@ -43,7 +43,7 @@ GROUP BY
 
 -- Somme de la quantite des dépôt effectué via Paypal le jour j, avec une promotion p par joueur
 CREATE VIEW 
-    SumDepotPaypalView (id_joueur, sumDepot28Oct2020)
+    SumDepotPaypalView (id_joueur, sumDepot28Nov2020)
 AS
 SELECT
     p.id_joueur, SUM(quantite)
