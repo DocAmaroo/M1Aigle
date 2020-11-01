@@ -61,7 +61,7 @@ WHERE
 GROUP BY
     p.id_joueur;
 
--- Fréquence des dépôts lors d’une promotion
+-- Fréquence des dépôts lors d’une promotion (ici la promotion pour id 0)
 CREATE VIEW 
     CountDepotPromo0View (nbDepotAcPromo0)
 AS
@@ -142,7 +142,7 @@ WHERE
     AND i.id_joueur = j.id_joueur
     AND i.id_evenement = e.id_evenement
     AND i.id_promotion = p.id_promotion
-    AND EXTRACT(DAY FROM d.timestamp) = '30'
+    AND EXTRACT(DAY FROM d.timestamp) = '16'
     AND EXTRACT(MONTH FROM d.timestamp) = '11'
     AND EXTRACT(YEAR FROM d.timestamp) = '2020';
 
