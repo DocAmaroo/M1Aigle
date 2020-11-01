@@ -117,33 +117,33 @@ INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, ty
 (1, 1, 0, 1, 200, 1);
 INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
 (2, 2, 2, 0, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (3, 5, 7, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (3, 5, 8, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (4, 4, 9, 2000, 1);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (5, 1, 10, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (5, 1, 11, 250, 1);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (6, 1, 12, 200, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (6, 2, 13, 50, 1);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (6, 2, 14, 25, 1);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (7, 2, 15, 100, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (7, 2, 16, 100, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (0, 2, 22, 50, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (1, 2, 23, 1000, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (2, 2, 24, 100, 0);
-INSERT INTO Paiements (id_joueur, id_format, id_promotion, id_date, quantite, type) VALUES
+INSERT INTO Paiements (id_joueur, id_format, id_date, quantite, type) VALUES
 (3, 2, 25, 20, 0);
 
 -- INSERT INSCRIPTION
