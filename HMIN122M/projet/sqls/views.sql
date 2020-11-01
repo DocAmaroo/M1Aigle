@@ -23,7 +23,6 @@ WHERE
     p.id_date = d.id_date
     AND p.id_joueur = j.id_joueur
     AND p.id_format = f.id_format
-    AND p.id_promotion = pm.id_promotion
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
 -- TOUT LES PAIEMENTS DU MOIS DE NOVEMBRE 2020
@@ -116,7 +115,7 @@ SELECT * FROM CountInscritThisMonthByEventView;
 SELECT * FROM JoueurInscritAtEventAcPromoView;
 
 -- REQUESTS
-SELECT nom FROM Paiement2020View;
+SELECT nom_j FROM Paiement2020View;
 
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici novembre 2020)
 SELECT id_j, nom_j, prenom_j, SUM(quantite) FROM PaiementNov2020View WHERE type = 0 GROUP BY id_j, nom_j, prenom_j;
