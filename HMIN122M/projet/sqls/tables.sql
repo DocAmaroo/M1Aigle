@@ -13,15 +13,15 @@ CREATE TABLE Joueurs (
     pseudo VARCHAR(40),
     solde FLOAT(8),
     type NUMBER(1),
-    email VARCHAR(255),
+    email VARCHAR(64),
     date_naissance DATE,
     age NUMBER(3),
-    adresse VARCHAR(255),
-    ville VARCHAR(255),
-    pays VARCHAR(255),
-    forme_monetaire VARCHAR(127),
-    haut_fait VARCHAR(255),
-    coord_bancaire VARCHAR(255),
+    adresse VARCHAR(127),
+    ville VARCHAR(127),
+    pays VARCHAR(64),
+    forme_monetaire VARCHAR(64),
+    haut_fait VARCHAR(64),
+    coord_bancaire VARCHAR(20),
     CONSTRAINT PK_ID_JOUEUR PRIMARY KEY (id_joueur)
 );
 
@@ -42,8 +42,8 @@ CREATE TABLE Dates (
 
 CREATE TABLE Evenements (
     id_evenement NUMBER(7),
-    organisateur VARCHAR(255),
-    description VARCHAR(255),
+    organisateur VARCHAR(20),
+    description VARCHAR(127),
     type VARCHAR(25),
     inscrit_max NUMBER(5),
     cashprize NUMBER(7),
@@ -54,9 +54,9 @@ CREATE TABLE Evenements (
 
 CREATE TABLE Promotions (
     id_promotion NUMBER(7),
-    nom VARCHAR(255),
+    nom VARCHAR(50),
     reduction DECIMAL(3),
-    type VARCHAR(127),
+    type VARCHAR(20),
     date_debut TIMESTAMP,
     date_fin TIMESTAMP,
     CONSTRAINT PK_ID_PROMOTION PRIMARY KEY (id_promotion)
