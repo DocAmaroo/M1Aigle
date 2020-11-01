@@ -1,10 +1,12 @@
+set linesize 450;
+
 DROP VIEW Paiement2020View;
 DROP VIEW PaiementNov2020View;
--- DROP VIEW CountInscritEvent0View;
--- DROP VIEW AvgInscritView;
--- DROP VIEW CountInscritThisMonthView;
--- DROP VIEW CountInscritThisMonthByEventView;
--- DROP VIEW JoueurInscritAtEventAcPromoView;
+DROP VIEW CountInscritEvent0View;
+DROP VIEW AvgInscritView;
+DROP VIEW CountInscritThisMonthView;
+DROP VIEW CountInscritThisMonthByEventView;
+DROP VIEW JoueurInscritAtEventAcPromoView;
 
 -- _______________________________ --
 -- __________ PAIEMENTS __________ --
@@ -105,13 +107,6 @@ WHERE
     i.id_joueur = j.id_joueur
     AND i.id_evenement = e.id_evenement
     AND i.id_promotion = p.id_promotion;
-
--- EXEX DES VIEWS
--- SELECT * FROM AvgInscritView;
--- SELECT * FROM CountInscritEvent0View;
--- SELECT * FROM CountInscritThisMonthView;
--- SELECT * FROM CountInscritThisMonthByEventView;
--- SELECT * FROM JoueurInscritAtEventAcPromoView;
 
 -- REQUESTS
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici novembre 2020)
