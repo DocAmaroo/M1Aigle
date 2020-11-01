@@ -107,11 +107,11 @@ WHERE
     AND i.id_promotion = p.id_promotion;
 
 -- EXEX DES VIEWS
-SELECT * FROM AvgInscritView;
-SELECT * FROM CountInscritEvent0View;
-SELECT * FROM CountInscritThisMonthView;
-SELECT * FROM CountInscritThisMonthByEventView;
-SELECT * FROM JoueurInscritAtEventAcPromoView;
+-- SELECT * FROM AvgInscritView;
+-- SELECT * FROM CountInscritEvent0View;
+-- SELECT * FROM CountInscritThisMonthView;
+-- SELECT * FROM CountInscritThisMonthByEventView;
+-- SELECT * FROM JoueurInscritAtEventAcPromoView;
 
 -- REQUESTS
 -- Somme des dépôts ayant été effectué par un joueur précis sur un mois précis (ici novembre 2020)

@@ -28,7 +28,7 @@ CREATE TABLE Joueurs (
 CREATE TABLE Formats (
     id_format NUMBER(2),
     type VARCHAR(127),
-    taxe DECIMAL(3),
+    taxe DECIMAL(3,2),
     montant_min NUMBER(7),
     montant_max NUMBER(7),
     CONSTRAINT PK_ID_FORMAT PRIMARY KEY (id_format)
@@ -55,7 +55,7 @@ CREATE TABLE Evenements (
 CREATE TABLE Promotions (
     id_promotion NUMBER(7),
     nom VARCHAR(50),
-    reduction DECIMAL(3),
+    reduction DECIMAL(3,2),
     type VARCHAR(20),
     date_debut TIMESTAMP,
     date_fin TIMESTAMP,
