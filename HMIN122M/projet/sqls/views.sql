@@ -41,10 +41,10 @@ WHERE
 
 -- TOUTES LES INSCRIPTIONS DE CETTE ANNEE
 CREATE VIEW 
-    Inscription2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, prix_insc, gain, id_e, type_e, desc_e, id_pm, date_deb_pm, date_fin_pm)
+    Inscription2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, prix_insc, gain, id_e, type_e, cashprize_e, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
-    i.id_joueur, j.nom, j.prenom, j.type, j.age, j.pays, d.timestamp, prix_inscription, gain, e.id_evenement, e.type, e.description, pm.id_promotion, pm.date_debut, pm.date_fin
+    i.id_joueur, j.nom, j.prenom, j.type, j.age, j.pays, d.timestamp, prix_inscription, gain, e.id_evenement, e.type, e.cashprize, pm.id_promotion, pm.date_debut, pm.date_fin
 FROM 
     Inscriptions i, Dates d, Joueurs j, Evenements e, Promotions pm
 WHERE 
@@ -56,7 +56,7 @@ WHERE
 
 -- TOUTES LES INSCRIPTIONS DU MOIS DE NOVEMBRE 2020
 CREATE VIEW 
-    InscriptionNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, prix_insc, gain, id_e, type_e, desc_e, id_pm, date_deb_pm, date_fin_pm)
+    InscriptionNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, prix_insc, gain, id_e, type_e, cashprize_e, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
     *
@@ -90,5 +90,8 @@ SELECT id_j, nom_j, prenom_j, SUM(gain) AS GAIN_TOTAL_2020 FROM Inscription2020V
 -- Somme des gains obtenus par inscriptions par joueurs dans l'année
 SELECT id_j, nom_j, prenom_j, SUM(gain) AS GAIN_TOTAL_NOV FROM InscriptionNov2020View GROUP BY id_j, nom_j, prenom_j;
 
--- Nom et prénom des joueurs inscrit à un evenement avec une promotion d'id = (0 || 1 || 2)
-SELECT nom_j, prenom_j FROM Inscription2020View WHERE id_pm = 0;
+-- Somme des gains obtenus par inscriptions par joueurs dans l'année
+SELECT id_e, SUM(gain) AS GAIN_TOTAL_NOV FROM InscriptionNov2020View WHERE cashprize_e > 999 GROUP BY id_e;
+
+-- Nom et prénom des joueurs inscrit à un evenement avec une promotion d'anniversaire
+SELECT nom_j, prenom_j FROM Inscription2020View WHERE id_pm = 6;
