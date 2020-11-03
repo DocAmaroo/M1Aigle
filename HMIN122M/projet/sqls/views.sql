@@ -10,7 +10,7 @@ DROP VIEW InscriptionNov2020View;
 -- _______________________________ --
 
 -- TOUT LES PAIEMENTS DE CETTE ANNEE
-CREATE MATERIALIZED VIEW 
+CREATE VIEW 
     Paiement2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
@@ -25,7 +25,7 @@ WHERE
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
 -- TOUT LES PAIEMENTS DU MOIS DE NOVEMBRE 2020
-CREATE MATERIALIZED VIEW 
+CREATE VIEW 
     PaiementNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
@@ -40,7 +40,7 @@ WHERE
 -- _______________________________ --
 
 -- TOUTES LES INSCRIPTIONS DE CETTE ANNEE
-CREATE MATERIALIZED VIEW 
+CREATE VIEW 
     Inscription2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, prix_insc, gain, id_e, type_e, cashprize_e, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
@@ -55,7 +55,7 @@ WHERE
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
 -- TOUTES LES INSCRIPTIONS DU MOIS DE NOVEMBRE 2020
-CREATE MATERIALIZED VIEW 
+CREATE VIEW 
     InscriptionNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, prix_insc, gain, id_e, type_e, cashprize_e, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
