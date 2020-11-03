@@ -10,7 +10,7 @@ DROP VIEW InscriptionNov2020View;
 -- _______________________________ --
 
 -- TOUT LES PAIEMENTS DE CETTE ANNEE
-CREATE VIEW 
+CREATE MATERIALIZED VIEW 
     Paiement2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
@@ -25,7 +25,7 @@ WHERE
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
 -- TOUT LES PAIEMENTS DU MOIS DE NOVEMBRE 2020
-CREATE VIEW 
+CREATE MATERIALIZED VIEW 
     PaiementNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, quantite, type, type_f, taxe_f, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
@@ -40,7 +40,7 @@ WHERE
 -- _______________________________ --
 
 -- TOUTES LES INSCRIPTIONS DE CETTE ANNEE
-CREATE VIEW 
+CREATE MATERIALIZED VIEW 
     Inscription2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, prix_insc, gain, id_e, type_e, cashprize_e, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
@@ -55,7 +55,7 @@ WHERE
     AND EXTRACT(YEAR FROM d.timestamp) = EXTRACT(YEAR FROM (SELECT CURRENT_TIMESTAMP FROM DUAL));
 
 -- TOUTES LES INSCRIPTIONS DU MOIS DE NOVEMBRE 2020
-CREATE VIEW 
+CREATE MATERIALIZED VIEW 
     InscriptionNov2020View (id_j, nom_j, prenom_j, type_j, age_j, pays_j, timestamp_d, prix_insc, gain, id_e, type_e, cashprize_e, id_pm, date_deb_pm, date_fin_pm)
 AS
 SELECT 
@@ -91,7 +91,7 @@ SELECT id_j, nom_j, prenom_j, SUM(gain) AS GAIN_TOTAL_2020 FROM Inscription2020V
 SELECT id_j, nom_j, prenom_j, SUM(gain) AS GAIN_TOTAL_NOV FROM InscriptionNov2020View GROUP BY id_j, nom_j, prenom_j;
 
 -- Somme des gains obtenus par inscriptions par joueurs dans l'année
-SELECT id_e, SUM(gain) AS GAIN_TOTAL_NOV FROM InscriptionNov2020View WHERE cashprize_e > 999 GROUP BY id_e;
+SELECT id_e, SUM(gain) AS GAIN_TOTAL_EVENT_NOV FROM InscriptionNov2020View WHERE cashprize_e > 999 GROUP BY id_e;
 
 -- Nom et prénom des joueurs inscrit à un evenement avec une promotion d'anniversaire
 SELECT nom_j, prenom_j FROM Inscription2020View WHERE id_pm = 6;
