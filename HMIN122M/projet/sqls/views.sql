@@ -84,14 +84,15 @@ SELECT id_e AS ID_E, COUNT(id_j) AS NB_INSCRIT_ON_2020 FROM Inscription2020View 
 -- Nombre de joueur total inscrit au évenement du mois de novembre par évènement
 SELECT id_e AS ID_E, COUNT(id_j) AS NB_INSCRIT_ON_NOV_2020 FROM InscriptionNov2020View GROUP BY id_e;
 
--- Somme des gains obtenus par inscriptions par joueurs dans l'année
+-- Somme des gains obtenus par inscriptions par joueurs en 2020
 SELECT id_j, nom_j, prenom_j, SUM(gain) AS GAIN_TOTAL_2020 FROM Inscription2020View GROUP BY id_j, nom_j, prenom_j;
 
--- Somme des gains obtenus par inscriptions par joueurs dans l'année
+-- Somme des gains obtenus par inscriptions par joueurs de novembre en 2020
 SELECT id_j, nom_j, prenom_j, SUM(gain) AS GAIN_TOTAL_NOV FROM InscriptionNov2020View GROUP BY id_j, nom_j, prenom_j;
 
--- Somme des gains obtenus par inscriptions par joueurs dans l'année
+-- Somme des gains par évenements obtenus durant le mois de novembre 2020,
+-- et le cashprize de l'évènement est supérieur à 999€
 SELECT id_e, SUM(gain) AS GAIN_TOTAL_EVENT_NOV FROM InscriptionNov2020View WHERE cashprize_e > 999 GROUP BY id_e;
 
--- Nom et prénom des joueurs inscrit à un evenement avec une promotion d'anniversaire
+-- Nom et prénom des joueurs qui ce sont inscrit à un evenement avec une promotion d'anniversaire
 SELECT nom_j, prenom_j FROM Inscription2020View WHERE id_pm = 6;
