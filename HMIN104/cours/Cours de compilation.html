@@ -1,0 +1,2155 @@
+
+<!-- saved from url=(0074)http://www.lirmm.fr/~lafourcade/ML-enseign/Compilation/compil-GenCode.HTML -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		
+		<meta name="generator" content="Adobe GoLive 4">
+		<title>Cours de compilation</title>
+	<script data-dapp-detection="">(function(){let e=!1;function n(){if(!e){const n=document.createElement("meta");n.name="dapp-detected",document.head.appendChild(n),e=!0}}if(window.hasOwnProperty("ethereum")){if(window.__disableDappDetectionInsertion=!0,void 0===window.ethereum)return;n()}else{var t=window.ethereum;Object.defineProperty(window,"ethereum",{configurable:!0,set:function(e){window.__disableDappDetectionInsertion||n(),t=e},get:function(){return window.__disableDappDetectionInsertion||n(),t}})}})();</script></head>
+
+	<body bgcolor="white">
+		<div align="justify">
+			<table border="0" cellpadding="10" cellspacing="3" width="100%">
+				<tbody><tr>
+					<td width="4%"></td>
+					<td bgcolor="#fffff0">
+						<center>
+							<h1><font face="News Gothic,Times">Génération de code</font></h1>
+							<address><font face="News Gothic,Times">Mathieu Lafourcade</font></address>
+							<address>LIRMM<br>
+								version du 16/03/2003</address>
+						</center>
+					</td>
+					<td width="4%"></td>
+				</tr>
+			</tbody></table>
+			<p>
+			<table border="0" cellpadding="10" cellspacing="3" width="100%">
+				<tbody><tr>
+					<td width="4%"></td>
+					<td>
+						<h2><b>Introduction</b></h2>
+						<p>Nous aborderons la génération de code selon une approche fonctionelle. En effet, le générateur de code ayant besoin de la structure aborescente du programme, nous utiliserons à la place une forme équivalent préfixée (à la Lisp). La notion de schéma de compilation sera au cœur des transformations introduites.</p>
+						<div align="justify">
+							<p>Un schéma de compilation est une règle de réécriture de la forme:</p>
+						</div>
+						<blockquote>
+							<p><code>Compile[&lt;phrase1&gt;] --&gt; &lt;phrase2&gt;</code></p>
+						</blockquote>
+						<div align="justify">
+							<p>où <tt>&lt;phrase1&gt;</tt> est une énoncé du langage source et <tt>&lt;phrase2&gt;</tt> est une expression qui contient du code pour la machine cible. On notera les variables sous la forme <tt>&lt;x&gt;</tt> pour désigner une variable du schéma de compilation (qu'il faut bien évidemment différencier des variables du langage cible).</p>
+							<p>L'opération de concaténation des expressions cibles s'exprimera à l'aide d'un point virgule ';'.</p>
+							<p>L'opération de compilation est une opération récursive.</p>
+							<p>On utilisera fortement le fait de passer les arguments sur la pile. On verra par la suite les problèmes d'optimisation que cela pose et on réfléchira à la manière de les régler.</p>
+							<p>Notre pseudo-langage Lisp dispose d'arguments notés entre crochets [a1 ,a2,..., an]. L'opérateur @ dans la génération de code indique qu'il faut évaluer l'expression qui suit.</p>
+							<h2><b>La machine virtuelle - MV</b></h2>
+							<p>La machine virtuelle que nous utilisons dispose d'une mémoire (fini, mais suffisement grande afin de ne pas être géné) et de trois registres R0, R1 et R2. La mémoire est un ensemble fini de N cellules. La première cellule a par définition le numéro 0, la dernière le numéro N-1. On parlera plutôt d'adresse mémoire que de numéro de cellule.</p>
+							<p>La pile est gérée dans la mémoire. La pile commence à l'adresse indique dans le registre spécial BP (base pointer). A priori, on ne touchera jamais à ce registre. le sommet de pile est indiqué dans le registre spécial SP (stack pointer). La pile est vide quand <tt>SP = BP</tt>. On a toujours <tt>SP &gt;= BP</tt> (la pile est montante). Le compteur de programme est contenu dans un registre spécial PC (program counter).</p>
+							<p>Pour l'instant, nous avons donc les registres suivants : <code>R0, R1, R2, BP, SP, PC</code></p>
+							Nous introduirons dans la suite, un pointe<font face="Times New Roman,Georgia,Times">ur de cadre </font>(frame pointer)  : <code>FP. </code><font face="Times New Roman,Georgia,Times">Pour les comparaison et les sauts conditionnel, on dispose de trois registres booléens (1 bit) appelés drapeaux (flag) : <code>DPP, DE, DPG </code>(pour drapeau plus petit, drapeau égal, drapeau plus grand).</font>
+							<h3>Modes d'adressage</h3>
+							<p>Un adressage correspond soit à un source &lt;src&gt; d'où est lue une valeur, soit à une destination &lt;dest&gt; où une valeur est écrite.</p>
+							<h4>Valeur constante</h4>
+							<p>Une valeur constante s'écrit directement précédée par le symbole #. Par exemple :</p>
+							<blockquote>
+								<p><code>#50</code></p>
+							</blockquote>
+							<p>Correspond à la valeur 50.</p>
+							<p>une valeur constante ne peut être qu'une source (une telle destination n'aurait pas de sens).</p>
+							<h4>Mode direct</h4>
+							<p>D'une façon générale, les instructions qui ont besoin d'accéder à des données vont indiquer comme paramètres l'endroit ou se trouvent ces données. Les registres sont directement indiqués tel quels. Par exemple :</p>
+							<blockquote>
+								<p><code>R0, R1 ou R2</code></p>
+							</blockquote>
+							<p>S'il s'agit de sources &lt;src&gt;, ils correspondent respectivement à :</p>
+							<blockquote>
+								<p><code>contenu(R0), contenu(R1) et contenue (R2)</code></p>
+							</blockquote>
+							<p>Les adresses sont indiquées directement. Par exemple :</p>
+							<blockquote>
+								<p><code>500</code></p>
+							</blockquote>
+							<p>correspond pour ue source à la valeur contenue dans l'adresse 500 : <code>contenu(500)</code></p>
+							<h4>Mode indexé</h4>
+							<p>Une adresse calculée par addition d'un déplacement c au contenu d'une registre R, s'écrit sous la forme c(R). Ainsi, l'instruction:</p>
+							<blockquote>
+								<p><tt>4(R0) </tt></p>
+							</blockquote>
+							<p>correspond à la valeur contenue à l'adresse : <code>4 + contenu(R0)</code><tt> </tt>c'est-à-dire<tt> </tt><code>contenu(4 + contenu(R0))</code></p>
+							<h4>Mode indirect</h4>
+							<p>La forme indirecte est préfixée par *. Ainsi, l'instruction :</p>
+							<blockquote>
+								<p><code>*R0</code></p>
+							</blockquote>
+							<p>correspond à la valeur contenue à l'adresse <code>contenu(R0)</code><tt> </tt>c'est-à-dire<tt> </tt><code>contenu(contenu(R0))</code><tt>.</tt> On a aussi :</p>
+							<blockquote>
+								<p><code>*500</code></p>
+							</blockquote>
+							<p>qui correspond à la valeur contenue à l'adresse contenue à l'adresse 500<tt> </tt>c'est-à-dire<tt> </tt><code>contenu(contenu(500))</code></p>
+							<h4>Mode indirect indexé</h4>
+							<p>Il s'agit de la forme indirecte du mode indexée. Ainsi, l'instruction:</p>
+							<blockquote>
+								<p><code>*4(R0)</code></p>
+							</blockquote>
+							<p>correspond à la valeur contenue à l'adresse <code>contenu(4 + contenu(R0))</code><tt> </tt>c'est-à-dire<tt> </tt><code>contenu(contenu(4 + contenu(R0) + 4)))</code></p>
+							<h4>Etiquettes et variables globales</h4>
+							<p>Ce type symbole est inséré dans le code pour référencer un adresse particulière. On suppose que la machine virtuelle dispose d'une table &lt;étiquette, adresse&gt; qui permet de retrouver l'adresse correspondant à une étiquette donnée. En précédant une étiquette par le caractère @, on fait référence à son adresse. Par exemple :</p>
+							<blockquote>
+								<p><code>@ETIQ</code></p>
+							</blockquote>
+							<p>correspond à l'adresse ou se trouve l'étiquette <code>ETIQ</code>.</p>
+							<p>D'une façon similaire, les variables globales sont référencées comme des étiquettes. Il s'agit d'étiquettes qui se trouvent à un endroit définis à l'avance dans la mémoire. Par exemple, les variables peuvent commencer à l'adresse 0. Par exemple, nous avons les variables globales A, B et C :</p>
+							<ul>
+								<p><code>
+										<table border="0" cellpadding="2" cellspacing="0" width="100%">
+											<tbody><tr>
+												<td width="39"><code>0000<br>
+														0001<br>
+														0002</code></td>
+												<td width="53" bgcolor="#fffff0">
+													<div align="right">
+														<code>A<br>
+															B<br>
+															C<br>
+														</code></div>
+												</td>
+												<td bgcolor="#fffff0" width="108"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">50<font color="#fffff0"><i><br>
+															</i></font><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">214<br>
+														<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">-250<font color="#fffff0"><i>l</i></font></code><font color="#fffff0"><tt><i>or</i></tt></font><tt><i> </i></tt></td>
+												<td><i><code>variable A dont le valeur est 50<br>
+															variable B dont le valeur est 214<br>
+															variable C dont le valeur est -250</code></i></td>
+											</tr>
+										</tbody></table>
+									</code></p>
+							</ul>
+							<p>On a donc :</p>
+							<ul>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="134" bgcolor="#fffff0"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">@C</code></td>
+										<td><i><code>l'adresse de C --&gt; 0002</code></i></td>
+									</tr>
+								</tbody></table>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="134" bgcolor="#fffff0"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">*@C</code></td>
+										<td><i><code>le contenu de l'adresse de C --&gt; -250</code></i></td>
+									</tr>
+								</tbody></table>
+							</ul>
+							<h3>Instructions</h3>
+							<p>Les instructions ont soit 0, 1 ou 2 paramètres. Sauf indication contraire tous les modes d'adressage sont possibles. En général, il s'agit de la source <code>&lt;src&gt;</code> et de la destination <code>&lt;dest&gt;</code>.</p>
+							<h4>Instructions de base</h4>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>MOVE &lt;src&gt; &lt;dest&gt; </code></p>
+							<blockquote>
+								<p>Charge <code>&lt;src&gt;</code> dans <code>&lt;dest&gt;</code></p>
+								<p>Les différents modes d'adressage présentés ci-dessus peuvent être utilisés. Par exemple :</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="149" bgcolor="#fffff0"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;#50 R0</code></td>
+										<td><i><code>charge la constante 50 dans R0</code></i></td>
+									</tr>
+								</tbody></table>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="149" bgcolor="#fffff0"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;R0 R1</code></td>
+										<td><i><code>recopie le contenu de R0 dans R1</code></i></td>
+									</tr>
+								</tbody></table>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="149" bgcolor="#fffff0"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;R0 500</code></td>
+										<td><i><code>charge le contenu de R0 à l'adresse 500</code></i></td>
+									</tr>
+								</tbody></table>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="149" bgcolor="#fffff0"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;R0 *R1</code></td>
+										<td><i><code>charge le contenu de R0 en mémoire à l'adresse contenue dans R1</code></i></td>
+									</tr>
+								</tbody></table>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="149" bgcolor="#fffff0"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;*R0 *R1</code></td>
+										<td><i><code>charge le contenu de la case mémoire contenue en R0 à l'adresse contenue dans R1</code></i></td>
+									</tr>
+								</tbody></table>
+								<p>Les accès aux registres et à la mémoire sont banalisés. Si on tient (par réalisme ?) à les distinguer, on réservera <code>MOVE</code> pour les registes, et on introduira <code>LEA</code> pour charger un registe depuis la mémoire et <code>STO</code> pour écrire le contenu d'un registe dans la mémoire.</p>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>ADD &lt;src&gt; &lt;dest&gt;</code></p>
+							<blockquote>
+								<p>Ajoute <code>&lt;src&gt;</code> à <code>&lt;dest&gt;</code>, le resultat se trouve dans <code>&lt;dest&gt;</code>.</p>
+								<p>Par exemple :</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="168" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">ADD &nbsp;4(R0) *12(R1)</code></td>
+										<td valign="top"></td>
+									</tr>
+								</tbody></table>
+								<p>a pour effet de ranger la valeur <code>contenu(contenu(12 + contenu(R1))) + contenu(4 + contenu(R0))</code> dans la destination *12(R1).</p>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>SUB &lt;src&gt; &lt;dest&gt;</code></p>
+							<blockquote>
+								<p>Soutrait <code>&lt;src&gt;</code> à <code>&lt;dest&gt;</code>, le resultat se trouve dans <code>&lt;dest&gt;</code>.</p>
+								<p>Par exemple :</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="168" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">SUB &nbsp;4(R0) *12(R1)</code></td>
+										<td valign="top"></td>
+									</tr>
+								</tbody></table>
+								<p>a pour effet de ranger la valeur <code>contenu(contenu(12+contenu(R1)))-contenu(4+contenu(R0))</code> dans la destination *12(R1).</p>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>MULT &lt;src&gt; &lt;dest&gt;</code></p>
+							<blockquote>
+								<p>Multiplie <code>&lt;src&gt;</code> à <code>&lt;dest&gt;</code>, le resultat se trouve dans <code>&lt;dest&gt;</code>.</p>
+							</blockquote>
+							<ul>
+								<p>Par exemple :</p>
+							</ul>
+							<blockquote>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="172" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MULT &nbsp;4(R0) *12(R1)</code></td>
+										<td valign="top"></td>
+									</tr>
+								</tbody></table>
+								<p>a pour effet de ranger la valeur <code>contenu(contenu(12 + contenu(R1))) * contenu(4 + contenu(R0))</code> dans la destination *12(R1).</p>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>DIV &lt;src&gt; &lt;dest&gt;</code></p>
+							<blockquote>
+								<p>Divise <code>&lt;dest&gt;</code> par <code>&lt;src&gt;</code>, le resultat se trouve dans <code>&lt;dest&gt;</code>.</p>
+							</blockquote>
+							<ul>
+								<p>Par exemple :</p>
+							</ul>
+							<blockquote>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="190" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">DIV &nbsp;4(R0) *12(R1)</code></td>
+										<td valign="top"></td>
+									</tr>
+								</tbody></table>
+								<p>a pour effet de ranger la valeur<tt> </tt><code>contenu(contenu(12 + contenu(R1))) / contenu(4 + contenu(R0))</code> dans la destination *12(R1).</p>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>INCR &lt;dest&gt;</code></p>
+							<blockquote>
+								<p>Incrémente <code>&lt;dest&gt; </code>de 1</p>
+								<p>Par exemple :</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="143" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">INCR &nbsp;*12(R1)</code></td>
+										<td valign="top"></td>
+									</tr>
+								</tbody></table>
+								<p>a pour effet de ranger la valeur <code>contenu(contenu(12 + contenu(R1))) + 1</code> dans la destination *12(R1).</p>
+								<p>Cette instruction est équivalente à (<code>ADD&nbsp;#1&nbsp;&lt;dest&gt;)</code> qui suit, mais elle potentiellement plus efficace.</p>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>DECR &lt;dest&gt;</code></p>
+							<blockquote>
+								<p>Décrémente <code>&lt;dest&gt; </code>de 1</p>
+								<p>Par exemple :</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="143" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">DECR &nbsp;*12(R1)</code></td>
+										<td valign="top"></td>
+									</tr>
+								</tbody></table>
+								<p>a pour effet de ranger la valeur <code>contenu(contenu(12+contenu(R1)))-1</code> dans la destination *12(R1).</p>
+								<p>Cette instruction est équivalente à (<code>SUB&nbsp;#1&nbsp;&lt;dest&gt;)</code> qui suit, mais elle potentiellement plus efficace.</p>
+							</blockquote>
+							<p>Avec ces instructions, nous sommes capables d'écrire les instructions de pile. Toutefois, celles-ci peuvent raisonnablement être implémenté directement (code plus effiace et surtout plus clair).</p>
+							<h4>Instructions de pile</h4>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>PUSH &lt;src&gt;</code></p>
+							<blockquote>
+								<p>Pousse sur la pile le contenu de <code>&lt;src&gt;.</code></p>
+								<p>Le code qui suit est équivalent à <code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"></code><tt>PUSH &lt;src&gt; </tt>:</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="162" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">INCR &nbsp;SP<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;&lt;src&gt; *SP</code></td>
+										<td valign="top"><i><code>on incrémente SP<br>
+													on met &lt;src&gt; à la nouvelle adresse de SP</code></i></td>
+									</tr>
+								</tbody></table>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>POP &lt;dest&gt;</code></p>
+							<blockquote>
+								<p>Depile le sommet de pile, et met l'information dans <code>&lt;destination&gt;</code>.<tt> </tt></p>
+								<p>Le code qui suit est équivalent à <code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"></code><tt>POP &lt;dest&gt;</tt> :</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="143" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;*SP &lt;dest&gt;<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">DECR &nbsp;SP</code></td>
+										<td valign="top"><i><code>on met le contenu de l'adresse de SP dans &lt;dest&gt;<br>
+													on décrémente SP</code></i></td>
+									</tr>
+								</tbody></table>
+							</blockquote>
+							<h4>Instructions de saut</h4>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>JMP &lt;dest&gt;</code></p>
+							<blockquote>
+								<p>Saute à l'adresse <code>&lt;dest&gt;</code>.</p>
+								<p>Le code qui suit est équivalent à <code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"></code><tt>JMP &lt;dest&gt;</tt> :</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="143" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &lt;dest&gt; PC</code></td>
+										<td valign="top"><i><code>on affecte le compteur de programme avec &lt;dest&gt;</code></i></td>
+									</tr>
+								</tbody></table>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b><tt> </tt><code>JSR &lt;etiq&gt;</code></p>
+							<blockquote>
+								<p>Saute à l'adresse de l'étiquette <code>&lt;etiq&gt;</code>. Empile l'adresse de retour sur la pile. On revient à l'instruction qui suit le saut avec l'instruction <code>RTN</code></p>
+								<p>Le code qui suit est équivalent à <code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JSR &lt;etiq&gt;</code> :</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="143" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;PC<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP &nbsp;&nbsp;@&lt;etiq&gt;</code></td>
+										<td valign="top"><i><code>on pousse l'adresse courante sur la pile<br>
+													on saute </code></i></td>
+									</tr>
+								</tbody></table>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b>&nbsp;<code>RTN</code></p>
+							<blockquote>
+								<p>Saute à l'adresse contenue en sommet de pile. Supprime le sommet de pile.</p>
+								<p>Le code qui suit est équivalent à <code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">RTN</code> :</p>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" valign="top"></td>
+										<td width="19" bgcolor="#fffff0" valign="top"></td>
+										<td bgcolor="#fffff0" width="143" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE *SP R0<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">DECR &nbsp;SP<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP &nbsp;&nbsp;*R0<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"></code></td>
+										<td valign="top"><i><code>adresse présente sur la pile --&gt; R0<br>
+													on décrémente SP<br>
+													saut à adresse contenue dans RO</code></i></td>
+									</tr>
+								</tbody></table>
+								<p></p>
+							</blockquote>
+							<div align="justify">
+								<p><b><img src="file:///picts/dot_purple.gif" width="6" height="6"></b>&nbsp;<code>CMP &lt;src1&gt; &lt;src2&gt;</code></p>
+							</div>
+							<blockquote>
+								<div align="justify">
+									<p>Compare <code>&lt;src1&gt;</code> à <code>&lt;src2&gt;</code>  et positionne les drapeaux <code>DPP</code>, <code>DE</code> et <code>DPG</code> de façon adéquate :</p>
+									<div align="justify">
+										<blockquote>
+											<p>100 (si <code>&lt;src1&gt; &lt; &lt;src2&gt;</code>),<br>
+												010 (si <code>&lt;src1&gt; = &lt;src2&gt;</code>),<br>
+												001 (si <code>&lt;src1&gt; &gt; &lt;src2&gt;</code>),<br>
+											</p>
+											<blockquote>
+												
+											</blockquote>
+										</blockquote>
+									</div>
+								</div>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b>&nbsp;<code>JL, JEQ, JG, JLE, JGE, JNE &lt;dest&gt;</code></p>
+							<blockquote>
+								<p>Saute à l'adresse <code>&lt;dest&gt;</code> si les drapeaux <code>DPP</code> sont  respectivement à</p>
+								<blockquote>
+									<p>100 (plus petit),<br>
+										010 (égal),<br>
+										001 (plus grand),<br>
+										110 (plus petit ou égal),<br>
+										011 (plus grand ou égal), <br>
+										101 (non égal).</p>
+								</blockquote>
+								<p>On effectue un <code>AND</code> entre le schéma (ci-dessus) et l'état des drapeaux. Si le résultat est différent de 000 alors le saut est effectué. Les instructions de saut n'ont de sens que si elles sont précédées par un <code>CMP</code>. L'état initial des drapeaux est indéfini.</p>
+								<p>Par exemples : <br>
+									On a 001 comme états de drapeaux et le test est <code>JGE : 001 and 011 = 001 (saut effectué)<br>
+									</code>On a 001 comme états de drapeaux et le test est <code>JLE : 001 and 110 = 000 (saut pas effectué)<br>
+									</code></p>
+							</blockquote>
+							<h3>Instructions diverses</h3>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b>&nbsp;<code>NOP</code></p>
+							<blockquote>
+								<p>Instruction vide, ne fait rien</p>
+							</blockquote>
+							<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"></b>&nbsp;<code>HALT</code></p>
+							<blockquote>
+								<p>Termine l'execution de la machine virtuelle. Cette instruction doit au moins suivre la dernière ligne de code valide.</p>
+							</blockquote>
+							<h2>Schémas de compilation</h2>
+							<h3>Expressions constantes</h3>
+							<p>Les expressions constantes seront empilées en plaçant les valeurs intermédiaires sur la pile en transformant les expressions sous une forme préfixée.</p>
+							<ul>
+								<p><code>Compile[(&lt;op&gt; &lt;e1&gt; &lt;e2&gt;)] --&gt;</code> où <code>&lt;op&gt;</code> est une opération primitive</p>
+							</ul>
+							<blockquote>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" bgcolor="white"></td>
+										<td width="165" bgcolor="#e0ffff"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;e1&gt;] ;<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;<font size="3">R</font>0 <font size="3">;</font><br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;e2&gt;] ;<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;<font size="3">R</font>0 <font size="3">;</font><br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">CompileOp[&lt;op&gt;]</code></td>
+										<td></td>
+									</tr>
+								</tbody></table>
+							</blockquote>
+							<p>On supposera que les résultats de toutes les opérations sont passées dans le registre <code>R0</code>. Il s'agit d'une convention ; une autre pourrait être choisie.</p>
+							<p>La compilation d'un opérateur primitif passe généralement par l'appel à une bibliothèque de primitives (calculs de flottants, calculs d'entiers longs, ...) par l'intermédiaire de l'instruction d'appel <code>JSR &lt;prim&gt;</code>. Dans ce cas <code>CompileOp</code> a la forme suivante :</p>
+						</div>
+						<blockquote>
+							<p><code>CompileOP[&lt;op&gt;] --&gt;</code></p>
+						</blockquote>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" bgcolor="white"></td>
+									<td width="165" bgcolor="#e0ffff"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><font size="3">JSR &nbsp;@&lt;op&gt;</font></code></td>
+									<td></td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<div align="justify">
+							<p>Afin que ce mécanisme fontionne, il faut précéder chaque procédure (ou fonction) par un en-tête contenant son étiquette.</p>
+							<p>Si <code>&lt;op&gt;</code> est en plus une fonction prédéfinie de la machine virtuelle (par exemple la fonction +), on peut la compiler ainsi :</p>
+						</div>
+						<blockquote>
+							<div align="justify">
+								<p><code>CompileOP[&lt;+&gt;] --&gt;</code></p>
+							</div>
+						</blockquote>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" bgcolor="white"></td>
+									<td width="165" bgcolor="#e0ffff"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><font size="3">POP &nbsp;R1 ;<br>
+											</font><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><font size="3">POP &nbsp;R0 ;</font><br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><font size="3">ADD &nbsp;R1 R0</font></code></td>
+									<td></td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<div align="justify">
+							<p>Ce code remplace l'appel <code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JSR @+</code> .</p>
+							<p>En fait, dans le cas de Lisp on ne sait pas si l'opérateur est effectivement primitif ou non car on ne connaît pas le type des expressions. Cela changera avec l'introduction des types et donc on doit compiler les primitives en faisant appel à une bibliothèque de procédures primitives.</p>
+							<p>Les constantes sont directement placées dans le registre <code>R0 </code>:</p>
+							<blockquote>
+								<p><code>CompileCste[&lt;cste&gt;] --&gt;</code></p>
+							</blockquote>
+						</div>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" bgcolor="white"></td>
+									<td width="165" bgcolor="#e0ffff"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;#&lt;cste&gt; <font size="3">R</font>0</code></td>
+									<td></td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<div align="justify">
+							<p>Les variables globales sont traitées par utilisation de l'accès direct à une case mémoire : <code>MOV @&lt;var&gt; A0 </code></p>
+							<blockquote>
+								<p><code>CompileVarg[&lt;varg&gt;] --&gt;</code></p>
+							</blockquote>
+						</div>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" bgcolor="white"></td>
+									<td width="165" bgcolor="#e0ffff"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;*@&lt;varg&gt; <font size="3">R</font>0</code></td>
+									<td></td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<div align="justify">
+							<p><b>Exemple</b> : Compiler l'expressions suivante: <code>((a + 4) * 2) * (3 - b)</code> et en supposant que a et b sont des variables globales. Soit soit forme préfixée <code>(* (* (+ 4 a) 2) (- 3 b))</code></p>
+							<ul>
+								<p></p>
+							</ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39"></td>
+									<td width="322" bgcolor="#fffff0"><code>Compile[(* (* (+ 4 a) 2) (- 3 b))] --&gt;</code>
+										<ul>
+											<p><font size="3"><code>Compile[(* (+ 4 a) 2)] ;<br>
+														PUSH R0 ;<br>
+														Compile[(- 2 b)] ;<br>
+														PUSH R0 ;<br>
+														CompileOp[*]</code></font></p>
+										</ul>
+										<dir>
+											<p><font size="3"><code>Compile[(* (+ 4 a) 2)] --&gt;</code></font></p>
+										</dir>
+										<ul>
+											<ul>
+												<p><font size="3"><code>Compile[(+ 4 a)];<br>
+															PUSH R0 ;<br>
+															CompileCste[2] ;<br>
+															PUSH R0 ;<br>
+															CompileOp[*] ;</code></font></p>
+											</ul>
+										</ul>
+										<dir>
+											<dir>
+												<p><font size="3"><code>Compile[(+ 4 a)] --&gt;</code></font></p>
+												<dir>
+													<p><font size="3"><code>CompileCste[4] ;<br>
+																PUSH R0 ;<br>
+																CompileVarg[a] ;<br>
+																PUSH R0 ;<br>
+																CompileOp[+] ;</code></font></p>
+													<p><font size="3"><code>CompileCste[4] --&gt; </code></font><code>MOVE<font size="3"> #4 R0<br>
+															</font></code></p>
+												</dir>
+											</dir>
+										</dir>
+										<ul>
+											<ul>
+												<ul>
+													<p><font size="3"><code>CompileVarg[a] --&gt; </code></font><code>MOVE *@a <font size="3">R</font>0</code></p>
+													<p><font size="3"><code>CompileOp[+] --&gt; JSR @+</code></font></p>
+												</ul>
+											</ul>
+										</ul>
+										<dir>
+											<dir>
+												<p><font size="3"><code>CompileCste[2] --&gt; </code></font><code>MOVE<font size="3"> #2 R0<br>
+														</font></code></p>
+											</dir>
+										</dir>
+										<ul>
+											<ul>
+												<p><font size="3"><code>CompileOp[*] --&gt; JSR @*</code></font></p>
+											</ul>
+											<p><font size="3"><code>Compile[(- 3 b)] --&gt;</code></font></p>
+											<ul>
+												<p><font size="3"><code>CompileCste[3] ;<br>
+															PUSH R0 ;<br>
+															CompileVarGlob[b] ;<br>
+															PUSH R0 ;<br>
+															CompileOp[-] ;</code></font></p>
+												<p><font size="3"><code>CompileCste[3] --&gt; </code></font><code>MOVE<font size="3"> #3 R0<br>
+														</font></code></p>
+												<p><font size="3"><code>CompileVarg[b] --&gt; </code></font><code>MOVE *@b <font size="3">R</font>0</code></p>
+												<p><font size="3"><code>CompileOp[-] --&gt; JSR @+</code></font></p>
+											</ul>
+											<p><font size="3"><code>CompileOp[*] --&gt; JSR @*</code></font></p>
+										</ul>
+									</td>
+									<td></td>
+								</tr>
+							</tbody></table>
+							<p>Si on remet tout ça dans l'ordre on obtient : <code>Compile[(* (* (+ 4 a) 2) (- 3 b))] --&gt;</code></p>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"></td>
+									<td width="53" bgcolor="#fffff0" valign="top"></td>
+									<td bgcolor="#fffff0" width="108" valign="top"><code>MOVE &nbsp;#4 R0<br>
+											PUSH &nbsp;R0<br>
+											MOVE &nbsp;*@a R0<br>
+											PUSH &nbsp;R0<br>
+											JSR &nbsp;&nbsp;@+<br>
+											PUSH &nbsp;R0<br>
+											MOVE &nbsp;#2 R0<br>
+											PUSH &nbsp;R0<br>
+											JSR &nbsp;&nbsp;@*<br>
+											PUSH &nbsp;R0<br>
+											MOVE &nbsp;#3 R0<br>
+											PUSH &nbsp;R0<br>
+											MOVE &nbsp;*@b R0<br>
+											PUSH &nbsp;R0<br>
+											JSR &nbsp;&nbsp;@-<br>
+											PUSH &nbsp;R0<br>
+											JSR &nbsp;&nbsp;@*<br>
+										</code></td>
+									<td valign="top"></td>
+								</tr>
+							</tbody></table>
+							<p>Lorsqu'on ne fait pas appel à des sous-programmes et qu'on compile les appels à +, - et * directement dans la machine, cela donne :</p>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"></td>
+									<td width="53" bgcolor="#fffff0" valign="top"></td>
+									<td bgcolor="#fffff0" width="108"><code>MOVE &nbsp;#4 R0<br>
+											PUSH &nbsp;R0<br>
+											MOVE &nbsp;*@a R0<br>
+											PUSH &nbsp;R0<br>
+											<font color="#dc143c">POP &nbsp;&nbsp;R1<br>
+												POP &nbsp;&nbsp;R0<br>
+												ADD &nbsp;&nbsp;R1 R0</font><br>
+											PUSH &nbsp;R0<br>
+											MOVE &nbsp;#2 R0<br>
+											PUSH &nbsp;R0<br>
+											<font color="#dc143c">POP &nbsp;&nbsp;R1<br>
+												POP &nbsp;&nbsp;R0<br>
+												MULT &nbsp;R1 R0</font><br>
+											PUSH &nbsp;R0<br>
+											MOVE &nbsp;#3 R0<br>
+											PUSH &nbsp;R0<br>
+											MOVE &nbsp;*@b R0<br>
+											PUSH &nbsp;R0<br>
+											<font color="#dc143c">POP &nbsp;&nbsp;R1<br>
+												POP &nbsp;&nbsp;R0<br>
+												SUB &nbsp;&nbsp;R1 R0</font><br>
+											PUSH &nbsp;R0<br>
+											<font color="#dc143c">POP &nbsp;&nbsp;R1<br>
+												POP&nbsp; &nbsp;R0<br>
+												MULT &nbsp;R1 R0</font><br>
+										</code></td>
+									<td valign="top"><i><code><br>
+												<br>
+												<br>
+												<br>
+											</code></i><i><code>à la place de JSR @+<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												à la place de JSR @*<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												à la place de JSR @-<br>
+												<br>
+												<br>
+												<br>
+												à la place de JSR @*</code></i></td>
+								</tr>
+							</tbody></table>
+							<h2>Fonctions de tests</h2>
+							<p>En général, les procédures de tests se compilent comme les opérateurs arithmétiques (sauf quand les tests peuvent être effectués par la machine cible et qu'ils se situent dans une structure de contrôle telle qu'un 'if').</p>
+							<ol>
+								<p><b>Exemple </b>: <tt>(a &gt; 4)</tt></p>
+							</ol>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39"></td>
+									<td width="356" bgcolor="#fffff0"><code>Compile[(&gt; a 4)] --&gt;</code>
+										<ul>
+											<p><code>CompileVarg[a] --&gt; MOVE &nbsp;*@a R0<br>PUSH &nbsp;R0<br>CompileCste[4] --&gt; MOVE &nbsp;#4 R0<br>PUSH &nbsp;R0<br>
+													CompileOp[&gt;] --&gt; JSR &nbsp;&nbsp;@&gt;</code></p>
+										</ul>
+									</td>
+									<td></td>
+								</tr>
+							</tbody></table>
+						</div>
+						<p>Soit :</p>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39"></td>
+								<td width="164" bgcolor="#fffff0">
+									<ul>
+										<code>MOVE &nbsp;*@a R0<br>
+											PUSH &nbsp;R0 ;<br>
+											MOVE &nbsp;#4 R0<br>
+											PUSH &nbsp;R0 ;<br>
+											JSR &nbsp;&nbsp;@&gt;</code>
+									</ul>
+								</td>
+								<td></td>
+							</tr>
+						</tbody></table>
+						<p>Les fonction booléennes retournent 0 (faux) ou 1 (vrai) comme valeurs.</p>
+						<h2>Affectation de variables globales</h2>
+						<p>En général, les procédures de tests se compilent comme les opérateurs arithmétiques (sauf quand les tests peuvent être effectués par la machine cible et qu'ils se situent dans une structure de contrôle telle qu'un 'if').</p>
+						<div align="justify">
+							<blockquote>
+								<p><code>Compile[(setf &lt;var&gt; &lt;expr&gt;)] --&gt;</code></p>
+							</blockquote>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="165" bgcolor="#e0ffff"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE R0 @&lt;var&gt;</code></td>
+								<td></td>
+							</tr>
+						</tbody></table>
+						<div align="justify">
+							<p>Par exemple, nous avons pour <code>(setf a 533) --&gt;</code> </p>
+						</div>
+						<div align="left">
+							<ul>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="53" bgcolor="#fffff0"></td>
+										<td bgcolor="#fffff0" width="20%"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;#533 R0<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;R0 @a</code></td>
+										<td></td>
+									</tr>
+								</tbody></table>
+							</ul>
+						</div>
+						<div align="justify">
+							<p>L'état de la mémoire après exécution est :</p>
+						</div>
+						<div align="left">
+							<ul>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"><tt>0000<br>
+												0001<br>
+												0002</tt></td>
+										<td width="53" bgcolor="#fffff0">
+											<div align="right">
+												<code>A<br>
+													B<br>
+													C<br>
+												</code></div>
+										</td>
+										<td bgcolor="#fffff0" width="20%"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">533<font color="#fffff0"><br>
+												</font><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">214<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">-250</code></td>
+										<td></td>
+									</tr>
+								</tbody></table>
+							</ul>
+						</div>
+						<div align="justify">
+							<p><b>Note</b> : le code précédent qui pourrait s'optimiser :</p>
+						</div>
+						<div align="left">
+							<ul>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="53" bgcolor="#fffff0"></td>
+										<td bgcolor="#fffff0" width="20%"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE<font size="3"> &nbsp;#533 @a </font></code><font color="#fffff0"><tt>r</tt></font><tt><i> </i></tt></td>
+										<td></td>
+									</tr>
+								</tbody></table>
+							</ul>
+						</div>
+						<div align="justify">
+							<p>Mais, une telle optimisation n'est immédiatement possible, si on a <code>(setf a (+ a 5)) --&gt;</code></p>
+							<ul>
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39"></td>
+										<td width="53" bgcolor="#fffff0"></td>
+										<td bgcolor="#fffff0" width="161"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;*@a R0<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;R0<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE&nbsp; #5 R0<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;R0<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP&nbsp; &nbsp;R1<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP&nbsp;&nbsp; R0<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">ADD &nbsp;&nbsp;R1 R0<br>
+												<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;R0 @a</code></td>
+										<td></td>
+									</tr>
+								</tbody></table>
+							</ul>
+						</div>
+						<h2>Structures de contrôles</h2>
+						<h3>Séquence</h3>
+						<div align="justify">
+							<p>La structure de séquence s'exprime simplement comme la concaténation de la compilation des instructions se situant dans la séquence.</p>
+							<ul>
+								<p><code>Compile[(progn &lt;expr1&gt; &lt;expr2&gt; … &lt;exprn&gt;)] --&gt;</code></p>
+							</ul>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="165" bgcolor="#e0ffff"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr1&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr2&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">…<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;exprn&gt;] ;<br>
+									</code></td>
+								<td></td>
+							</tr>
+						</tbody></table>
+						<h3>Si alors sinon</h3>
+						<p>Les structures de contrôles classiques (conditionnelles et boucles) doivent gérer des étiquettes.</p>
+						<div align="justify">
+							<ul>
+								<p><code>Compile[(if &lt;test&gt; &lt;alors&gt; … &lt;sinon&gt;)] --&gt;</code></p>
+							</ul>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="239" bgcolor="#e0ffff"><code>soit<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">etiq-sinon = etiq()<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">etiq-fin = etiq()<br>
+										<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;test&gt;]<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">CMP R0 #O<br>
+									</code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><code>JEQ @etiq-sinon<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;alors&gt;]<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP @etiq-fin<br>
+										etiq-sinon<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;sinon&gt;<br>
+										etiq-fin<br>
+									</code></td>
+								<td valign="top"><i><code><br>
+											<br>
+											<br>
+											<br>
+											<br>
+											si R0 = 0 alors test faux</code></i></td>
+							</tr>
+						</tbody></table>
+						<p>Par exemple : <code>(if (&lt; a 5) 1 2) --&gt;</code></p>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"><i><code>01<br>
+												02<br>
+												03<br>
+												04<br>
+												05<br>
+												06<br>
+												07<br>
+												08<br>
+												09<br>
+												10<br>
+											</code></i></td>
+									<td width="53" bgcolor="#fffff0" valign="top">
+										<div align="right">
+											<code><br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												SINON1<br>
+												FIN1<br>
+											</code></div>
+									</td>
+									<td bgcolor="#fffff0" width="131" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;*@a R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;#4 R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JSR &nbsp;&nbsp;@&gt;<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">CMP   R0 1<br>
+										</code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><code>JNE &nbsp;&nbsp;@SINON1<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;#1 R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP &nbsp;&nbsp;@FIN1<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;#2 R0<br>
+											<br>
+										</code></td>
+									<td valign="top"><i><code>calcul de (&lt; a 5)<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												le résultat de (&lt; a 5) se trouve dans R0<br>
+											</code></i></td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<h3><b>Boucle "</b>tant que"</h3>
+						<p>Le 'tant que' utilise une technique semblable.</p>
+						<ul>
+							<p><code>CompileOp[(while &lt;test&gt; &lt;expr&gt;)] --&gt;</code></p>
+						</ul>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="305" bgcolor="#e0ffff"><code>soit<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">etiq-boucle = etiq()<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">etiq-fin = etiq()<br>
+										<br>
+										etiq-boucle<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;test&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JEQ R0 @etiq-fin ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP @etiq-boucle ;<br>
+										etiq-fin</code></td>
+								<td></td>
+							</tr>
+						</tbody></table>
+						<p>Par exemple : <code>(while (&lt; a 5) (setf a (+ a 2)))</code></p>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"><i><code>01<br>
+												02<br>
+												03<br>
+												04<br>
+												05<br>
+												06<br>
+												07<br>
+												08<br>
+												09<br>
+												10<br>
+												11<br>
+												12<br>
+												13<br>
+												14<br>
+												15<br>
+												16</code></i></td>
+									<td width="53" bgcolor="#fffff0" valign="top">
+										<div align="right">
+											<code>BOUCLE1<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												FIN1<br>
+											</code></div>
+									</td>
+									<td bgcolor="#fffff0" width="131" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;*@a R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;#5 R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JSR &nbsp;&nbsp;@&lt;<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JEQ R0 @FIN1<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;*@a R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE&nbsp; #2 R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP&nbsp; &nbsp;R1<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP&nbsp;&nbsp; R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">ADD &nbsp;&nbsp;R1 R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;R0 @a<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP &nbsp;&nbsp;@BOUCLE1<br>
+											<br>
+										</code></td>
+									<td valign="top"><i><code>Calcul de (&lt; a 5)<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												Calcul de (setf a (+ a 2))<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
+												fin de (setf a (+ a 2))<br>
+												<br>
+											</code></i></td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<h3>Boucle "pour"</h3>
+						<p>Le 'pour' u est plus complexe <code>(for (i 0 n) &lt;expr&gt;)</code>. Deux cas se présentent. Soit la valeur finale est une constante et on n'a besoin de la calculer qu'une fois (c'est le cas général - cas 1), soit la valeur finale peut évoluer au cours de la boucle et il faut alors la recalculer systématiquement (cas 2).</p>
+						<div align="justify">
+							<ol>
+								<p><b>Cas 1 </b>: <code>&lt;expr-fin&gt;</code> n'est calculée qu'une seule fois</p>
+							</ol>
+						</div>
+						<p><code>Compile[(for (&lt;var&gt; &lt;expr-init&gt; &lt;expr-fin&gt;) &lt;expr&gt;)] --&gt;</code></p>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="243" bgcolor="#e0ffff"><code>soit<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">etiq-boucle = etiq()<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">etiq-fin = etiq()<br>
+										<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr-init&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;R0 @&lt;var&gt; ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr-fin&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH &nbsp;R0 ;<br>
+										etiq-boucle<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE @&lt;var&gt; R0 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP R1 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">SUB R0 R1 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JLE R1 @etiq-fin ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">INCR @&lt;var&gt;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP @etiq-boucle ;<br>
+										etiq-fin</code></td>
+								<td valign="top"><code><br>
+										<br>
+										<br>
+										<br>
+										<br>
+										&lt;expr-init&gt; --&gt; &lt;var&gt;<br>
+										&lt;expr-fin&gt; est une cste<br>
+										&lt;expr-fin&gt; --&gt; pile<br>
+										<br>
+										&lt;var&gt; --&gt; R0<br>
+										&lt;expr-fin&gt; --&gt; R1<br>
+										R1 - R0 --&gt; R1<br>
+									</code><code><br>
+										<br>
+										on incrémente &lt;var&gt;<br>
+										<br>
+										<br>
+									</code></td>
+							</tr>
+						</tbody></table>
+						<p>Par exemple : <code>(for (i 0 10) (setf a (/ a 2))) --&gt;</code></p>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"><i><code>01<br>
+												02<br>
+												03<br>
+											</code></i></td>
+									<td width="53" bgcolor="#fffff0" valign="top">
+										<div align="right">
+											<code>BOUCLE1<br>
+												FIN1<br>
+											</code></div>
+									</td>
+									<td bgcolor="#fffff0" width="131" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;<br>
+										</code></td>
+									<td valign="top">a faire</td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<div align="justify">
+							<ol>
+								<p><b>Cas 2 </b>:<b> </b><code>&lt;expr-fin&gt;</code> est calculée à chaque tour</p>
+							</ol>
+							<ul>
+								<p><code>Compile[(for (&lt;var&gt; &lt;expr-init&gt; &lt;expr-fin&gt;) &lt;expr&gt;)] --&gt;</code></p>
+							</ul>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="243" bgcolor="#e0ffff" valign="top"><code>soit<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">etiq-boucle = etiq()<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">etiq-fin = etiq()<br>
+										<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr-init&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE R0 @&lt;var&gt; ;<br>
+										etiq-boucle<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr-fin&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE R0 R1 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;@&lt;var&gt; R0 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">SUB R0 R1 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JLE R1 @etiq-fin ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">INCR @&lt;var&gt; ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP @etiq-boucle ;<br>
+										etiq-fin</code></td>
+								<td valign="top"><code><br>
+										<br>
+										<br>
+										<br>
+										<br>
+										&lt;expr-init&gt; --&gt; &lt;var&gt;<br>
+										<br>
+										&lt;expr-fin&gt; est recalculé<br>
+										&lt;expr-fin&gt; --&gt; R1<br>
+										<br>
+										R1 - R0 --&gt; R1</code><code><br>
+										<br>
+										<br>
+										on incrémente &lt;var&gt;<br>
+										<br>
+									</code></td>
+							</tr>
+						</tbody></table>
+						<p>Par exemple : <code>(for (i 0 (+ a 1)) (setf a (/ a 2)) ) --&gt;</code></p>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"><i><code>01<br>
+												02<br>
+												03<br>
+											</code></i></td>
+									<td width="53" bgcolor="#fffff0" valign="top">
+										<div align="right">
+											<code>BOUCLE1<br>
+												FIN1<br>
+											</code></div>
+									</td>
+									<td bgcolor="#fffff0" width="131" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;<br>
+										</code></td>
+									<td valign="top">a faire</td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<h2>Fonctions</h2>
+						<div align="justify">
+							<p>Les fonctions se trouvent à deux endroits&nbsp;:</p>
+							<ol>
+								<li>Dans la déclaration de la fonction
+								</li><li value="1">Lors de son utilisation (l'appel)
+							</li></ol>
+						</div>
+						<h3>Compilation d’une déclaration d'une fonction</h3>
+						<div align="justify">
+							<p>Pour l’instant on compile les fonctions sans paramètres ni variables locales. Une déclaration d’un sous-programme s’exprime ainsi&nbsp;:</p>
+							<ul>
+								<p><code>Compile[(defun &lt;proc&gt; &lt;expr&gt;)] --&gt;</code></p>
+								<p>où<code> &lt;expr&gt;</code> est généralement de la forme <code>(progn &lt;expr1&gt; .. &lt;exprn&gt;) </code></p>
+							</ul>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="243" bgcolor="#e0ffff" valign="top"><code>&lt;proc&gt;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">RTN<br>
+									</code></td>
+								<td valign="top"><i><code>l’etiquette du sous-programme</code></i></td>
+							</tr>
+						</tbody></table>
+						<h3>Compilation d’un appel de sous-programme&nbsp;</h3>
+						<div align="justify">
+							<p>L’appel d’un sous-programme s’exprime ainsi&nbsp;:</p>
+							<ul>
+								<p><code>Compile[(&lt;proc&gt;)] --&gt;</code></p>
+							</ul>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="243" bgcolor="#e0ffff" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JSR @&lt;proc&gt;<br>
+									</code></td>
+								<td valign="top"></td>
+							</tr>
+						</tbody></table>
+						<div align="justify">
+							<p><i>Remarque</i>&nbsp;: cela montre la simplicité de la définition des sous-programmes. En fait le problème principal se situe non pas dans les sous-programmes, mais dans les variables locales et les paramètres passés en argument.</p>
+							<h3>Paramètres et variables locales</h3>
+							<p>De nombreuses techniques peuvent être utilisées pour traiter les paramètres des procédures. La première, qui est celle employée initialement par Fortran, consiste à réserver des variables globales dans chaque procédure. Mais elle ne permet pas la récursivité. Les autres utilisent la pile.</p>
+						</div>
+						<h4>Passage de paramètres à la Fortran</h4>
+						<p>Déclaration d'un sous-programme :</p>
+						<ul>
+							<p><code>Compile[(defun &lt;proc&gt; (&lt;x1&gt; .. &lt;xn&gt;) &lt;expr&gt;)] --&gt;</code></p>
+						</ul>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="241" bgcolor="#e0ffff" valign="top"><code>soit<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">debut_proc = etiq(debut_, &lt;proc&gt;)<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">var_x1 = etiq(v, &lt;proc&gt;, _, &lt;x1&gt;)<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"> ...<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">var_xn = etiq(v, &lt;proc&gt;, _, &lt;xn&gt;)<br>
+										<br>
+										&lt;proc&gt; ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP @debut_proc<br>
+										var_x1 &nbsp;&nbsp;0&nbsp;;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">...<br>
+										var_xn &nbsp;&nbsp;0&nbsp;;<br>
+										debut_proc<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP R2 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP R0 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE R0 @var_xn&nbsp;;<br>
+										...<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP R0<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE R0 @var_x1 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH A2<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[expr]&nbsp;;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">RTN<br>
+									</code></td>
+								<td valign="top"><i><code><br>
+											<br>
+											<br>
+											<br>
+											<br>
+											<br>
+											l’etiquette du sous-programme<br>
+											<br>
+											<br>
+											<br>
+											<br>
+											<br>
+											récupère l’adresse de retour<br>
+											récupère les variables<br>
+											on les stocke en mémoire<br>
+											<br>
+											<br>
+											remet l’adresse de retour sur la pile<br>
+											<br>
+											<br>
+										</code></i></td>
+							</tr>
+						</tbody></table>
+						<blockquote>
+							<p>Par exemple : </p>
+						</blockquote>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"><i><code>01<br>
+												02<br>
+												03<br>
+											</code></i></td>
+									<td width="53" bgcolor="#fffff0" valign="top">
+										<div align="right">
+											<code>BOUCLE1<br>
+												FIN1<br>
+											</code></div>
+									</td>
+									<td bgcolor="#fffff0" width="131" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;<br>
+										</code></td>
+									<td valign="top">à faire</td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<p>Appel d'un sous-programme :</p>
+						<blockquote>
+							<p><code>Compile[(&lt;proc&gt; &lt;expr1&gt; .. &lt;exprn&gt;)] --&gt;</code></p>
+						</blockquote>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="241" bgcolor="#e0ffff" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr1&gt;]&nbsp;;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH R0 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">…<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;exprn&gt;]&nbsp;;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH R0 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JSR &lt;proc&gt;<br>
+									</code></td>
+								<td valign="top"></td>
+							</tr>
+						</tbody></table>
+						<blockquote>
+							<p>Par exemple : </p>
+						</blockquote>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"><i><code>01<br>
+												02<br>
+												03<br>
+											</code></i></td>
+									<td width="53" bgcolor="#fffff0" valign="top">
+										<div align="right">
+											<code>BOUCLE1<br>
+												FIN1<br>
+											</code></div>
+									</td>
+									<td bgcolor="#fffff0" width="131" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;<br>
+										</code></td>
+									<td valign="top">à faire</td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<div align="justify">
+							<p><i>Problèmes</i> </p>
+							<blockquote>
+								<p>1) pas de récursivité possible ;</p>
+								<p>2) l’accès aux valeurs passées en argument lors de la compilation du corps de la procédure. Comment y accéder&nbsp;?</p>
+							</blockquote>
+							<p>Par exemple pour (1), considérons le code Lisp suivant :</p>
+							<blockquote>
+								<p><code>(defun foo (x)<br>
+										 (if (= x 0)<br>
+										     1<br>
+										     (+ 1 (foo (- x 1))<br>
+										  ))</code></p>
+								<p><code>(foo 5)</code></p>
+							</blockquote>
+							<p>Réponse&nbsp;: pour le problème (2), on peut utiliser un <b>environnement</b>. Un environnement est une suite de couples (symbole, valeur), que l’on notera <code>{(s1,v1),..,(sk,vk)}</code> et que l’on manipulera avec les deux fonctions :</p>
+						</div>
+						<blockquote>
+							<p><code>at[env, s] == v</code> si <code>s</code> est un symbole de l’environnement et une erreur sinon.</p>
+							<p><code>atput[env,sj,v’j] ==<br>
+									<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">env’ = env + {(sj,v’j)</code>} si sj n’est pas un symbole de l’environnement et<br>
+								<code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">env - {(sj,vj)} + {(sj,v’j)}</code> si <code>(sj,v’j)</code> était dans env.</p>
+						</blockquote>
+						<div align="justify">
+							<p>On ajoutera donc un argument à la fonction <code>Compile[&lt;expr&gt;, &lt;env&gt;]</code> qui exprime que l’expression se compile dans l’environnement <code>&lt;env&gt;</code>. Nous verrons par la suite que nous ajouterons d’autres variables à la fonction <code>Compile</code>. Dans toutes les expressions que nous avons compilé pour l’instant, cela ne change rien&nbsp;: on reporte simplement la variable d’environnement inchangée.</p>
+							<p>Ainsi, la compilation d’expression s’écrit maintenant ainsi&nbsp;:</p>
+						</div>
+						<ul>
+							<p><code>Compile[(&lt;op&gt; &lt;expr1&gt; &lt;expr2&gt;),&lt;env&gt;] --&gt;<br>
+								</code>où <code>&lt;op&gt;</code> est une opération primitive</p>
+						</ul>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="241" bgcolor="#e0ffff" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr1&gt;, &lt;env&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH R0 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr2&gt;, &lt;env&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH R0 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">CompileOp[&lt;op&gt;, &lt;env&gt;]<br>
+									</code></td>
+								<td valign="top"></td>
+							</tr>
+						</tbody></table>
+						<ol>
+							<p>Par exemple : ?</p>
+						</ol>
+						<ul>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"><i><code>01<br>
+												02<br>
+												03<br>
+											</code></i></td>
+									<td width="53" bgcolor="#fffff0" valign="top">
+										<div align="right">
+											<code>BOUCLE1<br>
+												FIN1<br>
+											</code></div>
+									</td>
+									<td bgcolor="#fffff0" width="131" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;<br>
+										</code></td>
+									<td valign="top">à faire</td>
+								</tr>
+							</tbody></table>
+						</ul>
+						<div align="justify">
+							<p>Lors de la compilation du corps d’une procédure, nous allons passer à la fois les noms des variables ainsi que les adresses (les étiquettes) des variables locales&nbsp;:</p>
+							<ul>
+								<p><code>Compile[(defun (&lt;proc&gt; &lt;x1&gt; .. &lt;xn&gt;) &lt;expr&gt;),&lt;env&gt;] --&gt;<br>
+									</code>où <code>&lt;op&gt;</code> est une opération primitive</p>
+							</ul>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="323" bgcolor="#e0ffff" valign="top"><code>soit<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">debut_proc = etiq(debut_, &lt;proc&gt;)<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">var_x1 = etiq(v, &lt;proc&gt;, _, &lt;x1&gt;)<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"> ...<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">var_xn = etiq(v, &lt;proc&gt;, _, &lt;xn&gt;)<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">&lt;nenv&gt; = {(&lt;x1&gt;, @var_x1), .., (&lt;xn&gt;, @var_xn)}<br>
+										<br>
+										&lt;proc&gt; ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JMP @debut_proc<br>
+										var_x1 &nbsp;&nbsp;0&nbsp;;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">...<br>
+										var_xn &nbsp;&nbsp;0&nbsp;;<br>
+										debut_proc<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP R2 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP R0 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE R0 @var_xn&nbsp;;<br>
+										...<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP R0<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE R0 @var_x1 ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH R2<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[expr,&lt;nenv&gt;]&nbsp;;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">RTN</code></td>
+								<td valign="top"></td>
+							</tr>
+						</tbody></table>
+						<p>Par exemple :</p>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" valign="top"><i><code>01<br>
+											02<br>
+											03<br>
+										</code></i></td>
+								<td width="53" bgcolor="#fffff0" valign="top">
+									<div align="right">
+										<code>BOUCLE1<br>
+											FIN1<br>
+										</code></div>
+								</td>
+								<td bgcolor="#fffff0" width="131" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;<br>
+									</code></td>
+								<td valign="top">à faire</td>
+							</tr>
+						</tbody></table>
+						<h4><b>Accès aux variables locales</b></h4>
+						<div align="justify">
+							<p>Lors de la compilation des variables, ce qui s’exprimait auparavant ainsi&nbsp;:</p>
+						</div>
+						<ul>
+							<p><code>Compile[&lt;ident&gt;] --&gt;</code></p>
+						</ul>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="241" bgcolor="#e0ffff" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE @&lt;ident&gt; R0</code></td>
+								<td valign="top"></td>
+							</tr>
+						</tbody></table>
+						<p>se compile maintenant à l’aide des environnements&nbsp;:</p>
+						<ul>
+							<p><code>Compile[&lt;ident&gt;, &lt;env&gt;] --&gt;</code></p>
+						</ul>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="334" bgcolor="#e0ffff" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE (loc @at[&lt;env&gt;,&lt;ident&gt;]) R0</code></td>
+								<td valign="top"></td>
+							</tr>
+						</tbody></table>
+						<div align="justify">
+							<p>Exemple :</p>
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" valign="top"><i><code>01<br>
+												02<br>
+												03<br>
+											</code></i></td>
+									<td width="53" bgcolor="#fffff0" valign="top">
+										<div align="right">
+											<code>BOUCLE1<br>
+												FIN1<br>
+											</code></div>
+									</td>
+									<td bgcolor="#fffff0" width="131" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE &nbsp;<br>
+										</code></td>
+									<td valign="top"></td>
+								</tr>
+							</tbody></table>
+						</div>
+						<h4>Valeur de retour</h4>
+						<div align="justify">
+							<p>On notera qu’il n’y a strictement rien à faire pour que les procédures retournent un résultat. Le dernier résultat se trouve dans R0 lors de la sortie de la procédure. Si l’on désire avoir une instruction de type <code>return</code> comme en C, on écrira&nbsp;simplement&nbsp;:</p>
+							<ul>
+								<p><code>Compile[(return &lt;expr&gt;), &lt;env&gt;] --&gt;</code></p>
+							</ul>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="241" bgcolor="#e0ffff" valign="top"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr&gt;, &lt;env&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">RTN</code></td>
+								<td valign="top"></td>
+							</tr>
+						</tbody></table>
+						<p><b>Passages de paramètres par la pile</b></p>
+						<div align="justify">
+							<p>On utilise la pile pour le passage de paramètres. Le principe consiste à laisser les variables sur la pile. On obtient alors :</p>
+							<ul>
+								<p><code>Compile[(defun &lt;proc&gt; (&lt;x1&gt; … &lt;xn&gt;) &lt;expr&gt;), &lt;env&gt;] --&gt;</code></p>
+							</ul>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="241" bgcolor="#e0ffff" valign="top"><code>debut_proc<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr&gt;, &lt;env&gt;] ;<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">RTN</code></td>
+								<td valign="top"></td>
+							</tr>
+						</tbody></table>
+						<div align="justify">
+							<p>L’appel de procédure se fait simplement comme dans l’appel de type Fortran. </p>
+							<p><b>Problème&nbsp;:</b> comment accéder aux variables locales sur la pile&nbsp;? </p>
+							<p><b>Réponse&nbsp;:</b> il faut marquer la pile lors de l’appel des sous-programmes. Il s'agit de la notion de bloc de pile (stack frame). on remarquera que ce n'est pas la seule solution possible, mais c'est une des plus simples et qui donne un code généré les plus lisibles.</p>
+							<p>Il existe de nombreuses formes de bloc de pile, mais elles se ramenent simplement à faire des variantes de celle qui est décrite ci-dessous.</p>
+						</div>
+						<center>
+							<p><img src="./Cours de compilation_files/Image1.gif" width="296" height="427"></p>
+						</center>
+						<div align="justify">
+							<p>Cela signifie que lors de la compilation d’un appel il faut générer le code suivant&nbsp;:</p>
+							<ul>
+								<p><code>Compile[(&lt;proc&gt; &lt;expr1&gt; … &lt;exprn&gt;), &lt;env&gt;] --&gt;</code></p>
+							</ul>
+						</div>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="245" bgcolor="#e0ffff" valign="top"><tt>Soit n le nombre d'arguments<code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><br>
+										</code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><code>Compile[&lt;expr1&gt;, &lt;env&gt;] ;<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;expr2&gt;, &lt;env&gt;] ;<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">…<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">Compile[&lt;exprn&gt;, &lt;env&gt;] ;<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH R0<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH #&lt;n&gt;<br>
+											<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE&nbsp;FP R1&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE&nbsp;SP FP  &nbsp;&nbsp; <br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE&nbsp;SP R2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">SUB&nbsp;&nbsp;@n R2<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">SUB&nbsp;&nbsp;1 R2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH&nbsp;R2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">PUSH&nbsp;R1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<br>
+											<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">JSR @&lt;proc&gt;<br>
+										</code><br>
+										<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><code><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP R1<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">POP R2<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE R1 FP<br>
+											<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF">MOVE R2 SP<br>
+										</code></tt>
+									<p></p>
+								</td>
+								<td valign="top"><tt><br>
+										<br>
+										<br>
+										<br>
+										<br>
+										<br>
+										<br>
+										<br>
+										// on pousse le nb d'arguments<br>
+										<br>
+										// <code>on recupère l'ancien FP</code><br>
+										// <code>le nouvel FP = SP</code><br>
+										// <code>on recupère l’ancien SP</code><br>
+										<code>// R2 = SP - (n + 1)</code><br>
+										<br>
+										<code>// on sauve l’ancien SP<br>
+										</code><code>// on sauve l’ancien FP</code><br>
+										<code>// fin de l’entete d’appel</code><br>
+										<br>
+										// appel<br>
+										<br>
+									</tt><tt><code>// début de la restauration </code><br>
+										<code>// on recupère l’ancien FP</code><br>
+										<code>// on recupère l’ancien SP</code><br>
+										<code>// FP est restauré à son ancienne valeur</code><br>
+										<code>// on a supprimé toutes les variables</code><br>
+										<br>
+										<code>// fin de la restauration</code><br>
+										<br>
+									</tt></td>
+							</tr>
+						</tbody></table>
+						<div align="left">
+							<p>On récupère les variables sur la pile à l’adresse suivante&nbsp;:</p>
+						</div>
+						<ol>
+							<ol>
+								<div align="justify">
+									<p><b><code>var<sub>i</sub> = FP - (n + 1) + i   // on compte i à partir de 0</code></b></p>
+								</div>
+							</ol>
+						</ol>
+						<div align="justify">
+							<p>On peut utiliser avec profit l’instruction <tt>(local &lt;n&gt; &lt;reg&gt;)</tt> qui va chercher le n<sup>ième</sup> élément sur la pile à partir de FP et le place dans le registre <tt>&lt;reg&gt;</tt>. Ainsi la compilation d’une procédure avec passage de paramètres se compile ainsi:</p>
+						</div>
+						<ol>
+							<ol>
+								<p><tt>Compile[(define (&lt;proc&gt; &lt;x1&gt; .. &lt;xn&gt;) &lt;expr&gt;),&lt;env&gt;] --&gt;</tt></p>
+							</ol>
+						</ol>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="265" bgcolor="#e0ffff" valign="top">
+									<p><tt>soit n le nombre de paramètres<br>
+										</tt><tt>&lt;nenv&gt; = {(&lt;x1&gt;,-(n+1)+1),..,<br>
+										</tt><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><tt>(&lt;xi&gt;,-(n+1)+i),..,</tt><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><tt><br>
+										</tt><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><tt>(&lt;xn&gt;,-2)} <br>
+											<br>
+										</tt><tt>&lt;proc&gt;<br>
+											<br>
+										</tt><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><tt>FENTRY &lt;proc&gt;<br>
+											<br>
+										</tt><img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><tt>Compile[&lt;expr&gt;,&lt;nenv&gt;]&nbsp;</tt><br>
+										<br>
+										<img height="6" width="16" src="./Cours de compilation_files/SPACE.GIF"><tt>RTN<br>
+										</tt></p>
+								</td>
+								<td valign="top"><br>
+									<br>
+									<tt>// - 2 car -(n+1)+(n-1) = -2</tt><br>
+									<tt>// l’etiquette de la fonction</tt><br>
+									<tt>// ne sert à rien en fait</tt><br>
+									<br>
+									<br>
+								</td>
+							</tr>
+						</tbody></table>
+						<div align="justify">
+							<div align="justify">
+								<p>Maintenant, l’<b>accès aux variables</b> s’écrit ainsi&nbsp;:</p>
+							</div>
+						</div>
+						<ol>
+							<ol>
+								<div align="justify">
+									<p><tt>Compile[&lt;ident&gt;,&lt;env&gt;] --&gt;</tt></p>
+								</div>
+							</ol>
+						</ol>
+						<div align="justify">
+							<table border="0" cellpadding="2" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td width="39" bgcolor="white"></td>
+									<td width="241" bgcolor="#e0ffff" valign="top"><tt>LOCAL @at[&lt;env&gt;,&lt;ident&gt;] R0</tt></td>
+									<td valign="top"></td>
+								</tr>
+							</tbody></table>
+						</div>
+						<div align="justify">
+							<div align="justify">
+								<p>De même l’<b>affectation</b> est donnée par&nbsp;:</p>
+							</div>
+						</div>
+						<ol>
+							<ol>
+								<div align="justify">
+									<p><tt>Compile[(setq &lt;ident&gt; &lt;expr&gt;), &lt;expr&gt;] --&gt;</tt></p>
+								</div>
+							</ol>
+						</ol>
+						<div align="justify">
+							<div align="justify">
+								<table border="0" cellpadding="2" cellspacing="0" width="100%">
+									<tbody><tr>
+										<td width="39" bgcolor="white"></td>
+										<td width="369" bgcolor="#e0ffff" valign="top">
+											<div align="justify">
+												<p><tt>Compile[&lt;expr&gt;, &lt;env&gt;]<br>
+													</tt><tt>SETLOCAL R0 @at[&lt;env&gt;, &lt;ident&gt;]</tt></p>
+											</div>
+										</td>
+										<td valign="top"></td>
+									</tr>
+								</tbody></table>
+							</div>
+						</div>
+						<p><b>Compilation des variables locales</b></p>
+						<div align="justify">
+							<p>Principe: les variables locales sont sur la pile et "poussent" à l'envers des paramètres.</p>
+							<p>Ces variables sont introduites par le mot clé <tt>Var</tt> en Pascal au début d'une fonction où se situent au début d'un "bloc" en C. En Scheme et Lisp ces variables sont introduites par la structure <tt>let</tt>. On supposera que les variables locales sont définies une fois pour toute par le mot clé <code>let</code> au début de la définition d'une fonction.</p>
+							<p><b>Remarque</b> : On supposera qu'il n'est pas possible de définir</p>
+						</div>
+						<ol>
+							<ol>
+								<p><tt>(define (f x)<br>
+										  </tt><tt>(let (z y)<br>
+										   </tt><tt>(setq z (1+ x)<br>
+										   (setq y 0)<br>
+										   </tt><tt>(while (&gt; y z)<br>
+										<br>
+										     </tt><tt>...<br>
+										    </tt><tt>(setq y (1+ y)<br>
+										   )<br>
+									</tt><tt>))</tt></p>
+							</ol>
+						</ol>
+						<p>On a donc le schémas suivant : &nbsp;</p>
+						<ol>
+							<ol>
+								<p><tt>Compile[(vars &lt;x1&gt; .. &lt;xn&gt;), &lt;env&gt;] --&gt;</tt></p>
+							</ol>
+						</ol>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="196" bgcolor="#e0ffff" valign="top">
+									<p><tt>pour &lt;xi&gt;<br>
+										</tt><tt>atput[&lt;env&gt;,&lt;xi&gt;,i+2] <br>
+											<br>
+										</tt><tt>pour i = 1 to n do<br>
+											<br>
+										</tt><tt>PUSH 0</tt></p>
+								</td>
+								<td valign="top"><tt><br>
+									</tt><tt>// le +2 est utilisé pour sauter par<br>
+									</tt><tt>// dessus les infos laissées sur la pile</tt><tt><br>
+										<br>
+										<br>
+										// réserve de la place pour la variable locale<br>
+										<br>
+									</tt></td>
+							</tr>
+						</tbody></table>
+						<div align="justify">
+							<p>L'accès aux variables locales se fait ensuite comme pour les paramètres, c'est-à-dire par la règle de compilation suivante:</p>
+						</div>
+						<ol>
+							<ol>
+								<p><tt>Compile[&lt;ident&gt;,&lt;env&gt;] --&gt;</tt></p>
+							</ol>
+						</ol>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="319" bgcolor="#e0ffff" valign="top">
+									<p><tt>LOCAL  @at[&lt;env&gt;,&lt;ident&gt;] R0</tt></p>
+								</td>
+								<td valign="top"><tt><br>
+										<br>
+									</tt></td>
+							</tr>
+						</tbody></table>
+						<p><b>Procédures dans des variables</b></p>
+						<div align="justify">
+							<p>Certains compilateurs Pascal et C permettent d'avoir des pointeurs sur des procédures et d'utiliser dynamiquement ces procédures. Par exemple:</p>
+						</div>
+						<ol>
+							<ol>
+								<p><tt>void f(int x) {..}<br>
+										<br>
+									</tt><tt>main() {<br>
+									</tt><tt>...<br>
+									</tt><tt>m = f;<br>
+									</tt><tt>..<br>
+										<br>
+									</tt><tt>(m*)(3)<br>
+									</tt><tt>..<br>
+									</tt><tt>}</tt></p>
+							</ol>
+						</ol>
+						<div align="justify">
+							<p>De même en Scheme on peut écrire:</p>
+						</div>
+						<ol>
+							<ol>
+								<p><tt>(define (f x y)(* x y))<br>
+										(set! a f)<br>
+									</tt><tt>(a 3 4) <br>
+										<br>
+										--&gt; 12</tt>&nbsp;</p>
+							</ol>
+						</ol>
+						<div align="justify">
+							<p><b>Principe</b>: si l'on s'aperçoit que l'identificateur réfère à une fonction (mais qu'elle n'a pas été définie ainsi), on compile non pas un appel direct, mais un appel indirect via <code>R0</code>.</p>
+						</div>
+						<ol>
+							<ol>
+								<p><tt>Compile[(&lt;expr&gt; &lt;e1&gt; ... &lt;en&gt;), &lt;env&gt;] --&gt;</tt></p>
+							</ol>
+						</ol>
+						<table border="0" cellpadding="2" cellspacing="0" width="100%">
+							<tbody><tr>
+								<td width="39" bgcolor="white"></td>
+								<td width="256" bgcolor="#e0ffff" valign="top">
+									<p><tt>soit n = nombre d’arguments<br>
+											<br>
+										</tt><tt>Compile[&lt;e1&gt;,&lt;env&gt;]<br>
+										</tt><tt>PUSH R0<br>
+											…<br>
+										</tt><tt>Compile[&lt;en&gt;,&lt;env&gt;]<br>
+										</tt><tt>PUSH R0<br>
+											<br>
+										</tt><tt>PUSH #&lt;n&gt;<br>
+											<br>
+										</tt><b><tt>Compile[&lt;expr&gt;, &lt;env&gt;]<br>
+												<br>
+												<br>
+											</tt></b><tt>MOVE FP R1</tt><br>
+										<tt>MOVE SP FP<br>
+										</tt><tt>MOV SP R2<br>
+										</tt><tt>DIFF #&lt;n&gt; R2<br>
+											DECF R2<br>
+											<br>
+										</tt><tt>PUSH R2<br>
+										</tt><tt>PUSH R1<br>
+											<br>
+											<br>
+											<br>
+										</tt><tt><b>JSR R0<br>
+												<br>
+												<br>
+												<br>
+												<br>
+											</b></tt><br>
+										<tt>POP R1<br>
+										</tt><tt>POP R2<br>
+										</tt><tt>MOVE R1 FP<br>
+										</tt><tt>MOVE R2 SP</tt></p>
+									<p></p>
+								</td>
+								<td valign="top"><tt><br>
+										<br>
+										<br>
+										<br>
+										<br>
+										// <b>début</b> de l’entête d’appel&nbsp;<br>
+										<br>
+										<br>
+										// nombre d’arguments<br>
+										<br>
+									</tt><b><tt>// insertion de la compilation de &lt;expr&gt;<br>
+										</tt></b><b><tt>// Attention: résultat dans A0</tt></b><tt><br>
+										<br>
+										// on recupère l’ancien FP<br>
+										// le nouvel FP = SP<br>
+										// on recupére l’ancien SP<br>
+										<br>
+										// R2 = SP - (n + 1)<br>
+										<br>
+										// on sauve l’ancien SP<br>
+										// on sauve l’ancien FP<br>
+										<br>
+										// <b>fin</b> de l’entete d’appel<br>
+										<br>
+										// appel indirect via R0<br>
+										<br>
+										// <b>début</b> de la restauration <br>
+										// du contexte d’exécution<br>
+										<br>
+										// on recupère l’ancien FP<br>
+										// on recupère l’ancien SP<br>
+										// FP est restauré à son ancienne valeur<br>
+										// on a supprimé toutes les variables<br>
+										<br>
+										// <b>fin</b> de la restauration<br>
+									</tt></td>
+							</tr>
+						</tbody></table>
+						<p><b>Remarque</b>: cette modification peut s'appliquer aussi à l'appel direct. C'est généralement ce qui se passe dans les langages faiblement typés, où il est difficile de savoir si la variable est un identificateur correspondant effectivement à la fonction où s'il s'agit d'une variable qui contient une procédure.</p>
+						<div align="justify"></div>
+						<h3>Fonctions auxilliaires (labels)</h3>
+						<div align="justify">
+							<p>Compilation des fonctions auxiliaires que l'on ne veut pas définir à l'extérieur d'une procédure. On rencontre ce type de procédure en Pascal, en Ada et en Scheme. Exemple en Lisp:</p>
+							<p><i>à faire</i></p>
+							<dir>
+								<p><tt>(defun indice (lst x)<br>
+										  (labels ((indice1 (lst x i)<br>
+										           (cond<br>
+										            ((null? lst) ())<br>
+										            ((equal? (car lst) x) i)<br>
+										            (else (indice1 (cdr lst) x (1+ i)))))<br>
+										<br>
+										    )  ;; du labels<br>
+										<br>
+										  (indice1 lst x 0)<br>
+										)</tt></p>
+								<p><tt>;; appel</tt></p>
+								<p><tt>(indice '(a b c d e) 'c) --&gt; 2</tt></p>
+								<p><tt>;;<br>
+										;; autre exemple&nbsp;</tt></p>
+								<p><tt>(define (f x)</tt></p>
+								<p><tt>(define (g z)</tt></p>
+								<p><tt>(set! x (1+ z))</tt></p>
+								<p><tt>x)</tt></p>
+								<p><tt>(+ x (g 3)))</tt></p>
+								<p><tt>&nbsp;;; appel</tt></p>
+								<p><tt>(f 5 )--&gt; 9</tt></p>
+							</dir></div>
+						<div align="justify">
+							<p>Principe:</p>
+							<ol>
+								<li>On considère que la procédure interne (par exemple <tt>g</tt>) dans le deuxième exemple est une variable locale de la procédure.
+								</li><li value="1">On compile l'appel à la procédure locale comme s'il s'agissait d'une procédure passée dans une variable.
+								</li><li value="1">Les variables locales à la procédure interne sont récupérées normalement sur la pile dans un bloc de pile local.
+								</li><li value="1">Les variables globales à la procédure interne, mais locales à la procédure de définition sont accédées au travers du pointeur de frame et on remonte ensuite les blocs de piles jusqu'à aller au bloc de pile de bon niveau.
+								</li><li value="1">Lors de la compilation, on passe un environnement structuré en plusieurs parties. Chaque partie correspond à un niveau d'emboîtement.
+							</li></ol>
+							<p>La compilation des procédures les plus globales n'est pas modifiée. Voici la nouvelle compilation des procédures:</p>
+						</div>
+						<dir>
+							<p><tt>Compile[(define (&lt;proc&gt; &lt;x1&gt; .. &lt;xn&gt;) &lt;expr&gt;),&lt;env&gt;] <br>
+									<br>
+									<b>et &lt;env&gt; ¹ ()<br>
+									</b></tt><b><tt>atput[&lt;env&gt;,&lt;proc&gt;,paramNumber[]] <br>
+										// on ajoute une variable<br>
+										// local à l'environnement englobant.?</tt></b></p>
+							<p><tt>soit n = nombre de paramètres</tt></p>
+							<p><tt>&lt;nenv&gt; = {{(&lt;x1&gt;,-(n+1)+1),..,<br>
+								</tt><tt>(&lt;xi&gt;,-(n+1)+i),..,<br>
+								</tt><tt>(&lt;xn&gt;,-2)}<br>
+								</tt><tt>&lt;env&gt;}             // emboitement des environnements</tt></p>
+							<p><tt>--&gt;</tt></p>
+							<p><tt>&lt;proc&gt;&nbsp;            // l’etiquette du sous-programme</tt></p>
+							<p><tt>FENTRY &lt;proc&gt;&nbsp;     // ne sert à rien en fait</tt></p>
+							<p><tt>Compile[&lt;expr&gt;,&lt;nenv&gt;]&nbsp;</tt></p>
+							<p><tt>RTN</tt></p>
+						</dir>
+						<div align="justify">
+							<p>Le changement principal se situe dans l'accès aux variables:</p>
+						</div>
+						<dir>
+							<p><tt>Compile[&lt;ident&gt;,&lt;env&gt;]<br>
+								</tt><b><tt>et &lt;ident&gt;&nbsp;appartient au 1<sup>er</sup> élément de &lt;env&gt; // variable locale</tt></b></p>
+							<p><tt>--&gt;<br>
+									<br>
+								</tt><tt>LOCAL @at[&lt;env&gt;,&lt;ident&gt;]) R0</tt></p>
+							<p></p>
+							<p><tt>Compile[&lt;ident&gt;,&lt;env&gt;]<br>
+								</tt><b><tt>et &lt;ident&gt;&nbsp;n'appartient pas à &lt;env&gt;      // variable purement globale</tt></b></p>
+							<p><tt>--&gt;<br>
+									<br>
+								</tt><tt>MOVE @&lt;ident&gt; R0</tt></p>
+							<p>&nbsp;</p>
+						</dir>
+						<div align="justify">
+							<p>Et voilà le code de recherche d'un élément dans les blocs de piles englobant :</p>
+						</div>
+						<dir>
+							<p><tt>Compile[&lt;ident&gt;,&lt;env&gt;]<br>
+								</tt><tt>et &lt;ident&gt;&nbsp;n'appartient pas au  1<sup>er</sup> élément de &lt;env&gt; // variable locale/globale<br>
+								</tt><tt>et &lt;ident&gt; appartient à &lt;env&gt; (élément suivant)<br>
+									<br>
+								</tt><tt>soit var_x = at[&lt;env&gt;, &lt;ident&gt;] <br>
+									et </tt><tt>n = niveau d'emboitement de &lt;ident&gt;</tt></p>
+							<p><tt>--&gt;</tt></p>
+							<p><tt>MOVE (FP+1) R1   // on prend l'ancien FP (indirect indexé)<br>
+								</tt><tt>MOVE @n R2</tt></p>
+							<p><tt><b>recherche</b></tt></p>
+							<p><tt>JEQ R2 trouve   // R2 = 0</tt></p>
+							<p><tt>MOV (R1+1) R1   // recupere les FP</tt></p>
+							<p><tt>DECF R2         // on decremente R2</tt></p>
+							<p><tt>JMP recherche</tt></p>
+							<p><tt><b>trouve</b></tt></p>
+							<p><tt>MOV FP R2    // on sauve FP</tt></p>
+							<p><tt>MOVE R1 FP   // FP prend la valeur du FP "global"</tt></p>
+							<p><tt>LOCAL @var_x R0  // on met le resultat dans R0</tt></p>
+							<p><tt>MOV R2 FP    // FP reprend sa valeur</tt></p>
+							<p><tt>&nbsp;</tt></p>
+						</dir>
+						<p>C'est tout !</p>
+						<h3><b>Structures de données</b></h3>
+						<div align="justify">
+							<p>Pour la compilation des structures de données, il existe plusieurs classes de données:</p>
+							<ol>
+								<li>Les données statiques qui sont allouées par le compilateur.
+								</li><li>Les données semi-dynamiques qui sont allouées sur la pile lors de l'appel d'une procédure.
+								</li><li>Les données dynamiques qui sont allouées à la demande du programmeur (instruction new en Pascal et malloc en C, objets en Ada et Smalltalk).
+							</li></ol>
+						</div>
+						<h4><b>Tableaux et </b><b>Compilation statique</b></h4>
+						<p><i>1. Déclaration</i></p>
+						<div align="justify">
+							<p>On réserve de la place dans une zone de données.</p>
+						</div>
+						<ol>
+							<ol>
+								<ol>
+									<div align="justify">
+										<p><tt>Var A : Array[1..6] of Integer;</tt></p>
+									</div>
+								</ol>
+							</ol>
+						</ol>
+						<div align="justify">
+							<p>sera transformé en:</p>
+						</div>
+						<ol>
+							<ol>
+								<ol>
+									<p><tt>A:word 0<br>
+											  </tt><tt>word 0<br>
+											<br>
+											  </tt><tt>...<br>
+											 <br>
+											  </tt><tt>word 0</tt></p>
+								</ol>
+							</ol>
+						</ol>
+						<div align="justify">
+							<p>On a donc:</p>
+						</div>
+						<ol>
+							<ol>
+								<ol>
+									<p><tt>Compile[&lt;nom&gt; : Array [1..&lt;n&gt;] of Integer, &lt;env&gt;]</tt></p>
+									<p><tt>et &lt;env&gt; = nil   // environnement global</tt></p>
+									<p><tt>--&gt;</tt></p>
+									<p><tt>&lt;nom&gt; word 0;</tt></p>
+									<p><tt>for i = 1 to &lt;n&gt;-1 do</tt></p>
+									<p><tt>word 0</tt></p>
+								</ol>
+							</ol>
+						</ol>
+						<p><i>2. Accès</i><i> en lecture:</i></p>
+						<ol>
+							<ol>
+								<p><tt>Compile[&lt;tab&gt;[&lt;expr&gt;],&lt;env&gt;] --&gt;</tt></p>
+								<p><tt>Compile[&lt;expr&gt;, &lt;env&gt;];</tt></p>
+								<p><tt>MOVE R1 &lt;tab&gt;); // recupere l'adresse de base</tt></p>
+								<p><tt>ADD R0 R1;  // ajoute l'offset</tt></p>
+								<p><tt>(MOV A0 (A1)); // recherche indirecte de l'information.</tt></p>
+								<p></p>
+							</ol>
+						</ol>
+						<div align="justify">
+							<p><i>3. Accès en écriture:</i></p>
+						</div>
+						<ol>
+							<ol>
+								<p><tt>Compile[&lt;tab&gt;[&lt;expr1&gt;]:= &lt;expr2&gt;,&lt;env&gt;] --&gt;</tt></p>
+								<p><tt>Compile[&lt;expr1&gt;, &lt;env&gt;];</tt></p>
+								<p><tt>(PUSH A0)</tt></p>
+								<p><tt>Compile[&lt;expr2&gt;, &lt;env&gt;];</tt></p>
+								<p><tt>(MOV A1 &lt;tab&gt;); // recupere l'adresse de base</tt></p>
+								<p><tt>(POP A2);?// recupere la valeur de l'offset</tt></p>
+								<p><tt>(MOV A1 A1 A2); // ajoute l'offset</tt></p>
+								<p><tt>(MOV (A1) A0);?// sauvegarde indirecte</tt></p>
+								<div align="justify">
+									<p>&nbsp;</p>
+								</div>
+							</ol>
+						</ol>
+						<p><b>Tableaux et Compilation semi-dynamique</b></p>
+						<p><i>1. Déclaration</i></p>
+						<div align="justify">
+							<p>On réserve de la place sur la pile lors de l'allocation des variables locales.</p>
+						</div>
+						<ol>
+							<ol>
+								<ol>
+									<p><tt>Compile[&lt;nom&gt; : Array [1..&lt;n&gt;] of Integer, &lt;env&gt;] et &lt;env&gt; local</tt></p>
+									<p><tt>--&gt;</tt></p>
+									<p><tt>?for i = 1 to &lt;n&gt; do</tt></p>
+									<p><tt>??(PUSH 0)</tt></p>
+								</ol>
+							</ol>
+						</ol>
+						<p><i>2. Accès en lecture</i></p>
+						<div align="justify">
+							<p>Les accès s'effectuent comme précédemment. Seul change l'adresse de base qui se trouve sur la pile.</p>
+						</div>
+						<ol>
+							<ol>
+								<div align="justify">
+									<p><tt>Compile[&lt;tab&gt;[&lt;expr&gt;],&lt;env&gt;] --&gt;</tt></p>
+								</div>
+								<p><tt>?Compile[&lt;expr&gt;, &lt;env&gt;];</tt></p>
+								<p><tt>?<b>(LOCAL A1 @at[&lt;env&gt;,&lt;tab&gt;])</b>?; // recupere l'adresse de base</tt></p>
+								<p><tt>?(ADD A1 A1 A0); // ajoute l'offset</tt></p>
+								<p><tt>?(MOV A0 (A1)); // recherche indirecte de l'information.</tt></p>
+							</ol>
+						</ol>
+						<div align="justify">
+							<p><i>3. Accès en écriture:</i></p>
+						</div>
+						<ol>
+							<ol>
+								<p><tt>Compile[&lt;tab&gt;[&lt;expr1&gt;]:= &lt;expr2&gt;,&lt;env&gt;] --&gt;</tt></p>
+								<p><tt>?Compile[&lt;expr1&gt;, &lt;env&gt;];</tt></p>
+								<p><tt>?(PUSH A0)</tt></p>
+								<p><tt>?Compile[&lt;expr2&gt;, &lt;env&gt;];</tt></p>
+								<p><tt>?<b>(LOCAL A1 @at[&lt;env&gt;,&lt;tab&gt;])</b>?; // recupere l'adresse de base</tt></p>
+								<p><tt>?(POP A2);?// recupere la valeur de l'offset</tt></p>
+								<p><tt>?(MOV A1 A1 A2); // ajoute l'offset</tt></p>
+								<p><tt>?(MOV (A1) A0);?// sauvegarde indirecte</tt></p>
+							</ol>
+						</ol>
+						<h4><b>Tableau et Compilation dynamique</b></h4>
+						<ol>
+							<ol>
+								<div align="justify">
+									<p><tt>Var P: ^Array[1..6] of Integer;</tt></p>
+								</div>
+								<p><tt>Compile[new(P), &lt;env&gt;]</tt></p>
+								<p><tt>s = taille du type de P</tt></p>
+								<p><tt> --&gt;</tt></p>
+								<p><tt>(ALLOCATE @s);?// general. un appel a une routine systeme</tt></p>
+								<p><tt>(MOV (loc &lt;P&gt;) &lt;A0&gt;) // si P est une variable globale.</tt></p>
+							</ol>
+						</ol>
+						<p><i>Accès</i></p>
+						<ol>
+							<div align="justify">
+								<p>Les accès s'effectuent comme précédemment. Seul change l'adresse de base qui se trouve dans la variable P. La différence se situe dans l'appel indirect de la variable (opérateur ^ en Pascal et * en C).</p>
+							</div>
+						</ol>
+						<div align="justify">
+							<p><i>En lecture:</i></p>
+						</div>
+						<ol>
+							<p><tt>Compile[&lt;p&gt;^[&lt;expr&gt;],&lt;env&gt;] --&gt;</tt></p>
+							<p><tt>?Compile[&lt;expr&gt;, &lt;env&gt;];</tt></p>
+							<p><tt>?<b>(MOV A1 &lt;P&gt;)</b></tt></p>
+							<p><tt><b>?(MOV A1 (A1));</b> // recupere l'adresse de base (via l'indirect.)</tt></p>
+							<p><tt>?(ADD A1 A1 A0); // ajoute l'offset</tt></p>
+							<p><tt>?(MOV A0 (A1)); // recherche indirecte de l'information.</tt></p>
+						</ol>
+						<div align="justify">
+							<p><i>En écriture:</i></p>
+						</div>
+						<ol>
+							<p><tt>Compile[&lt;tab&gt;[&lt;expr1&gt;]:= &lt;expr2&gt;,&lt;env&gt;] --&gt;</tt></p>
+							<p><tt>?Compile[&lt;expr1&gt;, &lt;env&gt;];</tt></p>
+							<p><tt>?(PUSH A0)</tt></p>
+							<p><tt>?Compile[&lt;expr2&gt;, &lt;env&gt;];</tt></p>
+							<p><tt>?<b>(MOV A1 &lt;P&gt;)</b></tt></p>
+							<p><tt><b>?(MOV A1 (A1));</b> // recupere l'adresse de base (via l'indirect.)</tt></p>
+							<p><tt>?(POP A2);?// recupere la valeur de l'offset</tt></p>
+							<p><tt>?(MOV A1 A1 A2); // ajoute l'offset</tt></p>
+							<p><tt>?(MOV (A1) A0);?// sauvegarde indirecte</tt></p>
+						</ol>
+						<h4><b>Record (ou struct)</b></h4>
+						<div align="justify">
+							<p>On gère les record comme des tableaux. Seul change le fait que les valeurs sont de types différents et donc (normalement) de taille différente.</p>
+						</div>
+						<ol>
+							<p><tt>R: Record a: Integer; b: Integer end;</tt></p>
+						</ol>
+						<div align="justify">
+							<p>sera transformé en:</p>
+						</div>
+						<ol>
+							<p><tt>R:?word 0?// A</tt></p>
+							<p><tt>?word 0?// B</tt></p>
+						</ol>
+						<div align="justify">
+							<p>C'est le compilateur qui à la charge de faire le lien entre les noms de champs et l'indice de la valeur</p>
+						</div>
+						<ol>
+							<p><tt>Compile[&lt;rec&gt;:Record &lt;champ1&gt;:&lt;type1&gt;;..;&lt;champ1&gt;:&lt;type1&gt; end,<br>
+									&lt;env&gt;] et &lt;env&gt; = nil<br>
+								</tt><tt>soit taille = taille de &lt;rec&gt;</tt></p>
+							<p><tt>--&gt;</tt></p>
+							<p><tt>&lt;nom&gt; word 0;</tt></p>
+							<p><tt>for i = 1 to &lt;taille&gt;-1 do</tt></p>
+							<p><tt>  word 0</tt></p>
+						</ol>
+						<div align="justify">
+							<p>On suppose que la table des symbole dispose des informations nécessaires ensuite pour transformer les noms des champs en offsets.</p>
+						</div>
+						<p><b>Objets</b></p>
+						<ol>
+							<div align="justify">
+								<p>Même structure que pour les records.</p>
+							</div>
+						</ol>
+					</td>
+				
+				
+					
+				
+				
+					
+				</tr><tr>
+					<td width="4%"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td width="4%"></td>
+					<td></td>
+				</tr>
+			
+			
+						
+					
+					<tr><td width="4%"></td>
+				</tr>
+			</tbody></table>
+			</p>
+		</div>
+		<center>
+			<p><b><img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"> <img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"> <img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"> <img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"> <img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"> <img src="./Cours de compilation_files/dot_purple.gif" width="6" height="6"> <img src="./Cours de compilation_files/SPACE(1).GIF" width="1" height="15" align="top"></b></p></center>
+	
+
+
+</body></html>
