@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
@@ -16,7 +17,8 @@ const ObjectID = require('mongodb').ObjectId;
 const url = "mongodb://localhost:27017";
 
 MongoClient.connect(url, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }, (err, client) => {
     let db = client.db("SUPERVENTES");
 
@@ -25,11 +27,11 @@ MongoClient.connect(url, {
         console.log("/produits");
         try {
             db.collection("produits").find().toArray((err, documents) => {
-                res.end(JSON.stringify(documents));
+                res.json(documents);
             });
         } catch (e) {
             console.log("Erreur sur /produits : " + e);
-            res.end(JSON.stringify([]));
+            res.json([]);
         }
     });
 
@@ -41,29 +43,31 @@ MongoClient.connect(url, {
             db.collection("produits").find({
                 type: categorie
             }).toArray((err, documents) => {
-                res.end(JSON.stringify(documents));
+                res.json(documents);
             });
         } catch (e) {
             console.log("Erreur sur /produits/" + categorie + " : " + e);
-            res.end(JSON.stringify([]));
+            res.json([]);
         }
     });
 
 
     /* Liste des catégories de produits */
     app.get("/categories", (req, res) => {
-        console.log("/categories");
         categories = [];
         try {
-            db.collection("produits").find().toArray((err, documents) => {
-                for (let doc of documents) {
-                    if (!categories.includes(doc.type)) categories.push(doc.type);
+            db.collection("produits")
+                .find()
+                .toArray((err, documents) => {
+                    for (let doc of documents) {
+                        if (!categories.includes(doc.type)) categories.push(doc.type);
+                    }
+                    res.json(categories);
                 }
-                res.end(JSON.stringify(categories));
-            });
+            );
         } catch (e) {
             console.log("Erreur sur /categories : " + e);
-            res.end(JSON.stringify([]));
+            res.json([]);
         }
     });
 
@@ -74,22 +78,22 @@ MongoClient.connect(url, {
                 .find(req.body)
                 .toArray((err, documents) => {
                     if (documents != undefined && documents.length == 1)
-                        res.end(JSON.stringify({
+                        res.json({
                             "resultat": 1,
                             "message": "Authentification réussie"
-                        }));
-                    else res.end(JSON.stringify({
+                        });
+                    else res.json({
                         "resultat": 0,
                         "message": "Email et/ou mot de passe incorrect"
-                    }));
+                    });
                 });
         } catch (e) {
-            res.end(JSON.stringify({
+            res.json({
                 "resultat": 0,
                 "message": e
-            }));
+            });
         }
     });
 });
 
-app.listen(8888);
+app.listen(4444);
