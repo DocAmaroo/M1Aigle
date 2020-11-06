@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE twitter SYSTEM "tweet.dtd">
+<twitter>
+    <profiles>
+        <profile idUser="user1">
+            <pseudo>Gilbert</pseudo>
+            <ref-user idRef="user1">@Gilbertlebg</ref-user>
+            <description>Bonjour, je m'appelle Gilbert</description>
+            <picture src="https://imgur.com/gallery/Gilbertlebg"></picture>
+            <followers>
+                <follower idUser="user2"/>
+            </followers>
+            <follows>
+                <follow idUser="user2"/>
+                <follow idUser="user3"/>
+            </follows>
+        </profile>
+        <profile idUser="user2">
+            <pseudo>Michel</pseudo>
+            <ref-user idRef="user2">@Micheloupastaga</ref-user>
+            <description>Bonjour, je m'appelle Michel, c'est cool nan ?</description>
+            <picture src="https://imgur.com/gallery/Micheloupastaga"></picture>
+            <followers></followers>
+            <follows>
+                <follow idUser="user1"/>
+            </follows>
+        </profile>
+        <profile idUser="user3">
+            <pseudo>Rick</pseudo>
+            <ref-user idRef="user3">@Astley</ref-user>
+            <description>NEVER GONNA GIVE U UP ! NEVER GONNA LET U DOWN !</description>
+            <picture src="https://imgur.com/gallery/WsUV4DK"></picture>
+            <followers>
+                <follower idUser="user1"/>
+            </followers>
+            <follows>
+                <follow idUser="user2"/>
+            </follows>
+        </profile>
+    </profiles>
+
+    <tweets>
+        <tweet id="tweet1" idUser="user1" os="computer">
+            <date>
+                <timestamp>1600412469</timestamp>
+                <fuseau>UTC+1</fuseau>
+            </date>
+
+            <location>
+                <longitude>43.610658</longitude>
+                <latitude>3.876479</latitude>
+                <city>Montpellier</city>
+                <country>France</country>
+            </location>
+
+            <corps language="en">
+                <ref-user idRef="user2">@Micheloupastaga</ref-user>
+                <hashtag>#love</hashtag>
+                <ref-user idRef="user3">@Astley</ref-user>
+            </corps>
+
+            <nbrRt>3</nbrRt>
+            <responses>
+            </responses>
+        </tweet>
+        <tweet id="tweet2" idUser="user3" os="computer">
+            <date>
+                <timestamp>1602326032</timestamp>
+                <fuseau>UTC+1</fuseau>
+            </date>
+
+            <location>
+                <longitude>43.610658</longitude>
+                <latitude>3.876479</latitude>
+                <city>Montpellier</city>
+                <country>France</country>
+            </location>
+
+            <corps language="en">
+                <text>I love u too</text>
+                <ref-user idRef="user1">@Gilbertlebg</ref-user>
+                <hashtag>#love</hashtag>
+                <hashtag>#friend</hashtag>
+            </corps>
+
+            <nbrRt>1</nbrRt>
+            <responses>
+            </responses>
+        </tweet>
+        <tweet id="tweet3" idUser="user1" os="phone">
+            <date>
+                <timestamp>1602324015</timestamp>
+                <fuseau>UTC+1</fuseau>
+            </date>
+
+            <location>
+                <longitude>43.610658</longitude>
+                <latitude>3.876479</latitude>
+                <city>Montpellier</city>
+                <country>France</country>
+            </location>
+
+            <corps language="en">
+                <text>I LOVE CALLOFDUTY, come play with my friends</text>
+                <ref-user idRef="user3">@Astley</ref-user>
+                <ref-user idRef="user2">@Gilbertlebg</ref-user>
+                <hashtag>#gaming</hashtag>
+                <hashtag>#callofduty</hashtag>
+                <hashtag>#frenchmonster</hashtag>
+            </corps>
+
+            <nbrRt>2</nbrRt>
+            <responses>
+                <response idUser="user2">
+                    <corps language="en">
+                        <text>Me ? You friend ? NO !</text>
+                    </corps>
+                </response>
+            </responses>
+        </tweet>
+        <tweet id="tweet4" idUser="user3" os="computer">
+            <date>
+                <timestamp>564019200</timestamp>
+                <fuseau>UTC+1</fuseau>
+            </date>
+
+            <location>
+                <longitude>26</longitude>
+                <latitude>48</latitude>
+                <city>New York</city>
+                <country>Etats-Unis</country>
+            </location>
+
+            <corps language="en">
+                <hashtag>#I&lt;3XML</hashtag>
+                <ref-user idRef="user1">@GilbertLeBG</ref-user>
+                <text>
+                	Never gonna give you up
+					Never gonna let you down
+					Never gonna run around and desert you
+					Never gonna make you cry
+					Never gonna say goodbye
+					Never gonna tell a lie and hurt you
+				</text>
+                <hashtag>#rickrolled</hashtag>
+            </corps>
+
+            <nbrRt>776970984</nbrRt>
+
+            <responses>
+                <response idUser="user2">
+                    <corps language="ru">
+                        <text>Рик Ролд Бро !</text>
+                    </corps>
+                </response>
+                <response idUser="user1">
+                    <corps language="es">
+                        <text>Hola me llamo Toma</text>
+                    </corps>
+                </response>
+                <response idUser="user2">
+                    <corps language="en">
+                        <text>noob</text>
+                    </corps>
+                </response>
+            </responses>
+        </tweet>
+        <tweet id="tweet5" idUser="user3" os="phone">
+            <date>
+                <timestamp>1609484400</timestamp>
+                <fuseau>UTC+1</fuseau>
+            </date>
+
+            <location>
+                <longitude>43.610658</longitude>
+                <latitude>3.876479</latitude>
+                <city>Montpellier</city>
+                <country>France</country>
+            </location>
+
+            <corps language="fr">
+                <text>Bonne année !</text>
+                <ref-user idRef="user1">@GilbertLeBG</ref-user>
+                <hashtag>#bonneresolution</hashtag>
+                <hashtag>#nouvelleannee</hashtag>
+                <hashtag>#tagsuperoriginal</hashtag>
+            </corps>
+
+            <nbrRt>0</nbrRt>
+
+            <responses>
+            </responses>
+        </tweet>
+    </tweets>
+</twitter>
