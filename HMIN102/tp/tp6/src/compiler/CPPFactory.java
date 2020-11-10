@@ -1,25 +1,43 @@
 package compiler;
 
-public class CPPFactory extends AFactory{
-	
-	
+import java.io.File;
+
+public class CPPFactory extends CompilerFactory {
+
 	public CPPFactory() {
-		this.supportedLanguage = "C++";
+		supportedLanguage = "C++";
+	}
+	
+	public Lexer createLexer(){return new CPPLexer();}
+	public Parser createParser(){return new CPPParser();}
+	public Generator createGenerator(){return new JVMGenerator();}
+	public PrettyPrinter createPrettyPrinter(){return new CPPPrettyPrinter();}
+	
+	class CPPLexer extends Lexer{
+		public ScanedText scan(ProgramText t){
+			System.out.println("I am scanning a C++ program text");
+			return new ScanedText();
+		}
 	}
 
-	@Override
-	public ALexer createLexer() {
-		return new LexerCPP();
+	class CPPParser extends Parser{
+		public AST parse(ScanedText t){
+			System.out.println("I am parsing a C++ scaned text");
+			return new AST();
+		}
 	}
-
-	@Override
-	public AParser createParser() {
-		return new ParserCPP();
+		
+	class JVMGenerator extends Generator{
+		public File generate(AST a){
+			System.out.println("I am generating an assembler program text from a C++ AST");
+			return new File("f.jvm");
+		}
 	}
-
-	@Override
-	public AGenerator createGenerator() {
-		return new GeneratorCPP();
+	
+	class CPPPrettyPrinter extends PrettyPrinter{
+		public ProgramText prettyPrint(AST a){
+			System.out.println("I am pretty printing a CPP AST");
+			return new ProgramText("blabla");
+		}
 	}
-
 }
