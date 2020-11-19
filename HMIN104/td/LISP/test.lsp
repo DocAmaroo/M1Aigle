@@ -52,9 +52,9 @@
 (= '() (car '((())))) => "NIL IS NOT A NUMBER"
 
 ; nb cellules
-(1 2 3 4) ⇒ 1
-(1 (2 3) 4) ⇒ 2
-(1 (2) (3) 4) ⇒ 1
+(1 2 3 4) ⇒ 4
+(1 (2 3) 4) ⇒ 3+2 = 5
+(1 (2) (3) 4) ⇒ 4 + 1 + 1 = 6
 
 ; en doublets
 (cons 1 '(2 3 4)) => (1 2 3 4)
@@ -74,27 +74,58 @@
             (nmember x (cdr l)))))
 (nmember 'b '(a b c))
 
+; calcul la taille d'une liste
 (defun mylength (l)
     (if (atom l) 0 (+ 1 (mylength (cdr l)))))
 (mylength '(a b c))
 
+; return le dernier élément d'une liste
 (defun mylast (l)
     (if (eq nil (cdr l)) (car l) (mylast (cdr l))))
 (mylast '(a b c))
 
+; return la liste de 1 à n
 (defun makelist (n) 
     (if (equal 0 n) '(0) (cons n (monmakelist (- n 1)))))
 (makelist 3)
 
+; recopie une liste
 (defun copylist (l)
     (if (atom l) l
         (cons (car l) (copylist (cdr l)))))
 
+; supprime tout les éléments choisis dans une liste
 (defun nremove (x l)
     (if (atom l) l
         (if (eql x (car l)) (nremove x (cdr l))
             (progn (setf (cdr l) (nremove x (cdr l))) l))))
 
+(defun nremovebis (x l)
+    (if (atom l) l
+        (if (eql x (car l)) (cdr l)
+            (cons (car l) (nremovebis x (cdr l))))))
+
+; concatene deux listes
 (defun myappend (l1 l2)
     (if (equal (cdr l1) nil) (append l1 l2)
         (myappend (cdr l1) l2)))
+
+; ajoute un élement en fin de liste (si il n'existe pas)
+(defun nadjoin (x l)
+    (if (equal x (car l)) l
+        (if (equal (cdr l) nil) (append l (list x))
+            (cons (car l) (nadjoin x (cdr l))))))
+
+(defun size-tree (tree)
+    (cond 
+        ((null tree) 0)
+        ((atom tree) 1)
+        (t (+ 1 (size-leaf (car tree)) (size-leaf (cdr tree))))))
+(size-tree '(3(5(6)2)))
+
+(defun size-leaf (tree) 
+    (cond 
+        ((null tree) 0)
+        ((atom tree) 1)
+        (t (+ (size-leaf (car tree)) (size-leaf (cdr tree))))))
+(size-leaf '(3(5(6)2)))
