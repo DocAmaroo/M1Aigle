@@ -1,6 +1,7 @@
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -20,6 +21,8 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
+import static java.lang.System.exit;
+
 public class GroupBy {
 	private static final String INPUT_PATH = "input-groupBy/";
 	private static final String OUTPUT_PATH = "output/groupBy-";
@@ -33,48 +36,55 @@ public class GroupBy {
 			fh.setFormatter(new SimpleFormatter());
 			LOG.addHandler(fh);
 		} catch (SecurityException | IOException e) {
-			System.exit(1);
+			exit(1);
 		}
 	}
 
-	public static class Map extends Mapper<LongWritable, Text, Text, DoubleWritable> {
-		private final static String emptyWords[] = {""};
+	public static class Map extends Mapper<LongWritable, Text, Text, Text> {
+		private final static String emptyWords[] = { "" };
 
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 			String line = value.toString();
-			String[] words = line.split(",");
+			String[] words = line.split(";");
 
 			if(Arrays.equals(words, emptyWords))
 				return;
 
-			String word1 = words[2]; // Date
-			String word2 = words[10]; // State
-			String word = word1 + "||" + word2;
-			double number = Double.parseDouble(words[17]); // Sales
-			DoubleWritable write = new DoubleWritable(number);
-			context.write(new Text(word), write);
+			try {
+				String word = words[3]; // nomStation
+				String[] times = words[7].split(":"); // time
+				String time = times[0];
+				String txt = "<Station "+word+", "+time+"h, X =";
+				context.write(new Text(txt), new Text("1"));
+			}catch (Exception e){}
 		}
 	}
 
-	public static class Reduce extends Reducer<Text, DoubleWritable, Text, DoubleWritable> {
+	public static class Reduce extends Reducer<Text, Text, Text, Text> {
+		private static ArrayList<String> list = new ArrayList<String>();
 
 		@Override
-		public void reduce(Text key, Iterable<DoubleWritable> values, Context context)
+		public void reduce(Text key, Iterable<Text> values, Context context)
 				throws IOException, InterruptedException {
-			double sum = 0;
 
-			for(DoubleWritable val : values)
-				sum += val.get();
+			int sum=0; for(Text val : values)
+				sum += Integer.parseInt(val.toString());
 
-			context.write(key, new DoubleWritable(sum));
+			if(sum <= 8)
+				context.write(key, new Text("faible>"));
+			else if(sum <= 18)
+				context.write(key, new Text("moyen>"));
+			else
+				context.write(key, new Text("fort>"));
+
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		conf.set("fs.file.impl", "com.conga.services.hadoop.patch.HADOOP_7682.WinLocalFileSystem");
-		
+
 		Job job = new Job(conf, "GroupBy");
 
 		job.setOutputKeyClass(Text.class);
@@ -83,7 +93,7 @@ public class GroupBy {
 		job.setMapperClass(Map.class);
 		job.setReducerClass(Reduce.class);
 
-		job.setOutputValueClass(DoubleWritable.class); 
+		job.setOutputValueClass(Text.class);
 
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);

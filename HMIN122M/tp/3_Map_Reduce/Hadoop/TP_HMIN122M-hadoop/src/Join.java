@@ -52,35 +52,40 @@ public class Join {
             if(Arrays.equals(words, emptyWords))
                 return;
 
-            // on Customer
-            if (words.length == 8)
+            if (words.length == 8) // on Customer
                 context.write(new Text(words[0]), new Text("||"+words[1]));
-            // on Order
-            else
-                context.write(new Text(words[1]), new Text(words[8]));
+
+            else // on Order
+                //context.write(new Text(words[1]), new Text(words[8]));
+                context.write(new Text(words[1]), new Text(words[3]));
         }
     }
 
-    public static class Reduce extends Reducer<Text, Text, Text, Text> {
+    public static class Reduce extends Reducer<Text, Text, Text, DoubleWritable> {
 
         @Override
         public void reduce(Text key, Iterable<Text> values, Context context)
                 throws IOException, InterruptedException {
 
             ArrayList<String> cust = new ArrayList<>();
-            ArrayList<String> comment = new ArrayList<>();
+            //ArrayList<String> comment = new ArrayList<>();
+            DoubleWritable total = new DoubleWritable(0);
 
             for (Text val : values) {
                 String line = val.toString();
                 String[] words = line.split("\\|\\|");
 
                 if (words.length == 2) cust.add(words[1]);
-                else comment.add(words[0]);
+                else {
+                    //comment.add(words[0]);
+                    total.set(total.get() + Double.parseDouble(words[0]));
+                }
             }
 
             for(String _cust : cust)
-                for (String _comment : comment)
-                    context.write(new Text(_cust), new Text(_comment));
+                //for (String _comment : comment)
+                if(total.get() != 0)
+                    context.write(new Text(_cust), total);
         }
     }
 

@@ -1,0 +1,56 @@
+TCP/IP
+Voir ça comme du Cloud
+puissance de calcul / espace de stockage
+location de ressource :
+-- exclusif => unique client
+-- partagé => utilisé en même temps par plusieurs client
+
+serveur concurrent => multi-thread
+serveur :
+-- gère l'espace partagé
+-- gère accès clients (location / libération)
+
+client :
+-- échange avec le serveur (réservation / libération)
+
+
++précis...
+
+
+serveur :
+-- proc parent :
+---- init() espace
+---- attente connexion client
+---- un client => proc fils (thread)
+
+-- proc fils :
+---- envoie l'état du système au client
+---- mise en attente de réservation/libération
+---- mise à jour des ressources
+---- broadcast
+
+com entre processus fils => tableau de sémaphores
+
+
+client :
+-- peut voir l'état du serveur lors de la connexion
+-- en boucle - réservation/libération de ressource au serveur
+-- saisie au clavier
+-- mise en attente si non satisfait
+-- fork sur le client pour la réception
+
+
+
++sites géo.
++chaque sites :
+-- nb proc
+-- stockage
+
+struct geo {
+    int index;
+    char* city;
+    int availableCPU;
+    int availableStorage;
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;    
+}
