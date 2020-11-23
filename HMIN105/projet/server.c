@@ -24,25 +24,44 @@ const int DEFAULT_BUFFER_SIZE = 127;
 const int MAX_RESSOURCES = 10;
 const int MAX_CLIENT = 10;
 
-
-struct message {
+/**
+ * @brief structure used to get message sent by a client
+ * 
+ */
+struct message 
+{
 	int service;
 	long int quantity;
 } message;
 
-struct ressource {
+/**
+ * @brief structure used to store ressource
+ * 
+ */
+struct ressource 
+{
 	char* country;
 	int length;
 	int CPU;
 	int storage;
 } ressource;
 
-struct data {
+/**
+ * @brief structure used to store all ressources
+ * 
+ */
+struct data 
+{
 	struct ressource* ressources;
 	int length;
 }data;
 
-struct thread_param {
+/**
+ * @brief struct used to send param to thread
+ * 
+ */
+struct thread_param 
+{
 	int* socket;
 	int* socketStore;
 	int* nbClient;
@@ -50,12 +69,24 @@ struct thread_param {
     pthread_mutex_t* mutex;
 }param;
 
-void printUsage(char const* name) {
+/**
+ * @brief print on the terminal how to use server program
+ * 
+ * @param name 
+ */
+void printUsage(char const* name) 
+{
 	printf("Usage: %s port", name);
 	exit(0);
 }
 
-void printData(struct data* data) {
+/**
+ * @brief print all data available
+ * 
+ * @param data 
+ */
+void printData(struct data* data) 
+{
 	for (int i=0; i < data->length; i++) {
 		printf(RESET "{\n");
 		printf("\tCountry: %s\n", data->ressources[i].country);
@@ -65,19 +96,38 @@ void printData(struct data* data) {
 	}
 }
 
-int recvTCP(int socket, char *buffer, size_t length){
+/**
+ * @brief Receive TCP message
+ * 
+ * @param socket 
+ * @param buffer 
+ * @param length 
+ * @return int 
+ */
+int recvTCP(int socket, char *buffer, size_t length) 
+{
+
+	size_t toread = length; 
 	
-	size_t remaining=length; while(remaining){
-		int _recv = recv(socket, buffer, remaining, 0);
+	while(toread > 0){
+		size_t _recv = recv(socket, buffer, toread, 0);
 		if (_recv <= 0) return _recv;		
 		buffer += _recv;
-		remaining -= _recv;
+		toread -= _recv;
 	}
 
-	return 1;
+	return length;
 }
 
-int recvMessage(int socket, char* buffer, struct message *ms) {
+/**
+ * @brief Receive message from the client
+ * 
+ * @param socket 
+ * @param msg 
+ * @return int 
+ */
+int recvMessage(int socket, char* buffer, struct message *ms) 
+{
 	int recv = 0;
 	int _intBuffer = 0;
 
@@ -92,54 +142,99 @@ int recvMessage(int socket, char* buffer, struct message *ms) {
 	return 1;
 }
 
-int sendTCP(int socket, const char *buffer, size_t length){
-	int _send = 1;
-
-	size_t bytes=length; while(bytes != 0){
-		_send = send(socket, buffer, bytes, 0);
+/**
+ * @brief Send TCP request
+ * 
+ * @param socket 
+ * @param buffer 
+ * @param length 
+ * @return int 
+ */
+int sendTCP(int socket, const char* buffer, size_t length)
+{
+	size_t bytes=length;
+	
+	while(bytes > 0){
+		size_t _send = send(socket, buffer, bytes, 0);
 		if (_send <= 0) return _send;
 
 		buffer += _send;
 		bytes -= _send;
 	}
+
+	return length;
+}
+
+/**
+ * @brief Send ressource structure
+ * 
+ * @param socket 
+ * @param buffer 
+ * @param length 
+ * @return int 
+ */
+int sendRessource(int socket, char* buffer, struct ressource ressource) 
+{
+	int send = 0;
+
+	// send country size
+	sprintf(buffer, "%d", ressource.length);
+	send = sendTCP(socket, (char *) buffer, sizeof(int));
+	if (send <= 0) return send;
+	bzero(buffer, DEFAULT_BUFFER_SIZE);
+
+	// send country
+	send = sendTCP(socket, ressource.country, ressource.length*sizeof(char));
+	if (send <= 0) return send;
+	bzero(buffer, DEFAULT_BUFFER_SIZE);
+
+	// send CPU
+	sprintf(buffer, "%d", ressource.CPU);
+	send = sendTCP(socket, (char *) buffer, sizeof(size_t));
+	if (send <= 0) return send;
+	bzero(buffer, DEFAULT_BUFFER_SIZE);
+	
+	// send storage
+	sprintf(buffer, "%d", ressource.storage);
+	send = sendTCP(socket, (char *) buffer, sizeof(size_t));
+	if (send <= 0) return send;
+	bzero(buffer, DEFAULT_BUFFER_SIZE);
 	return 1;
 }
 
-int sendRessource(int socket, struct ressource ressource) {
+/**
+ * @brief Send all ressource structure
+ * 
+ * @param socket 
+ * @param buffer 
+ * @param length 
+ * @return int 
+ */
+int sendRessources(int socket, char* buffer, struct ressource* ressources, int length) 
+{
 	int send = 0;
 
-	send = sendTCP(socket, (char *) &ressource.length, sizeof(int));
-	if (send <= 0) return send;
-
-	send = sendTCP(socket, ressource.country, ressource.length);
-	if (send <= 0) return send;
-
-	send = sendTCP(socket, (char *) &ressource.CPU, sizeof(size_t));
-	if (send <= 0) return send;
-
-	send = sendTCP(socket, (char *) &ressource.storage, sizeof(size_t));
-	if (send <= 0) return send;
-
-	return 1;
-}
-
-int sendRessources(int socket, struct ressource* ressources, int length) {
-	int send = 0;
-
-	send = sendTCP(socket, (char *) &length, sizeof(int));
+	sprintf(buffer, "%d", length);
+	send = sendTCP(socket, (char *) buffer, sizeof(int));
 	if (send <= 0) return send;
 
 	for (int i=0; i < length; i++){
-		send = sendRessource(socket, ressources[i]);
+		send = sendRessource(socket, buffer, ressources[i]);
 		if (send <= 0) return send;
 	}
 
 	return 1;
 }
 
-void initRessources(struct data* data, struct ressource* ressources) {
+/**
+ * @brief initialize data
+ * 
+ * @param data 
+ * @param ressources 
+ */
+void initData(struct data* data, struct ressource* ressources) 
+{
 	struct ressource new;
-	char buffer[DEFAULT_BUFFER_SIZE];
 	int res = 0;
 
 	new.country = (char *) "Lyon";
@@ -161,7 +256,14 @@ void initRessources(struct data* data, struct ressource* ressources) {
 	printData(data);
 }
 
-void* handleClient(void* param) {
+/**
+ * @brief client handler
+ * 
+ * @param param 
+ * @return void* 
+ */
+void* handleClient(void* param) 
+{
 
 	//get params
 	struct thread_param *p = (struct thread_param*) param;
@@ -177,13 +279,13 @@ void* handleClient(void* param) {
 	//unlock mutex
 	pthread_mutex_unlock(p->mutex);
 	
+	//struct message msg;
+	char buffer[DEFAULT_BUFFER_SIZE];
+
 	// send available ressources to the client
-	int send = sendRessources(socket, p->data->ressources, p->data->length);
+	int send = sendRessources(socket, buffer, p->data->ressources, p->data->length);
 	if (send < 0) { perror(RED "[-]Error while sending\n"); close(socket);}
 	else if (send == 0) { printf(YEL "[~]The client is disconnected\n"); close(socket);}	
-
-	struct message msg;
-	char* buffer = calloc(DEFAULT_BUFFER_SIZE, sizeof(char));
 
 	while(1) {
 
@@ -206,8 +308,8 @@ void* handleClient(void* param) {
 	pthread_exit(NULL);
 }
 
-
-int main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[]) 
+{
 	
 	if (argc != 2) 
 		printUsage(argv[0]);
@@ -261,7 +363,7 @@ int main(int argc, char const *argv[]) {
 	printf(CYN "------------------------------\n");
 	struct data* data = malloc(sizeof(struct data));
 	struct ressource ressources[MAX_RESSOURCES];
-	initRessources(data, ressources);
+	initData(data, ressources);
 
 	//start the program
 	int nbClient=0; while(1) {

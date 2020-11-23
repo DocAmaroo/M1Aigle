@@ -22,24 +22,56 @@
 int DEFAULT_BUFFER_SIZE = 128;
 const int MAX_RESSOURCES = 10;
 
-struct message {
+/**
+ * @brief structure used to send to the server
+ * 
+ */
+struct message 
+{
 	int service;
 	long int quantity;
 } message;
 
-struct ressource {
+/**
+ * @brief structure used to kept ressource send by the server
+ * 
+ */
+struct ressource 
+{
 	char* country;
 	int length;
 	int CPU;
 	int storage;
 } ressource;
 
-struct data {
+/**
+ * @brief structure used to store all ressources send by the server
+ * 
+ */
+struct data 
+{
 	struct ressource* ressources;
 	int length;
 }data;
 
-void printData(struct data* data) {
+/**
+ * @brief print on the terminal how to use client program
+ * 
+ * @param name 
+ */
+void printUsage(char const* name) 
+{
+	printf("Usage: %s adress port", name);
+	exit(0);
+}
+
+/**
+ * @brief print all data available
+ * 
+ * @param data 
+ */
+void printData(struct data* data) 
+{
 	for (int i=0; i < data->length; i++) {
 		printf(RESET "{\n");
 		printf("\tCountry: %s\n", data->ressources[i].country);
@@ -49,96 +81,135 @@ void printData(struct data* data) {
 	}
 }
 
-void printUsage(char const* name) {
-	printf("Usage: %s adress port", name);
-	exit(0);
-}
+/**
+ * @brief Receive TCP message
+ * 
+ * @param socket 
+ * @param buffer 
+ * @param length 
+ * @return int 
+ */
+int recvTCP(int socket, char *buffer, size_t length) 
+{
 
-int recvTCP(int socket, char *buffer, size_t length){
-	int _recv = 0;
-
-	size_t remaining=length; while(remaining){
-		_recv = recv(socket, buffer, remaining, 0);
-		if (_recv <= 0) return _recv;
-
+	size_t toread = length; 
+	
+	while(toread > 0){
+		size_t _recv = recv(socket, buffer, toread, 0);
+		if (_recv <= 0) return _recv;		
 		buffer += _recv;
-		remaining -= _recv;
+		toread -= _recv;
 	}
 
-	return 1;
+	return length;
 }
 
-int recvRessource(int socket, char* buffer, struct ressource* ressources, int index) {
+/**
+ * @brief Receive ressource structure
+ * 
+ * @param socket 
+ * @param buffer 
+ * @param ressources 
+ * @param index 
+ * @return int 
+ */
+int recvRessource(int socket, char* buffer, struct ressource* ressources, int index) 
+{
 	int recv = 0;
-	int _intBuffer = 0;
 	struct ressource new;
 
 	// get country size
-	recv = recvTCP(socket, (char *) &_intBuffer, sizeof(int));
+	recv = recvTCP(socket, (char *) buffer, sizeof(int));
 	if (recv <= 0) return recv;
-	new.length = _intBuffer;
-	printf("j'ai reçu: %i\n", new.length);
+	new.length = atoi(buffer);
+	bzero(buffer, DEFAULT_BUFFER_SIZE);
 
-	// country
-	recv = recvTCP(socket, buffer, 4);
+	// get country
+	recv = recvTCP(socket, (char *) buffer, new.length);
 	if (recv <= 0) return recv;
-	new.country = buffer;
-	printf("\tcountry: %s\n", buffer);
+	new.country = malloc(new.length + 1);
+	strncpy(new.country, buffer , new.length);
+	bzero(buffer, DEFAULT_BUFFER_SIZE);
+	// printf("\tCountry: %s\n", buffer);
 
-	// CPU
-	// recv = recvTCP(socket, (char *) &_intBuffer, sizeof(size_t));
-	// if (recv <= 0) return recv;
-	// new.CPU = _intBuffer;
-	// printf("\tCPU: %i\n", _intBuffer);
+	// get CPU
+	recv = recvTCP(socket, (char *) buffer, sizeof(size_t));
+	if (recv <= 0) return recv;
+	new.CPU = atoi(buffer);
+	bzero(buffer, DEFAULT_BUFFER_SIZE);
+	// printf("\tCPU: %i\n", atoi(buffer));
 
 
-	// Storage
-	// recv = recvTCP(socket, (char *) &_intBuffer, sizeof(size_t));
-	// if (recv <= 0) return recv;
-	// new.storage = _intBuffer;
-	// printf("\tStorage: %i\n", _intBuffer);
+	// get Storage
+	recv = recvTCP(socket, (char *) buffer, sizeof(size_t));
+	if (recv <= 0) return recv;
+	new.storage = atoi(buffer);
+	// printf("\tStorage: %i\n", atoi(buffer));
 
-	// ressources[index] = new;
+	ressources[index] = new;
+	
 	return 1;
 }
 
-int recvRessources(int socket, char* buffer, struct data* data, struct ressource* ressources) {
-	
+/**
+ * @brief Receive all ressource structure
+ * 
+ * @param socket 
+ * @param buffer 
+ * @param data 
+ * @param ressources 
+ * @return int 
+ */
+int recvRessources(int socket, char* buffer, struct data* data, struct ressource* ressources) 
+{	
 	int recv = 0;
-	int _intBuffer = 0;
 
-	recv = recvTCP(socket, (char *) &_intBuffer, sizeof(size_t));
+	recv = recvTCP(socket, (char *) buffer, sizeof(int));
 	if (recv <= 0) return recv;
-	data->length = _intBuffer;
-	printf("Element to receive: %i\n", data->length);
-
+	data->length = atoi(buffer);
+	
 	for (int i=0; i < data->length; i++) {
-		printf(RESET "{\n");
-		
 		recv = recvRessource(socket, buffer, ressources, i);
 		if (recv <= 0) return recv;
-
-		printf("}\n");
 	}
 
 	data->ressources = ressources;
-
+	printData(data);
 	return 1;
 }
 
-int sendTCP(int socket, const char *buffer, size_t length){
-	int sent = 1;
+/**
+ * @brief Send TCP request
+ * 
+ * @param socket 
+ * @param buffer 
+ * @param length 
+ * @return int 
+ */
+int sendTCP(int socket, const char* buffer, size_t length)
+{
+	size_t bytes=length;
+	
+	while(bytes > 0){
+		size_t _send = send(socket, buffer, bytes, 0);
+		if (_send <= 0) return _send;
 
-	size_t bytes=length; while(bytes != 0){
-		sent = send(socket, buffer, bytes, 0);
-		if (sent <= 0) return sent;
-
-		bytes -= sent;
+		buffer += _send;
+		bytes -= _send;
 	}
-	return 1;
+
+	return length;
 }
 
-int sendMessage(int socket, struct message msg){
+/**
+ * @brief Send message structure
+ * 
+ * @param socket 
+ * @param msg 
+ * @return int 
+ */
+int sendMessage(int socket, struct message msg)
+{
 	int send = 0;
 
 	send = sendTCP(socket, (char *) &msg.service, sizeof(int));
@@ -150,7 +221,9 @@ int sendMessage(int socket, struct message msg){
 	return 1;
 }
 
-int main(int argc, char const *argv[]){
+
+int main(int argc, char const *argv[])
+{
 	
 	if (argc != 3) printUsage(argv[0]);
 
