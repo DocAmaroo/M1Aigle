@@ -9,18 +9,45 @@
 #include <arpa/inet.h>
 #include <string.h>
 
+/* colors define */
+#define RED   "\x1B[31m"
+#define GRN   "\x1B[32m"
+#define YEL   "\x1B[33m"
+#define BLU   "\x1B[34m"
+#define MAG   "\x1B[35m"
+#define CYN   "\x1B[36m"
+#define WHT   "\x1B[37m"
+#define RESET "\x1B[0m"
+
 int DEFAULT_BUFFER_SIZE = 128;
+const int MAX_RESSOURCES = 10;
 
 struct message {
-	char* buffer;
 	int service;
+	long int quantity;
 } message;
 
-struct ressources {
+struct ressource {
 	char* country;
+	int length;
 	int CPU;
 	int storage;
-} ressources;
+} ressource;
+
+struct data {
+	struct ressource* ressources;
+	int length;
+}data;
+
+void printData(struct data* data) {
+	for (int i=0; i < data->length; i++) {
+		printf(RESET "{\n");
+		printf("\tCountry: %s\n", data->ressources[i].country);
+		printf("\tCPU: %i\n", data->ressources[i].CPU);
+		printf("\tStorage: %i\n", data->ressources[i].storage);
+		printf("}\n");
+	}
+}
 
 void printUsage(char const* name) {
 	printf("Usage: %s adress port", name);
@@ -28,10 +55,12 @@ void printUsage(char const* name) {
 }
 
 int recvTCP(int socket, char *buffer, size_t length){
-	
+	int _recv = 0;
+
 	size_t remaining=length; while(remaining){
-		int _recv = recv(socket, buffer, remaining, 0);
-		if (_recv <= 0) return _recv;		
+		_recv = recv(socket, buffer, remaining, 0);
+		if (_recv <= 0) return _recv;
+
 		buffer += _recv;
 		remaining -= _recv;
 	}
@@ -39,36 +68,60 @@ int recvTCP(int socket, char *buffer, size_t length){
 	return 1;
 }
 
-int recvRessources(int socket, char *buffer, struct ressources* _ressources) {
-	
+int recvRessource(int socket, char* buffer, struct ressource* ressources, int index) {
 	int recv = 0;
 	int _intBuffer = 0;
-	printf("{\n");
+	struct ressource new;
+
+	// get country size
+	recv = recvTCP(socket, (char *) &_intBuffer, sizeof(int));
+	if (recv <= 0) return recv;
+	new.length = _intBuffer;
+	printf("j'ai reçu: %i\n", new.length);
 
 	// country
 	recv = recvTCP(socket, buffer, 4);
 	if (recv <= 0) return recv;
-	//_ressources->country = buffer;
+	new.country = buffer;
 	printf("\tcountry: %s\n", buffer);
-	bzero(buffer, DEFAULT_BUFFER_SIZE);
 
 	// CPU
-	recv = recvTCP(socket, (char *) &_intBuffer, 4);
-	if (recv <= 0) return recv;
-	//_ressources->CPU = atoi(buffer);
-	printf("\tCPU: %i\n", _intBuffer);
-	bzero(buffer, DEFAULT_BUFFER_SIZE);
+	// recv = recvTCP(socket, (char *) &_intBuffer, sizeof(size_t));
+	// if (recv <= 0) return recv;
+	// new.CPU = _intBuffer;
+	// printf("\tCPU: %i\n", _intBuffer);
 
 
 	// Storage
-	recv = recvTCP(socket, (char *) &_intBuffer, 4);
+	// recv = recvTCP(socket, (char *) &_intBuffer, sizeof(size_t));
+	// if (recv <= 0) return recv;
+	// new.storage = _intBuffer;
+	// printf("\tStorage: %i\n", _intBuffer);
+
+	// ressources[index] = new;
+	return 1;
+}
+
+int recvRessources(int socket, char* buffer, struct data* data, struct ressource* ressources) {
+	
+	int recv = 0;
+	int _intBuffer = 0;
+
+	recv = recvTCP(socket, (char *) &_intBuffer, sizeof(size_t));
 	if (recv <= 0) return recv;
-	//_ressources->storage = atoi(buffer);
-	printf("\tStorage: %i\n", _intBuffer);
-	bzero(buffer, DEFAULT_BUFFER_SIZE);
+	data->length = _intBuffer;
+	printf("Element to receive: %i\n", data->length);
 
+	for (int i=0; i < data->length; i++) {
+		printf(RESET "{\n");
+		
+		recv = recvRessource(socket, buffer, ressources, i);
+		if (recv <= 0) return recv;
 
-	printf("}\n");
+		printf("}\n");
+	}
+
+	data->ressources = ressources;
 
 	return 1;
 }
@@ -85,12 +138,15 @@ int sendTCP(int socket, const char *buffer, size_t length){
 	return 1;
 }
 
-int sendMessage(int socket, struct message *ms){
-	if (sendTCP(socket, ms->buffer, DEFAULT_BUFFER_SIZE) <= 0)  return -1;
-	
-	char* _service = malloc(8*sizeof(int));
-	sprintf(_service, "%d", ms->service);
-	if (sendTCP(socket, _service, DEFAULT_BUFFER_SIZE <= 0)) return -1;
+int sendMessage(int socket, struct message msg){
+	int send = 0;
+
+	send = sendTCP(socket, (char *) &msg.service, sizeof(int));
+	if (send <= 0) return send;
+
+	send = sendTCP(socket, (char *) &msg.quantity, sizeof(long int));
+	if (send <= 0) return send;
+
 	return 1;
 }
 
@@ -103,7 +159,7 @@ int main(int argc, char const *argv[]){
 	//try to create a socket
 	int _socket = socket(PF_INET, SOCK_STREAM, 0);
 	if (_socket == -1) exit(1);
-	printf("[+]Client Socket created\n");
+	printf(GRN "[+]Client Socket created\n");
 
 	//create server structure
 	struct sockaddr_in server;
@@ -114,24 +170,18 @@ int main(int argc, char const *argv[]){
 
 	//try to connect to the server
 	if (connect(_socket, (struct sockaddr *) &server, lgAdrServer) == -1) exit(1);
-	printf("[+]Client is connected with the server\n");
-
-	/**
-	 * service: defin which service the client choose for (0:CPU | 1:Storage)
-	 * buffer: containe the value needed
-	*/
-	int service = 0;
-	// char* buffer = malloc(DEFAULT_BUFFER_SIZE * sizeof(int));
-	
-	//start sending message
-	//printf("Send messages: \n");
+	printf(GRN "[+]Client is connected with the server\n");
 	
 	// init ressources structure
 	char buffer[DEFAULT_BUFFER_SIZE];
-	struct ressources* ressources;
-	int recv = recvRessources(_socket, buffer, ressources);
-	if (recv < 0) { perror("[-]Error while receiving\n"); close(_socket); exit(1); }
-	else if (recv == 0) { printf("[-]The server is disconnected\n"); }
+	struct data* data = malloc(sizeof(struct data));
+	struct ressource* ressources = malloc(MAX_RESSOURCES*sizeof(struct ressource));
+	struct message msg;
+
+	// receive available ressources
+	int recv = recvRessources(_socket, buffer, data, ressources);
+	if (recv < 0) { perror(RED "[-]Error while receiving\n"); close(_socket); exit(1); }
+	else if (recv == 0) { printf(YEL "[~]The server is disconnected\n"); }
 
 	/**
 	 * fork comprehension :
@@ -143,13 +193,9 @@ int main(int argc, char const *argv[]){
 		while(1) {
 			
 			// ask which services
-			printf("What do you want ? (CPU: 0/ STORAGE: 1)");
-			service = fgetc(stdin) - 48; while(fgetc(stdin) != '\n');
-
-			//send it to the server
-			int send = sendTCP(_socket, (char *) &service, sizeof(int));
-			if (send < 0) { perror("[-]Error while sending\n"); close(_socket); exit(1); }
-			else if (send == 0) { printf("[-]The server is disconnected\n"); break;}
+			printf(RESET "What do you want ? (CPU: 0/ STORAGE: 1)");
+			msg.service = fgetc(stdin) - 48; 
+			while(fgetc(stdin) != '\n');
 
 			// ask the value
 			//if message = ":exit" then close the socket
@@ -157,23 +203,25 @@ int main(int argc, char const *argv[]){
 			fgets(buffer, DEFAULT_BUFFER_SIZE, stdin);
 			if (strncmp(buffer, ":exit", 5) == 0) { 
 				close(_socket); 
-				printf("[-]Disconnected from server.\n"); 
+				printf(RED "[-]Disconnected from server.\n"); 
 				exit(0); 
 			}
+			msg.quantity = atoi(buffer);
+			printf("test: %li", msg.quantity);
 
 			//send it to the server
-			send = sendTCP(_socket, buffer, sizeof(buffer));
-			if (send < 0) { perror("[-]Error while sending\n"); close(_socket); exit(1); }
-			else if (send == 0) { printf("[-]The server is disconnected\n"); break;}
+			int send = sendMessage(_socket, msg);
+			if (send < 0) { perror(RED "[-]Error while sending\n"); close(_socket); exit(1); }
+			else if (send == 0) { printf(YEL "[~]The server is disconnected\n"); break;}
 		}
 	} else {
 		while(1) {
 
 			//receive and print the message
-			int recv = recvTCP(_socket, buffer, sizeof(buffer));
-			if (recv < 0){ perror ("[-] Error while receiving\n"); close(_socket); break; }
-			if (recv == 0) { printf("[-] Socket is closed\n"); close(_socket); break; }
-			printf("%s", buffer);
+			// int recv = recvTCP(_socket, buffer, sizeof(size_t));
+			// if (recv < 0){ perror (RED "[-] Error while receiving\n"); close(_socket); break; }
+			// if (recv == 0) { printf(YEL "[~] Socket is closed\n"); close(_socket); break; }
+			// printf("%s", buffer);
 		}
 	}
 
