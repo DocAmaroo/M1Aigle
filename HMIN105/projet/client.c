@@ -19,7 +19,7 @@
 #define WHT   "\x1B[37m"
 #define RESET "\x1B[0m"
 
-int DEFAULT_BUFFER_SIZE = 128;
+int DEFAULT_BUFFER_SIZE = 127;
 const int MAX_RESSOURCES = 10;
 
 /**
@@ -38,7 +38,7 @@ struct message
  */
 struct ressource 
 {
-	char* country;
+	char* city;
 	int length;
 	int CPU;
 	int storage;
@@ -74,7 +74,7 @@ void printData(struct data* data)
 {
 	for (int i=0; i < data->length; i++) {
 		printf(RESET "{\n");
-		printf("\tCountry: %s\n", data->ressources[i].country);
+		printf("\tCountry: %s\n", data->ressources[i].city);
 		printf("\tCPU: %i\n", data->ressources[i].CPU);
 		printf("\tStorage: %i\n", data->ressources[i].storage);
 		printf("}\n");
@@ -127,8 +127,8 @@ int recvRessource(int socket, char* buffer, struct ressource* ressources, int in
 	// get country
 	recv = recvTCP(socket, (char *) buffer, new.length);
 	if (recv <= 0) return recv;
-	new.country = malloc(new.length + 1);
-	strncpy(new.country, buffer , new.length);
+	new.city = malloc(new.length + 1);
+	strncpy(new.city, buffer , new.length);
 	bzero(buffer, DEFAULT_BUFFER_SIZE);
 	// printf("\tCountry: %s\n", buffer);
 

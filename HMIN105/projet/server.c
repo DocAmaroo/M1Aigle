@@ -40,7 +40,7 @@ struct message
  */
 struct ressource 
 {
-	char* country;
+	char* city;
 	int length;
 	int CPU;
 	int storage;
@@ -89,7 +89,7 @@ void printData(struct data* data)
 {
 	for (int i=0; i < data->length; i++) {
 		printf(RESET "{\n");
-		printf("\tCountry: %s\n", data->ressources[i].country);
+		printf("\tCountry: %s\n", data->ressources[i].city);
 		printf("\tCPU: %i\n", data->ressources[i].CPU);
 		printf("\tStorage: %i\n", data->ressources[i].storage);
 		printf("}\n");
@@ -184,7 +184,7 @@ int sendRessource(int socket, char* buffer, struct ressource ressource)
 	bzero(buffer, DEFAULT_BUFFER_SIZE);
 
 	// send country
-	send = sendTCP(socket, ressource.country, ressource.length*sizeof(char));
+	send = sendTCP(socket, ressource.city, ressource.length*sizeof(char));
 	if (send <= 0) return send;
 	bzero(buffer, DEFAULT_BUFFER_SIZE);
 
@@ -237,15 +237,15 @@ void initData(struct data* data, struct ressource* ressources)
 	struct ressource new;
 	int res = 0;
 
-	new.country = (char *) "Lyon";
-	new.length = strlen(new.country);
+	new.city = (char *) "Lyon";
+	new.length = strlen(new.city);
 	new.CPU = 10;
 	new.storage = 50000;
 	ressources[0] = new;
 	res++;
 
-	new.country = (char *) "Montpellier";
-	new.length = strlen(new.country);
+	new.city = (char *) "Montpellier";
+	new.length = strlen(new.city);
 	new.CPU = 50;
 	new.storage = 500000;
 	ressources[1] = new;
