@@ -1,16 +1,3 @@
-
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
@@ -22,6 +9,13 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
+import java.io.IOException;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
 // =========================================================================
 // COMPARATEURS
 // =========================================================================
@@ -30,9 +24,9 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
  * Comparateur qui inverse la méthode de comparaison d'un sous-type T de WritableComparable (ie. une clé).
  */
 @SuppressWarnings("rawtypes")
-class InverseComparator10<T extends WritableComparable> extends WritableComparator {
+class InverseComparator12<T extends WritableComparable> extends WritableComparator {
 
-    public InverseComparator10(Class<T> parameterClass) {
+    public InverseComparator12(Class<T> parameterClass) {
         super(parameterClass, true);
     }
 
@@ -58,9 +52,9 @@ class InverseComparator10<T extends WritableComparable> extends WritableComparat
 /**
  * Inverseur de la comparaison du type Text.
  */
-class TextInverseComparator10 extends InverseComparator10<Text> {
+class TextInverseComparator12 extends InverseComparator10<Text> {
 
-    public TextInverseComparator10() {
+    public TextInverseComparator12() {
         super(Text.class);
     }
 }
@@ -68,8 +62,8 @@ class TextInverseComparator10 extends InverseComparator10<Text> {
 // CLASSE MAIN
 // =========================================================================
 
-public class exo10_firstStep {
-    private static String INPUT_PATH = "input-groupBy/";
+public class exo12 {
+    private static String INPUT_PATH = "input-tam/";
     private static String OUTPUT_PATH = "input-tmp/";
     private static final Logger LOG = Logger.getLogger(TriAvecComparaison.class.getName());
 
@@ -95,26 +89,37 @@ public class exo10_firstStep {
 
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
+            String[] words = line.split(";");
+
+            if(Arrays.equals(words, emptyWords))
+                return;
+            try {
+                String keys = words[3]; // stop_name
+
+                if(!keys.equals("stop_name")){
+                    if(Integer.parseInt(words[4]) < 5) // TRAM
+                        context.write(new Text(keys), new Text("1"));
+                }
+            }catch (Exception e){}
+        }
+    }
+    public static class Map1 extends Mapper<LongWritable, Text, Text, Text> {
+        private final static String emptyWords[] = { "" };
+
+        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+            String line = value.toString();
             String[] words = line.split(",");
 
             if(Arrays.equals(words, emptyWords))
                 return;
 
-            try {
-                String word = words[5]; // Customer ID
-                String word2 = words[6];// nom
-                String keys = word +" : "+ word2 + ",";
-                String val = words[20]; // profit
-
-                if(!word.equals("Customer ID"))
-                    context.write(new Text(keys), new Text(val));
-            }catch (Exception e){}
+            context.write(new Text(words[0]), new Text(","+words[1]));
         }
     }
 
     public static class Map2 extends Mapper<LongWritable, Text, Text, Text> {
         private final static String emptyWords[] = { "" };
-
+        private int nb = 0;
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
@@ -123,12 +128,9 @@ public class exo10_firstStep {
             if(Arrays.equals(words, emptyWords))
                 return;
 
-            try {
-                String word = words[0]; // Customer ID + Name
-                String val = words[1]; // profit
-
-                context.write(new Text(val), new Text(word));
-            }catch (Exception e){}
+            if(nb<10)
+                context.write(new Text(words[1]), new Text(words[0]));
+            nb++;
         }
     }
 
@@ -136,7 +138,7 @@ public class exo10_firstStep {
     // REDUCER
     // =========================================================================
 
-    public static class Reduce extends Reducer<Text, Text, Text, DoubleWritable> {
+    public static class Reduce extends Reducer<Text, Text, Text, Text> {
 
         public void reduce(Text key, Iterable<Text> values, Context context)
                 throws IOException, InterruptedException {
@@ -147,7 +149,7 @@ public class exo10_firstStep {
                 sum += Double.parseDouble(t.toString());
             }
 
-            context.write(key, new DoubleWritable(sum));
+            context.write(new Text(sum+","),key);
 
         }
     }
@@ -162,7 +164,7 @@ public class exo10_firstStep {
 
         Long tmp = Instant.now().getEpochSecond();
 
-        Job job = new Job(conf, "10-Sort");
+        Job job = new Job(conf, "12-reduc");
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
@@ -174,20 +176,36 @@ public class exo10_firstStep {
         job.setOutputFormatClass(TextOutputFormat.class);
 
         FileInputFormat.addInputPath(job, new Path(INPUT_PATH));
-        FileOutputFormat.setOutputPath(job, new Path(OUTPUT_PATH + tmp));
+        FileOutputFormat.setOutputPath(job, new Path(OUTPUT_PATH + Instant.now().getEpochSecond()));
 
         job.waitForCompletion(true);
 
-        ///
-        INPUT_PATH = OUTPUT_PATH + tmp;
-        OUTPUT_PATH = "output/10-TriAvecComparaison-";
-        Job job2 = new Job(conf, "10-Sort");
+        //
 
-        /*
-         * Affectation de la classe du comparateur au job.
-         * Celui-ci sera appelé durant la phase de shuffle.
-         */
-        job2.setSortComparatorClass(TextInverseComparator10.class);
+        INPUT_PATH = OUTPUT_PATH + tmp;
+        OUTPUT_PATH = "input-tmp/";
+
+        Job job1 = new Job(conf, "12-Sort");
+
+        job1.setSortComparatorClass(TextInverseComparator12.class);
+
+        job1.setOutputKeyClass(Text.class);
+        job1.setOutputValueClass(Text.class);
+
+        job1.setMapperClass(Map1.class);
+
+        job1.setInputFormatClass(TextInputFormat.class);
+        job1.setOutputFormatClass(TextOutputFormat.class);
+
+        FileInputFormat.addInputPath(job1, new Path(INPUT_PATH));
+        FileOutputFormat.setOutputPath(job1, new Path(OUTPUT_PATH + tmp+"a"));
+
+        job1.waitForCompletion(true);
+
+        ///
+        INPUT_PATH = OUTPUT_PATH + tmp +"a";
+        OUTPUT_PATH = "output/12-TopTram-";
+        Job job2 = new Job(conf, "12-topK");
 
         job2.setOutputKeyClass(Text.class);
         job2.setOutputValueClass(Text.class);

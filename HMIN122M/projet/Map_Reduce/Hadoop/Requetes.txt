@@ -1,0 +1,11 @@
+// Terminé
+1. Nombre total d'inscription par mois
+2. Benefice(Prix d'inscription - Gain) par mois
+3. Les événements qui ont accueillis le plus de joueurs cette année
+4. Pays les plus actifs en terme d'événement cette année
+5. Nombre de joueur VIP inscrit par mois
+6. Nombre de joueur basique inscrit par mois
+7. Pays avec le plus de joueur inscrit.
+8. Pays avec le plus de participation.
+9. Nbr de joueur dans notre base par palier d'age (18-30)(31-50)(51-70)(71-etc) 
+10. Nbr de d'inscription par palier d'age (18-30)(31-50)(51-70)(71-etc)
