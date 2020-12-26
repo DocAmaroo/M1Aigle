@@ -107,19 +107,19 @@ _Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/mas
 
 ```mips
 lw dest, offset(base)
+;offset (16bits) + base => address.
+;dest = valeur de 'address'
 ```
 
-offset (16bits) + base => newAddress.
-Contenu de newAddress => stoké dans dest
+
 
 :bulb: Écriture
 
 ```mips
-sw source, offset(base)
+sw src, offset(base)
+;offset (16bits) + base => address.
+;valeur de 'address' = src
 ```
-
-offset (16bits) + base => newAddress.
-Contenu de source => stoké dans newAddress
 
 #### Instructions de calcul
 
@@ -128,70 +128,61 @@ Contenu de source => stoké dans newAddress
 :bulb: Lecture d'une constante
 
 ```mips
-li dest, const
+li dest, const ;dest = const
 ```
 
-const transferé dans dest
 
 :bulb: Lecture d'une adresse
 
 ```mips
-la dest, address
+la dest, address ;dest = address
 ```
 
-adress transferé dans dest
 
 ##### unaire
 
 :bulb: Addition d'une constante
 
 ```mips
-addi dest, source, const
+addi dest, src, const ;dest = const + src
 ```
 
-const + source => stocké dans dest
 
 :bulb: Déplacement
 
 ```mips
-move dest, source
+move dest, src ;dest = src
 ```
-
-source => stocké dans dest
 
 :bulb: Négation
 
 ```mips
-neg dest, source
+neg dest, src ;dest = !src
 ```
-
-!source => stocké dans dest
 
 ##### binaire
 
 :bulb: Opérations
 
 ```mips
-add dest, source1, source2 ;addition
-sub dest, source1, source2 ;soustraction
-mul dest, source1, source2 ;multiplication
-div dest, source1, source2 ;division
+add dest, src1, src2 ;dest = src1 + src2
+sub dest, src1, src2 ;dest = src1 - src2
+mul dest, src1, src2 ;dest = src1 * src2
+div dest, src1, src2 ;dest = src1 / src2
 ```
-
-source1 (+ | - | \* | /) source2 => stocké dans dest
 
 :bulb: Comparaison
 
 ```mips
-slt dest, source1, source2 <
-sle dest, source1, source2 <=
-sgt dest, source1, source2 >
-sge dest, source1, source2 >=
-seq dest, source1, source2 ==
-sne dest, source1, source2 !=
+slt dest, src1, src2 ;dest = src1 < src2
+sle dest, src1, src2 ;dest = src1 <= src2
+sgt dest, src1, src2 ;dest = src1 > src2
+sge dest, src1, src2 ;dest = src1 >= src2
+seq dest, src1, src2 ;dest = src1 == src2
+sne dest, src1, src2 ;dest = src1 != src2
 ```
 
-return 1 si vrai, 0 sinon (res. stocké dans dest)
+
 
 #### Instructions de saut
 
@@ -200,26 +191,23 @@ return 1 si vrai, 0 sinon (res. stocké dans dest)
 :bulb: Saut
 
 ```mips
-j address
+j address ;Saute sur 'address'
 ```
-
-Saute à l'adresse constante address
 
 :bulb: Saut avec retour
 
 ```mips
-jal address
+jal address 
+;Sauvegarde l'adresse actuelle dans $ra puis
+;saute sur 'address'
 ```
 
-Sauvegarde l'adresse actuelle dans *$ra* &rarr; Saute à l'adresse constante address
 
 :bulb: Saut vers adresse variable
 
 ```mips
-jr target
+jr address ;Saute dans le registre contenu dans address
 ```
-
-Saute dans le registre contenu dans target
 
 _NB: `jr $ra` est typiquement utilisée pour rendre la main à l'appelant à la fin d'une fonction/procédure_
 
@@ -228,23 +216,19 @@ _NB: `jr $ra` est typiquement utilisée pour rendre la main à l'appelant à la 
 :bulb: Saut cond. unaire
 
 ```mips
-bgtz source, address ; > 0
-bgez source, address ; >= 0
-blez source, address ; <= 0
-bltz source, address ; < 0
+bgtz src, address ;saute sur 'address' si src > 0
+bgez src, address ;saute sur 'address' si src >= 0
+blez src, address ;saute sur 'address' si src <= 0
+bltz src, address ;saute sur 'address' si src < 0
 ```
-
-true => saute sur address
 
 :bulb: Saut cond. binaire
 
 ```mips
-blt source1, source2, address ; <
-beq source1, source2, address ; ==
-bne source1, source2, address ; !=
+blt src1, src2, address ; saute sur 'address' si src1 < src2
+beq src1, src2, address ; saute sur 'address' si src1 == src2
+bne src1, src2, address ; saute sur 'address' si src1 != src2
 ```
-
-true => saute sur address
 
 ##### spécial
 :bulb: syscall
