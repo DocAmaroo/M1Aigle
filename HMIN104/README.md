@@ -25,6 +25,10 @@ _"D. Delahaye :heart:"_
         - [Saut conditionnel](#saut-conditionnel)
         - [spécial](#spécial)
     - [Hello World](#hello-world)
+  - [Analyse syntaxique (AST)](#analyse-syntaxique-ast)
+    - [Introduction](#introduction-1)
+    - [ANTRL](#antrl)
+    - [Hello World](#hello-world-1)
   - [De UPP vers PP](#de-upp-vers-pp)
     - [UPP](#upp)
     - [RTL (Register Transfer Language)](#rtl-register-transfer-language)
@@ -75,19 +79,19 @@ _Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/mas
 
 ### Les registres
 
-:unlock: r0 &rarr; `toujours égal à 0`
+:unlock: $r0 &rarr; `toujours égal à 0`
 
-:unlock: (a0 - a3, ra) &rarr; `passage d'argument`
+:unlock: ($a0 - $a3, $ra) &rarr; `passage d'argument`
 
-:unlock: (v0 - v1) &rarr; `renvoie de résultat`
+:unlock: ($v0 - $v1) &rarr; `renvoie de résultat`
 
-:unlock: (s0 - s7) &rarr; `sauvegardé par l'appelé (une fonction)`
+:unlock: ($s0 - $s7) &rarr; `sauvegardé par l'appelé (une fonction)`
 
-:unlock: (t0 - t9) &rarr; `non sauvegardé par l'appelé (une fonction)`
+:unlock: ($t0 - $t9) &rarr; `non sauvegardé par l'appelé (une fonction)`
 
-:unlock: (sp, fp) &rarr; `pointeurs vers la pile`
+:unlock: ($sp, $fp) &rarr; `pointeurs vers la pile`
 
-:unlock: gp &rarr; `pointeur vers les données`
+:unlock: $gp &rarr; `pointeur vers les données`
 
 :unlock: (k0 - k1) &rarr; `réservé par le noyau`
 
@@ -110,8 +114,6 @@ lw dest, offset(base)
 ;offset (16bits) + base => address.
 ;dest = valeur de 'address'
 ```
-
-
 
 :bulb: Écriture
 
@@ -225,9 +227,9 @@ bltz src, address ;saute sur 'address' si src < 0
 :bulb: Saut cond. binaire
 
 ```mips
-blt src1, src2, address ; saute sur 'address' si src1 < src2
-beq src1, src2, address ; saute sur 'address' si src1 == src2
-bne src1, src2, address ; saute sur 'address' si src1 != src2
+blt src1, src2, address ;saute sur 'address' si src1 < src2
+beq src1, src2, address ;saute sur 'address' si src1 == src2
+bne src1, src2, address ;saute sur 'address' si src1 != src2
 ```
 
 ##### spécial
@@ -246,15 +248,41 @@ Communication avec le noyau système. La fonction utilisée est déterminée sel
 
 ### Hello World
 ```mips
-;; Affiche le message "hello world"
+;; --- Affiche le message "hello world"
 .data
 msg: .asciiz "hello world\n"
 
 .text
-main: li $v0, 4   ;; cmd: print_string
-      la $a0, msg ;; args: msg
-      syscall     ;; execute
+main: li $v0, 4   ; cmd: print_string
+      la $a0, msg ; args: msg
+      syscall     ; execute
 ```
+
+## Analyse syntaxique (AST)
+
+### Introduction
+:bulb: vérifie qu'une prog. est bien formé
+
+:bulb: syntaxe sous forme d'arbre (abstraite)
+
+### ANTRL
+:bulb: Outils d'analyse syntaxique
+
+:bulb: Générateur de parser 
+
+[Télécharger ANTLR](http://www.antlr.org/)
+
+### Hello World
+```antlr4
+grammar Hello;
+
+r : 'hello' ID;
+ID : [a-z]+;
+WS : [ \t\r\n]+ -> skip;
+```
+
+Pour plus, voir ce TP assez complet: [antlr-parser](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN104/td/ANTLR)
+
 
 ## De UPP vers PP
 
