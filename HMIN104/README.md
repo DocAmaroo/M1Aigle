@@ -264,9 +264,9 @@ Pour plus d'exemples voir les TP associé à MIPS [ici](https://github.com/DocAm
 :triangular_flag_on_post: syntaxe sous forme d'arbre (abstraite)
 
 ### ANTRL
-:heavy_check_mark: Outils d'analyse syntaxique
+:triangular_flag_on_post: Outils d'analyse syntaxique
 
-:heavy_check_mark: Générateur de parser 
+:triangular_flag_on_post: Générateur de parser 
 
 [Télécharger ANTLR](http://www.antlr.org/)
 
