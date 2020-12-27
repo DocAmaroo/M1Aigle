@@ -274,7 +274,7 @@ Pour plus d'exemples voir les TP associé à MIPS [ici](https://github.com/DocAm
 [Télécharger ANTLR](http://www.antlr.org/)
 
 ### Hello World
-```antlr4
+```g4
 grammar Hello;
 
 r : 'hello' ID;
