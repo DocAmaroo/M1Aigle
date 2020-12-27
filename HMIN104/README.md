@@ -193,14 +193,14 @@ sne dest, src1, src2 ;dest = src1 != src2
 :bulb: Saut
 
 ```mips
-j address ;Saute sur 'address'
+j address ;saute sur 'address'
 ```
 
 :bulb: Saut avec retour
 
 ```mips
 jal address 
-;Sauvegarde l'adresse actuelle dans $ra puis
+;sauvegarde l'adresse actuelle dans $ra puis
 ;saute sur 'address'
 ```
 
@@ -208,7 +208,7 @@ jal address
 :bulb: Saut vers adresse variable
 
 ```mips
-jr address ;Saute dans le registre contenu dans address
+jr address ;saute dans le registre contenu dans address
 ```
 
 _NB: `jr $ra` est typiquement utilisée pour rendre la main à l'appelant à la fin d'une fonction/procédure_
