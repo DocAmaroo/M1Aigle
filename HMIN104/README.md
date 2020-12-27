@@ -296,14 +296,14 @@ Voir [antlr-parser](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN104/td/
 - variable global distinguées par leur adresses (même nom / offset)
 - accès aux tableaux en utilisant `lw` et `sw`
 
-```asm
-;; --- Allocation de taille e
+```vhdl
+-- Allocation de taille e
 alloc (4*e)
 
-;; --- Accès : e1[e2]
+-- Accès : e1[e2]
 lw (e1 + 4*e2)
 
-;; --- Affect : e1[e2] := e3
+-- Affect : e1[e2] := e3
 sw (e1 + 4*e2) e3
 ```
 
@@ -324,9 +324,9 @@ sw (e1 + 4*e2) e3
 - il faut penser à allouer et désallouer à la main.
 - "callee-save" sauv. de façon explicite.
 
-```asm
+```vhdl
 
-call f(n) ;;appel proc. f avec n param.
+call f(n) --appel proc. f avec n param.
 ```
 ## Exemples
 Prenons pour exemple la fonction factorielle
@@ -371,24 +371,24 @@ procedure f(1)
 var %0, %1, %2, %3, %4, %5, %6
 entry f11
 f11: newframe -> f10
-f10: move %6, $ra -> f9     ;;%6 := $ra (adresse de retour)
-f9: move %5, $s1 -> f8      ;;%5 := $s1 (???)
-f8: move %4, $s0 -> f7      ;;%4 := $s0 (???)
-f7: move %0, $a0 -> f6      ;;%0 := $a0 (n)
-f6: li %1,0 -> f5           ;;%1 := 0
-f5: blez %0 -> f4,f3        ;;si n <= 0 => f4, sinon f3
-f3: addiu %3, %0, -1 -> f2  ;;%3 := (n-1)
+f10: move %6, $ra -> f9     --%6 := $ra (adresse de retour)
+f9: move %5, $s1 -> f8      --%5 := $s1 (???)
+f8: move %4, $s0 -> f7      --%4 := $s0 (???)
+f7: move %0, $a0 -> f6      --%0 := $a0 (n)
+f6: li %1,0 -> f5           --%1 := 0
+f5: blez %0 -> f4,f3        --si n <= 0 => f4, sinon f3
+f3: addiu %3, %0, -1 -> f2  --%3 := (n-1)
 f2: j -> f20                
-f20: move $a0, %3  -> f19    ;;$a0 := %3 (n-1)
-f19: call f(1) -> f18       ;;appel récursif sur f(1)
-f18: move %2, $v0 -> f1     ;;%2 := res du call
-f1: mul %1,%0,%2 -> f0      ;;%1 := n * f(n-1)
+f20: move $a0, %3  -> f19    --$a0 := %3 (n-1)
+f19: call f(1) -> f18       --appel récursif sur f(1)
+f18: move %2, $v0 -> f1     --%2 := res du call
+f1: mul %1,%0,%2 -> f0      --%1 := n * f(n-1)
 f0: j -> f17                
-f17: move $v0, %1 -> f16    ;;$v0 := n * f(n-1)
-f16: move $ra, %6 -> f15    ;;$ra := %6
-f15: move $s1, %5 -> f14    ;;$s1 := %5
-f14: move $s0, %4 -> f13    ;;$s0 := %4
+f17: move $v0, %1 -> f16    --$v0 := n * f(n-1)
+f16: move $ra, %6 -> f15    --$ra := %6
+f15: move $s1, %5 -> f14    --$s1 := %5
+f14: move $s0, %4 -> f13    --$s0 := %4
 f13: delframe -> f12
-f12: jr $ra                 ;;
-f4: li %1,1 -> f0           ;;%1 := 1
+f12: jr $ra                 --
+f4: li %1,1 -> f0           --%1 := 1
 ```
