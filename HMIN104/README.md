@@ -368,7 +368,7 @@ f4: li %1,1 -> f0
 Version ERTL (Explicit Register Transfer Language)
 ```asm
 procedure f(1)
-var %0,%1,%2,%3,%4,%5,%6
+var %0, %1, %2, %3, %4, %5, %6
 entry f11
 f11: newframe -> f10
 f10: move %6, $ra -> f9     ;;%6 := $ra (adresse de retour)
@@ -379,7 +379,7 @@ f6: li %1,0 -> f5           ;;%1 := 0
 f5: blez %0 -> f4,f3        ;;si n <= 0 => f4, sinon f3
 f3: addiu %3, %0, -1 -> f2  ;;%3 := (n-1)
 f2: j -> f20                
-f20: move $a0, %3 -> f19    ;;$a0 := %3 (n-1)
+f20: move $a0, %3  -> f19    ;;$a0 := %3 (n-1)
 f19: call f(1) -> f18       ;;appel récursif sur f(1)
 f18: move %2, $v0 -> f1     ;;%2 := res du call
 f1: mul %1,%0,%2 -> f0      ;;%1 := n * f(n-1)
