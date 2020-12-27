@@ -297,13 +297,13 @@ Voir [antlr-parser](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN104/td/
 - accès aux tableaux en utilisant `lw` et `sw`
 
 ```asm
---- Allocation de taille e
+# --- Allocation de taille e
 alloc (4*e)
 
---- Accès : e1[e2]
+# --- Accès : e1[e2]
 lw (e1 + 4*e2)
 
---- Affect : e1[e2] := e3
+# --- Affect : e1[e2] := e3
 sw (e1 + 4*e2) e3
 ```
 
@@ -371,7 +371,7 @@ procedure f(1)
 var %0, %1, %2, %3, %4, %5, %6
 entry f11
 f11: newframe -> f10
-f10: move %6, $ra -> f9     ;;%6 := $ra (adresse de retour)
+f10: move %6, $ra -> f9     #%6 := $ra (adresse de retour)
 f9: move %5, $s1 -> f8      #%5 := $s1 (???)
 f8: move %4, $s0 -> f7      #%4 := $s0 (???)
 f7: move %0, $a0 -> f6      #%0 := $a0 (n)
