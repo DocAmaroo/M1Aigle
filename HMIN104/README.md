@@ -332,7 +332,7 @@ call f(n) --appel proc. f avec n param.
 ### Exemples
 Prenons pour exemple la fonction factorielle
 Version PP
-```g4
+```ocaml
 function f (n : integer) : integer
 begin
   if n <= 0 then
@@ -342,7 +342,7 @@ begin
 end;
 ```
 Version UPP
-```g4
+```ocaml
 function f(n);
 begin
   f := 0;
