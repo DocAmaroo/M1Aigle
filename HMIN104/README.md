@@ -296,7 +296,7 @@ Voir [antlr-parser](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN104/td/
 - variable global distinguées par leur adresses (même nom / offset)
 - accès aux tableaux en utilisant `lw` et `sw`
 
-```vhdl
+```mips
 --- Allocation de taille e
 alloc (4*e)
 
@@ -324,14 +324,14 @@ sw (e1 + 4*e2) e3
 - il faut penser à allouer et désallouer à la main.
 - "callee-save" sauv. de façon explicite.
 
-```vhdl
+```mips
 
 call f(n) --appel proc. f avec n param.
 ```
 ## Exemples
 Prenons pour exemple la fonction factorielle
 Version PP
-```vhdl
+```mips
 function f (n : integer) : integer
 begin
   if n <= 0 then
@@ -341,7 +341,7 @@ begin
 end;
 ```
 Version UPP
-```vhdl
+```mips
 function f(n);
 begin
   f := 0;
@@ -352,7 +352,7 @@ begin
 end;
 ```
 Version RTL
-```vhdl
+```mips
 function f(%0) : %1
 var %0,%1,%2,%3
 entry f6
@@ -366,7 +366,7 @@ f4: li %1,1 -> f0
 ```
 
 Version ERTL (Explicit Register Transfer Language)
-```vhdl
+```mips
 procedure f(1)
 var %0, %1, %2, %3, %4, %5, %6
 entry f11
