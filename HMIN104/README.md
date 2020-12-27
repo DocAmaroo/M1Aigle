@@ -297,13 +297,13 @@ Voir [antlr-parser](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN104/td/
 - accès aux tableaux en utilisant `lw` et `sw`
 
 ```vhdl
--- Allocation de taille e
+--- Allocation de taille e
 alloc (4*e)
 
--- Accès : e1[e2]
+--- Accès : e1[e2]
 lw (e1 + 4*e2)
 
--- Affect : e1[e2] := e3
+--- Affect : e1[e2] := e3
 sw (e1 + 4*e2) e3
 ```
 
