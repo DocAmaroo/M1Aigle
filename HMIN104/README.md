@@ -6,13 +6,13 @@ _"D. Delahaye :heart:"_
 - [HMIN102 - Compilation et interprétation](#hmin102---compilation-et-interprétation)
   - [Sommaire](#sommaire)
   - [Liens utiles :](#liens-utiles-)
-  - [## Introduction](#-introduction)
+  - [Introduction](#introduction)
     - [Définitions](#définitions)
     - [Difficultées](#difficultées)
     - [Attentes d'un compilateur](#attentes-dun-compilateur)
-    - [Programme](#programme)
+  - [Programme](#programme)
   - [Le langage](#le-langage)
-  - [## MIPS](#-mips)
+  - [MIPS](#mips)
     - [Les registres](#les-registres)
     - [Les instructions](#les-instructions)
       - [Instructions de transfert](#instructions-de-transfert)
@@ -26,7 +26,7 @@ _"D. Delahaye :heart:"_
         - [spécial](#spécial)
     - [Un premier programme](#un-premier-programme)
   - [Analyse syntaxique (AST)](#analyse-syntaxique-ast)
-    - [Introduction](#introduction)
+    - [Introduction](#introduction-1)
     - [ANTRL](#antrl)
     - [Hello World](#hello-world)
   - [De UPP vers PP](#de-upp-vers-pp)
@@ -39,32 +39,32 @@ _"D. Delahaye :heart:"_
 [_Accès au moodle_](https://moodle.umontpellier.fr/course/view.php?id=5906 "Accèder au moodle") | `clé: compil;2020`
 
 ## Introduction
----
 
 ### Définitions
 
-- compilateur &rarr; `traduit un lang. de haut niv. vers du bas niv.`
+:bulb: compilateur &rarr; `traduit un lang. de haut niv. vers du bas niv.`
 
-- analyse syntax. &rarr; `passer du txt. à une structure arborescente sur laquelle on peut travailler.`
+:bulb: analyse syntax. &rarr; `passer du txt. à une structure arborescente sur laquelle on peut travailler.`
 
-- compilat° à la volée <small>_('Just-In-Time' JIT)_</small> &rarr; `Combinaison de la compilation native et bytecode pour offrir portabilité et performance.`
+:bulb: compilat° à la volée <small>_('Just-In-Time' JIT)_</small> &rarr; `Combinaison de la compilation native et bytecode pour offrir portabilité et performance.`
 
 ### Difficultées
 
-- Choix de la structure de data (AST)
+:children_crossing: Choix de la structure de data (AST)
 
-- Décomposit° en étape intermédiaire
+:children_crossing: Décomposit° en étape intermédiaire
 
-- Bonne connaissance du lang. cible
+:children_crossing: Bonne connaissance du lang. cible
 
-- Gestion des erreurs
+:children_crossing: Gestion des erreurs
 
 ### Attentes d'un compilateur
 
-- **Correction** *(le prog. traduit fait ce qu'on att. de lui)*
-- **Efficacité**
+:triangular_flag_on_post: **Correction** &rarr; le prog. traduit fait ce qu'on att. de lui)
 
-### Programme
+:triangular_flag_on_post: **Efficacité**
+
+## Programme
 
 - Compilat° native (+opti. | lang. c)
 - Compilat° bytecode (+portable | lang. Java)
@@ -76,27 +76,38 @@ _Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/mas
 :fire: Le langage utilisé est Turing-complet.
 
 ## MIPS
----
+
 ### Les registres
-- $r0 &rarr; `toujours égal à 0`
-- ($a0 - $a3, $ra) &rarr; `passage d'argument`
-- ($v0 - $v1) &rarr; `renvoie de résultat`
-- ($s0 - $s7) &rarr; `sauvegardé par l'appelé (une fonction)`
-- ($t0 - $t9) &rarr; `non sauvegardé par l'appelé (une fonction)`
-- ($sp, $fp) &rarr; `pointeurs vers la pile`
-- $gp &rarr; `pointeur vers les données`
-- (k0 - k1) &rarr; `réservé par le noyau`
-- at &rarr; `réservé par l'assembleur`
+
+:unlock: $r0 &rarr; `toujours égal à 0`
+
+:unlock: ($a0 - $a3, $ra) &rarr; `passage d'argument`
+
+:unlock: ($v0 - $v1) &rarr; `renvoie de résultat`
+
+:unlock: ($s0 - $s7) &rarr; `sauvegardé par l'appelé (une fonction)`
+
+:unlock: ($t0 - $t9) &rarr; `non sauvegardé par l'appelé (une fonction)`
+
+:unlock: ($sp, $fp) &rarr; `pointeurs vers la pile`
+
+:unlock: $gp &rarr; `pointeur vers les données`
+
+:unlock: (k0 - k1) &rarr; `réservé par le noyau`
+
+:unlock: at &rarr; `réservé par l'assembleur`
 
 ### Les instructions
 
-- transfert entre registres et mémoire
-- calcul
-- saut
+:triangular_flag_on_post: transfert entre registres et mémoire
+
+:triangular_flag_on_post: calcul
+
+:triangular_flag_on_post: saut
 
 #### Instructions de transfert
 
-**Lecture**
+:bulb: Lecture
 
 ```mips
 lw dest, offset(base)
@@ -104,7 +115,7 @@ lw dest, offset(base)
 ;dest = valeur de 'address'
 ```
 
-**Écriture**
+:bulb: Écriture
 
 ```mips
 sw src, offset(base)
@@ -116,14 +127,14 @@ sw src, offset(base)
 
 ##### nullaire
 
-**Lecture d'une constante**
+:bulb: Lecture d'une constante
 
 ```mips
 li dest, const ;dest = const
 ```
 
 
-**Lecture d'une adresse**
+:bulb: Lecture d'une adresse
 
 ```mips
 la dest, address ;dest = address
@@ -132,20 +143,20 @@ la dest, address ;dest = address
 
 ##### unaire
 
-**Addition d'une constante**
+:bulb: Addition d'une constante
 
 ```mips
 addi dest, src, const ;dest = const + src
 ```
 
 
-**Déplacement**
+:bulb: Déplacement
 
 ```mips
 move dest, src ;dest = src
 ```
 
-**Négation**
+:bulb: Négation
 
 ```mips
 neg dest, src ;dest = !src
@@ -153,7 +164,7 @@ neg dest, src ;dest = !src
 
 ##### binaire
 
-**Opérations**
+:bulb: Opérations
 
 ```mips
 add dest, src1, src2 ;dest = src1 + src2
@@ -162,7 +173,7 @@ mul dest, src1, src2 ;dest = src1 * src2
 div dest, src1, src2 ;dest = src1 / src2
 ```
 
-**Comparaison**
+:bulb: Comparaison
 
 ```mips
 slt dest, src1, src2 ;dest = src1 < src2
@@ -179,13 +190,13 @@ sne dest, src1, src2 ;dest = src1 != src2
 
 ##### Saut inconditionnel
 
-**Saut**
+:bulb: Saut
 
 ```mips
 j address ;Saute sur 'address'
 ```
 
-**Saut avec retour**
+:bulb: Saut avec retour
 
 ```mips
 jal address 
@@ -194,7 +205,7 @@ jal address
 ```
 
 
-**Saut vers adresse variable**
+:bulb: Saut vers adresse variable
 
 ```mips
 jr address ;Saute dans le registre contenu dans address
@@ -204,7 +215,7 @@ _NB: `jr $ra` est typiquement utilisée pour rendre la main à l'appelant à la 
 
 ##### Saut conditionnel
 
-**Saut cond. unaire**
+:bulb: Saut cond. unaire
 
 ```mips
 bgtz src, address ;saute sur 'address' si src > 0
@@ -213,7 +224,7 @@ blez src, address ;saute sur 'address' si src <= 0
 bltz src, address ;saute sur 'address' si src < 0
 ```
 
-**Saut cond. binaire**
+:bulb: Saut cond. binaire
 
 ```mips
 blt src1, src2, address ;saute sur 'address' si src1 < src2
@@ -222,12 +233,14 @@ bne src1, src2, address ;saute sur 'address' si src1 != src2
 ```
 
 ##### spécial
-**Appel système**
+:bulb: Appel système
 
 ```mips
 syscall
+;Communique avec le noyau système
+;La fonction utilisée est déterminée selon la valeur de *$v0*
 ```
-Communication avec le noyau système. La fonction utilisée est déterminée selon la valeur de *$v0*
+
 
 | *$v0* | cmd          | args                                           | result           |
 | ----- | ------------ | ---------------------------------------------- | ---------------- |
@@ -236,6 +249,7 @@ Communication avec le noyau système. La fonction utilisée est déterminée sel
 | 5     | read_int     |                                                | *$v0*: entier lu |
 | 8     | read_string  | *$a0*: adresse de chaine, *\$a1*: longueur max |
 | 10    | exit         |                                                |
+
 
 ### Un premier programme
 ```mips
@@ -250,6 +264,7 @@ main: li $v0, 4   ; cmd: print_string
 ```
 
 Pour plus d'exemples voir les TP associé à MIPS [ici](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN104/td/MIPS)
+
 ## Analyse syntaxique (AST)
 
 ### Introduction
