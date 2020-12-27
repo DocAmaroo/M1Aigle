@@ -324,6 +324,7 @@ sw (e1 + 4*e2) e3
 - il faut penser à allouer et désallouer à la main.
 - "callee-save" sauv. de façon explicite.
 
+*Mémo*
 ```mips
 call f(n) ;;appel proc. f avec n param.
 ```
