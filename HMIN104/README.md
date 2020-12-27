@@ -331,7 +331,7 @@ call f(n) ;;appel proc. f avec n param.
 ## Exemples
 Prenons pour exemple la fonction factorielle
 Version PP
-```asm
+```vhdl
 function f (n : integer) : integer
 begin
   if n <= 0 then
@@ -341,7 +341,7 @@ begin
 end;
 ```
 Version UPP
-```asm
+```vhdl
 function f(n);
 begin
   f := 0;
@@ -352,7 +352,7 @@ begin
 end;
 ```
 Version RTL
-```asm
+```vhdl
 function f(%0) : %1
 var %0,%1,%2,%3
 entry f6
