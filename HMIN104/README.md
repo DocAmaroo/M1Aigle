@@ -103,7 +103,7 @@ _Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/mas
 
 :bulb: Lecture
 
-```mips
+```asm
 lw dest, offset(base)
 ;offset (16bits) + base => address.
 ;dest = valeur de 'address'
@@ -111,7 +111,7 @@ lw dest, offset(base)
 
 :bulb: Écriture
 
-```mips
+```asm
 sw src, offset(base)
 ;offset (16bits) + base => address.
 ;valeur de 'address' = src
@@ -123,14 +123,14 @@ sw src, offset(base)
 
 :bulb: Lecture d'une constante
 
-```mips
+```asm
 li dest, const ;dest = const
 ```
 
 
 :bulb: Lecture d'une adresse
 
-```mips
+```asm
 la dest, address ;dest = address
 ```
 
@@ -139,20 +139,20 @@ la dest, address ;dest = address
 
 :bulb: Addition d'une constante
 
-```mips
+```asm
 addi dest, src, const ;dest = const + src
 ```
 
 
 :bulb: Déplacement
 
-```mips
+```asm
 move dest, src ;dest = src
 ```
 
 :bulb: Négation
 
-```mips
+```asm
 neg dest, src ;dest = !src
 ```
 
@@ -160,7 +160,7 @@ neg dest, src ;dest = !src
 
 :bulb: Opérations
 
-```mips
+```asm
 add dest, src1, src2 ;dest = src1 + src2
 sub dest, src1, src2 ;dest = src1 - src2
 mul dest, src1, src2 ;dest = src1 * src2
@@ -169,7 +169,7 @@ div dest, src1, src2 ;dest = src1 / src2
 
 :bulb: Comparaison
 
-```mips
+```asm
 slt dest, src1, src2 ;dest = src1 < src2
 sle dest, src1, src2 ;dest = src1 <= src2
 sgt dest, src1, src2 ;dest = src1 > src2
@@ -186,13 +186,13 @@ sne dest, src1, src2 ;dest = src1 != src2
 
 :bulb: Saut
 
-```mips
+```asm
 j address ;saute sur 'address'
 ```
 
 :bulb: Saut avec retour
 
-```mips
+```asm
 jal address 
 ;sauvegarde l'adresse actuelle dans $ra puis
 ;saute sur 'address'
@@ -201,7 +201,7 @@ jal address
 
 :bulb: Saut vers adresse variable
 
-```mips
+```asm
 jr address ;saute dans le registre contenu dans address
 ```
 
@@ -211,7 +211,7 @@ _NB: `jr $ra` est typiquement utilisée pour rendre la main à l'appelant à la 
 
 :bulb: Saut cond. unaire
 
-```mips
+```asm
 bgtz src, address ;saute sur 'address' si src > 0
 bgez src, address ;saute sur 'address' si src >= 0
 blez src, address ;saute sur 'address' si src <= 0
@@ -220,7 +220,7 @@ bltz src, address ;saute sur 'address' si src < 0
 
 :bulb: Saut cond. binaire
 
-```mips
+```asm
 blt src1, src2, address ;saute sur 'address' si src1 < src2
 beq src1, src2, address ;saute sur 'address' si src1 == src2
 bne src1, src2, address ;saute sur 'address' si src1 != src2
@@ -229,7 +229,7 @@ bne src1, src2, address ;saute sur 'address' si src1 != src2
 ##### spécial
 :bulb: Appel système
 
-```mips
+```asm
 syscall
 ;communique avec le noyau système
 ;la fonction utilisée est déterminée selon la valeur de $v0
@@ -246,7 +246,7 @@ syscall
 
 
 ### Hello World
-```mips
+```asm
 ;; --- Affiche le message "hello world"
 .data
 msg: .asciiz "hello world\n"
@@ -296,7 +296,7 @@ Voir [antlr-parser](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN104/td/
 - variable global distinguées par leur adresses (même nom / offset)
 - accès aux tableaux en utilisant `lw` et `sw`
 
-```mips
+```asm
 ;; --- Allocation de taille e
 alloc (4*e)
 
@@ -324,7 +324,7 @@ sw (e1 + 4*e2) e3
 - il faut penser à allouer et désallouer à la main.
 - "callee-save" sauv. de façon explicite.
 
-```mips
+```asm
 
 call f(n) ;;appel proc. f avec n param.
 ```
@@ -341,7 +341,7 @@ begin
 end;
 ```
 Version UPP
-```d
+```asm
 function f(n);
 begin
   f := 0;
@@ -352,7 +352,7 @@ begin
 end;
 ```
 Version RTL
-```mips
+```asm
 function f(%0) : %1
 var %0,%1,%2,%3
 entry f6
@@ -366,7 +366,7 @@ f4: li %1,1 -> f0
 ```
 
 Version ERTL (Explicit Register Transfer Language)
-```mips
+```asm
 procedure f(1)
 var %0,%1,%2,%3,%4,%5,%6
 entry f11
