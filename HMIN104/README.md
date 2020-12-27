@@ -366,7 +366,7 @@ f4: li %1,1 -> f0
 ```
 
 Version ERTL (Explicit Register Transfer Language)
-```mips
+```vhdl
 procedure f(1)
 var %0, %1, %2, %3, %4, %5, %6
 entry f11
