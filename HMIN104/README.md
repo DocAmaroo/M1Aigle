@@ -237,8 +237,8 @@ bne src1, src2, address ;saute sur 'address' si src1 != src2
 
 ```mips
 syscall
-;Communique avec le noyau système
-;La fonction utilisée est déterminée selon la valeur de *$v0*
+;communique avec le noyau système
+;la fonction utilisée est déterminée selon la valeur de *$v0*
 ```
 
 
