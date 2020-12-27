@@ -15,20 +15,11 @@ _"D. Delahaye :heart:"_
   - [MIPS](#mips)
     - [Les registres](#les-registres)
     - [Les instructions](#les-instructions)
-      - [Instructions de transfert](#instructions-de-transfert)
-      - [Instructions de calcul](#instructions-de-calcul)
-        - [nullaire](#nullaire)
-        - [unaire](#unaire)
-        - [binaire](#binaire)
-      - [Instructions de saut](#instructions-de-saut)
-        - [Saut inconditionnel](#saut-inconditionnel)
-        - [Saut conditionnel](#saut-conditionnel)
-        - [spécial](#spécial)
-    - [Un premier programme](#un-premier-programme)
+    - [Hello World](#hello-world)
   - [Analyse syntaxique (AST)](#analyse-syntaxique-ast)
     - [Introduction](#introduction-1)
     - [ANTRL](#antrl)
-    - [Hello World](#hello-world)
+    - [Hello World](#hello-world-1)
   - [De UPP vers PP](#de-upp-vers-pp)
     - [UPP](#upp)
     - [RTL (Register Transfer Language)](#rtl-register-transfer-language)
@@ -238,7 +229,7 @@ bne src1, src2, address ;saute sur 'address' si src1 != src2
 ```mips
 syscall
 ;communique avec le noyau système
-;la fonction utilisée est déterminée selon la valeur de *$v0*
+;la fonction utilisée est déterminée selon la valeur de $v0
 ```
 
 
@@ -251,7 +242,7 @@ syscall
 | 10    | exit         |                                                |
 
 
-### Un premier programme
+### Hello World
 ```mips
 ;; --- Affiche le message "hello world"
 .data
