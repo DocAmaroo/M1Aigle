@@ -259,14 +259,14 @@ Pour plus d'exemples voir les TP associé à MIPS [ici](https://github.com/DocAm
 ## Analyse syntaxique (AST)
 
 ### Introduction
-:bulb: vérifie qu'une prog. est bien formé
+:triangular_flag_on_post: vérifie qu'une prog. est bien formé
 
-:bulb: syntaxe sous forme d'arbre (abstraite)
+:triangular_flag_on_post: syntaxe sous forme d'arbre (abstraite)
 
 ### ANTRL
-:bulb: Outils d'analyse syntaxique
+:heavy_check_mark: Outils d'analyse syntaxique
 
-:bulb: Générateur de parser 
+:heavy_check_mark: Générateur de parser 
 
 [Télécharger ANTLR](http://www.antlr.org/)
 
