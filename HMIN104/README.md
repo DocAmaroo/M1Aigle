@@ -366,12 +366,12 @@ f4: li %1,1 -> f0
 ```
 
 Version ERTL (Explicit Register Transfer Language)
-```mips
+```a51
 procedure f(1)
 var %0, %1, %2, %3, %4, %5, %6
 entry f11
 f11: newframe -> f10
-f10: move %6, $ra -> f9     --%6 := $ra (adresse de retour)
+f10: move %6, $ra -> f9     ;;%6 := $ra (adresse de retour)
 f9: move %5, $s1 -> f8      --%5 := $s1 (???)
 f8: move %4, $s0 -> f7      --%4 := $s0 (???)
 f7: move %0, $a0 -> f6      --%0 := $a0 (n)
