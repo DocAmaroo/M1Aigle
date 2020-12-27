@@ -21,11 +21,11 @@ _"D. Delahaye :heart:"_
     - [ANTRL](#antrl)
     - [Hello World](#hello-world-1)
     - [Des exemples plus concret](#des-exemples-plus-concret)
-  - [De UPP vers PP](#de-upp-vers-pp)
+  - [De PP &rarr; UPP &rarr; RTL &rarr; ERTL](#de-pp--upp--rtl--ertl)
     - [UPP (Untyped Pseudo-Pascal)](#upp-untyped-pseudo-pascal)
-  - [RTL (Register Transfer Language)](#rtl-register-transfer-language)
-  - [ERTL (Explicit Register Transfer Language)](#ertl-explicit-register-transfer-language)
-  - [Exemples](#exemples)
+    - [RTL (Register Transfer Language)](#rtl-register-transfer-language)
+    - [ERTL (Explicit Register Transfer Language)](#ertl-explicit-register-transfer-language)
+    - [Exemples](#exemples)
 
 
 ## Liens utiles :
@@ -288,7 +288,7 @@ Voir [2_analyse-syntaxique](https://github.com/DocAmaroo/M1Aigle/blob/master/HMI
 Voir [antlr-parser](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN104/td/ANTLR), mini projet mélangeant ANTLR et Java.
 
 
-## De UPP vers PP
+## De PP &rarr; UPP &rarr; RTL &rarr; ERTL
 
 ### UPP (Untyped Pseudo-Pascal)
 
@@ -310,13 +310,13 @@ sw (e1 + 4*e2) e3
 - op. arith. utilise ceux de MIPS
 - toute variable = 4 octets (32 bits)
 
-## RTL (Register Transfer Language)
+### RTL (Register Transfer Language)
 
 - Expression et instruction sont décomposées en inst. élémentaire.
 - Var. local deviennent des pseudos registres _(nbr. infinis)_
 - Notion d'arbre ([voir diapo 10/11](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN104/cours/3_pp-upp-rtl.pdf)) **IMPORTANTE**
 
-## ERTL (Explicit Register Transfer Language)
+### ERTL (Explicit Register Transfer Language)
 
 - param et res des fonctions/proc. stocké dans des registres/piles.
 - proc. == fonction.
@@ -324,14 +324,15 @@ sw (e1 + 4*e2) e3
 - il faut penser à allouer et désallouer à la main.
 - "callee-save" sauv. de façon explicite.
 
-```asm
+```vhdl
 
-call f(n) #appel proc. f avec n param.
+call f(n) --appel proc. f avec n param.
 ```
-## Exemples
+
+### Exemples
 Prenons pour exemple la fonction factorielle
 Version PP
-```asm
+```g4
 function f (n : integer) : integer
 begin
   if n <= 0 then
@@ -341,7 +342,7 @@ begin
 end;
 ```
 Version UPP
-```asm
+```g4
 function f(n);
 begin
   f := 0;
@@ -352,7 +353,7 @@ begin
 end;
 ```
 Version RTL
-```asm
+```vhdl
 function f(%0) : %1
 var %0,%1,%2,%3
 entry f6
@@ -366,29 +367,29 @@ f4: li %1,1 -> f0
 ```
 
 Version ERTL (Explicit Register Transfer Language)
-```asm
+```vhdl
 procedure f(1)
 var %0, %1, %2, %3, %4, %5, %6
 entry f11
 f11: newframe -> f10
-f10: move %6, $ra -> f9     ;;%6 := $ra (adresse de retour)
-f9: move %5, $s1 -> f8      ;;%5 := $s1 (???)
-f8: move %4, $s0 -> f7      ;;%4 := $s0 (???)
-f7: move %0, $a0 -> f6      ;;%0 := $a0 (n)
-f6: li %1,0 -> f5           ;;%1 := 0
-f5: blez %0 -> f4,f3        ;;si n <= 0 => f4, sinon f3
-f3: addiu %3, %0, -1 -> f2  ;;%3 := (n-1)
+f10: move %6, $ra -> f9     --%6 := $ra (adresse de retour)
+f9: move %5, $s1 -> f8      --%5 := $s1 (???)
+f8: move %4, $s0 -> f7      --%4 := $s0 (???)
+f7: move %0, $a0 -> f6      --%0 := $a0 (n)
+f6: li %1,0 -> f5           --%1 := 0
+f5: blez %0 -> f4,f3        --si n <= 0 => f4, sinon f3
+f3: addiu %3, %0, -1 -> f2  --%3 := (n-1)
 f2: j -> f20                
-f20: move $a0, %3  -> f19    ;;$a0 := %3 (n-1)
-f19: call f(1) -> f18       ;;appel récursif sur f(1)
-f18: move %2, $v0 -> f1     ;;%2 := res du call
-f1: mul %1,%0,%2 -> f0      ;;%1 := n * f(n-1)
+f20: move $a0, %3  -> f19    --$a0 := %3 (n-1)
+f19: call f(1) -> f18       --appel récursif sur f(1)
+f18: move %2, $v0 -> f1     --%2 := res du call
+f1: mul %1,%0,%2 -> f0      --%1 := n * f(n-1)
 f0: j -> f17                
-f17: move $v0, %1 -> f16    ;;$v0 := n * f(n-1)
-f16: move $ra, %6 -> f15    ;;$ra := %6
-f15: move $s1, %5 -> f14    ;;$s1 := %5
-f14: move $s0, %4 -> f13    ;;$s0 := %4
+f17: move $v0, %1 -> f16    --$v0 := n * f(n-1)
+f16: move $ra, %6 -> f15    --$ra := %6
+f15: move $s1, %5 -> f14    --$s1 := %5
+f14: move $s0, %4 -> f13    --$s0 := %4
 f13: delframe -> f12
 f12: jr $ra
-f4: li %1,1 -> f0           ;;%1 := 1
+f4: li %1,1 -> f0           --%1 := 1
 ```
