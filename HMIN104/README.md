@@ -450,7 +450,7 @@ c := e + 8;    // ➦ {b,m,e}
 d := c;        // ➦ {b,m,c}
 k := m + 4;    // ➦ {d,b,m}
 j := b         // ➦ {d,k,b}
-              // départ: {d,j,k}
+               // départ: {d,j,k}
 ```
 
 ## Graphe d'interférences
