@@ -462,14 +462,13 @@ j := b         // ➦ {d,k,b}
 :bulb: Arête de préférence &rarr; `relie deux var. (sommets) reliée par une intr. move.`
 
 
-:bulb: Interférence &rarr;
-- Deux var. interfèrent si l'une est vivante à la sortie d'une instr. qui définit l'autre
-- Deux var. qui n'interfèrent pas peuvent être réalisées par un unique emplacement (et inversement) 
+:bulb: Interférence &rarr; `Deux var. interfèrent si l'une est vivante à la sortie d'une instr. qui définit l'autre`
 
-:bulb: Préférence &rarr; Si une var. *y* est vivante à la sortie d'une instr. qui définit une var. *x* et dont la valeur reçu dans *x* et celle de *y* (*x* := *y*, c'est une instruction move: `move x,y`).
+:bulb: Préférence &rarr; `Si une var. y est vivante à la sortie d'une instr. qui définit une var. x et dont la valeur reçu dans x et celle de y (x := y, c'est une instr. move).`
 
 ### Exemple
 
+**Question:** Dessiner le graphe d’interférences de ce programme
 ```c
 v := 0;     // ➦ {x,z,t}
 y := z + t; // ➦ {x,z,t}
@@ -482,3 +481,23 @@ v := z;     // ➦ {z}
 Interférences: (v,x), (v,t), (v,z), (y,x), (y,t), (u,x), (u,y)
 
 Préférences: (u,t)
+
+**Question:** Dessiner le graphe d’interférences de ce programme sachant qu’à la fin du programme, les variables vivantes sont d, k et j?
+
+```c
+g := j + 12;   // ➦ {j,k}
+h := k − 1;    // ➦ {j,g,k} => (g,j), (g,k)   
+f := g * h;    // ➦ {j,g,h} => (h,j), (h,g)
+e := j + 8;    // ➦ {f,j} => (f,j)
+m := j + 16;   // ➦ {e,f,j} => (e,f), (e,j)
+b := f;        // ➦ {m,e,f} => (m,e), (m,f)
+c := e + 8;    // ➦ {b,m,e} => !(b,f)
+d := c;        // ➦ {b,m,c} => (c,b), (c,m)
+k := m + 4;    // ➦ {d,b,m} => !(d,c)
+j := b;        // ➦ {d,k,b} => (k,d), (k,b) && !(j,b)
+               // départ: {d,k,j}
+```
+
+Interférences: (g,j), (g,k), (h,j), (h,g), (f,j), (e,f), (e,j), (m,e), (m,f), (c,b), (c,m), (k,d), (k,b)
+
+Préférences: (b,f), (d,c), (j,b)
