@@ -26,6 +26,12 @@ _"D. Delahaye :heart:"_
     - [RTL (Register Transfer Language)](#rtl-register-transfer-language)
     - [ERTL (Explicit Register Transfer Language)](#ertl-explicit-register-transfer-language)
     - [Exemples](#exemples)
+  - [Analyse de la durée de vie](#analyse-de-la-durée-de-vie)
+    - [Définition](#définition)
+    - [Exemples](#exemples-1)
+  - [Graphe d'interférences](#graphe-dinterférences)
+    - [Définition](#définition-1)
+    - [Exemple](#exemple)
 
 
 ## Liens utiles :
@@ -322,7 +328,7 @@ sw (e1 + 4*e2) e3
 - proc. == fonction.
 - adresse de retour devient un param explicite.
 - il faut penser à allouer et désallouer à la main.
-- "callee-save" sauv. de façon explicite.
+- "callee-save" ($s0-\$s7) sauv. de façon explicite.
 
 *Mémo*
 ```mips
@@ -393,3 +399,86 @@ f13: delframe -> f12
 f12: jr $ra
 f4: li %1,1 -> f0           ;;%1 := 1
 ```
+
+## Analyse de la durée de vie
+### Définition
+:bulb: naissance d'une variable &rarr; `Une var. (v) est engendrée par une instruc. (i) si i utilise (= lit dans) v.`
+
+:bulb: décès d'une variable &rarr; `Une var. (v) est engendréetuée par une instruc. (i) si i définit (= écrit dans) v.`
+
+:bulb: variable vivante &rarr; 
+`Si une var. est utilisée et/ou n'est pas affectée d'un point x à un point y pendant la durée du programme`
+
+:bulb: variable morte &rarr; 
+`Si une var. n'est pas utilisée et/ou est affectée d'un point x à un point y pendant la durée du programme`
+
+### Exemples
+
+Pour calculer les variables vivantes aux différents points du programme on fait une analyse arrière (en remontant)
+
+**Question:** Quels sont les variables vivantes dans les différents points de chaque programme ?
+```d
+t := x;   // ➦ t meurt, x naît => {y,x} ↑ (iii)
+x := y;   // ➦ x meurt, y naît => {t,y} ↑ (ii)
+y := t;   // ➦ y meurt, t naît => {x,t} ↑ (i)
+{x,y}     // ensemble de départ
+```
+
+```d
+t := x;   // ➦ t meurt, x naît => {y,x} ↑ (iii)
+x := y;   // ➦ y naît => {t,y}          ↑ (ii)
+y := t;   // ➦ t naît => {t}            ↑ (i)
+{}        // ensemble de départ
+```
+
+```d
+x := x + 1;   // ➦ x meurt, x naît => {x} ↑ (ii)
+y := x + 1;   // ➦ y meurt, x naît => {x} ↑ (i)
+{x,y}         // ensemble de départ
+```
+
+**Question:** Quels sont les variables vivantes à l’entrée du programme sachant qu’à la fin du programme, les variables vivantes sont d, k et j?
+
+```d
+g := j + 12;   // ➦ {j,k}   
+h := k − 1;    // ➦ {j,g,k}   
+f := g * h;    // ➦ {j,g,h}
+e := j + 8;    // ➦ {f,j}
+m := j + 16;   // ➦ {e,f,j} 
+b := f;        // ➦ {m,e,f}
+c := e + 8;    // ➦ {b,m,e}
+d := c;        // ➦ {b,m,c}
+k := m + 4;    // ➦ {d,b,m}
+j := b         // ➦ {d,k,b}
+{d,j,k}        // ensemble de départ
+```
+
+## Graphe d'interférences
+### Définition
+:bulb: Graphe d'interférences &rarr; `les sommets sont les var., les arêtes les relations d'interférences/préférences. Ce graphe spécifie à l'alloc. de reg. les contraintes sous lesquelles il doit travailler.`
+
+:bulb: Arête d'interférence &rarr; `relie deux var. (sommets) qui interfèrent.`
+
+:bulb: Arête de préférence &rarr; `relie deux var. (sommets) reliée par une intr. move.`
+
+
+:bulb: Interférence &rarr;
+- Deux var. interfèrent si l'une est vivante à la sortie d'une instr. qui définit l'autre
+- Deux var. qui n'interfèrent pas peuvent être réalisées par un unique emplacement (et inversement) 
+
+:bulb: Préférence &rarr; Si une var. *y* est vivante à la sortie d'une instr. qui définit une var. *x* et dont la valeur reçu dans *x* et celle de *y* (*x* := *y*, c'est une instruction move: `move x,y`).
+
+### Exemple
+
+```d
+v := 0;     // ➦ {x,z,t}
+y := z + t; // ➦ {x,z,t}
+u := t;     // ➦ {x,y,t}
+z := x + y; // ➦ {x,y}
+v := z;     // ➦ {z}
+{}          // ensemble de départ
+```
+
+Interférences: (v,x), (v,t), (v,z), (y,x), (y,t), (u,x), (u,y)
+
+Préférences: (u,t)
