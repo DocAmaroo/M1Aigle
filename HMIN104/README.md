@@ -404,7 +404,7 @@ f4: li %1,1 -> f0           ;;%1 := 1
 ### Définition
 :bulb: naissance d'une variable &rarr; `Une var. (v) est engendrée par une instruc. (i) si i utilise (= lit dans) v.`
 
-:bulb: décès d'une variable &rarr; `Une var. (v) est engendréetuée par une instruc. (i) si i définit (= écrit dans) v.`
+:bulb: décès d'une variable &rarr; `Une var. (v) est tuée par une instruc. (i) si i définit (= écrit dans) v.`
 
 :bulb: variable vivante &rarr; 
 `Si une var. est utilisée et/ou n'est pas affectée d'un point x à un point y pendant la durée du programme`
