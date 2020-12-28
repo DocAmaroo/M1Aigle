@@ -407,39 +407,39 @@ f4: li %1,1 -> f0           ;;%1 := 1
 :bulb: décès d'une variable &rarr; `Une var. (v) est tuée par une instruc. (i) si i définit (= écrit dans) v.`
 
 :bulb: variable vivante &rarr; 
-`Si une var. est utilisée et/ou n'est pas affectée d'un point x à un point y pendant la durée du programme`
+`Une var. est utilisée et/ou n'est pas affectée d'un point x à un point y pendant la durée du programme`
 
 :bulb: variable morte &rarr; 
-`Si une var. n'est pas utilisée et/ou est affectée d'un point x à un point y pendant la durée du programme`
+`Une var. n'est pas utilisée et/ou est affectée d'un point x à un point y pendant la durée du programme`
+
+:triangular_flag_on_post: Pour déterminer les variables vivantes aux différents points du programme on fait une analyse arrière (en remontant)
 
 ### Exemples
 
-Pour calculer les variables vivantes aux différents points du programme on fait une analyse arrière (en remontant)
-
 **Question:** Quels sont les variables vivantes dans les différents points de chaque programme ?
-```d
+```c
 t := x;   // ➦ t meurt, x naît => {y,x} ↑ (iii)
 x := y;   // ➦ x meurt, y naît => {t,y} ↑ (ii)
 y := t;   // ➦ y meurt, t naît => {x,t} ↑ (i)
-{x,y}     // ensemble de départ
+          // départ: {x,y}
 ```
 
-```d
+```c
 t := x;   // ➦ t meurt, x naît => {y,x} ↑ (iii)
 x := y;   // ➦ y naît => {t,y}          ↑ (ii)
 y := t;   // ➦ t naît => {t}            ↑ (i)
-{}        // ensemble de départ
+          // départ: {}
 ```
 
-```d
+```c
 x := x + 1;   // ➦ x meurt, x naît => {x} ↑ (ii)
 y := x + 1;   // ➦ y meurt, x naît => {x} ↑ (i)
-{x,y}         // ensemble de départ
+              // départ: {x,y}
 ```
 
 **Question:** Quels sont les variables vivantes à l’entrée du programme sachant qu’à la fin du programme, les variables vivantes sont d, k et j?
 
-```d
+```c
 g := j + 12;   // ➦ {j,k}   
 h := k − 1;    // ➦ {j,g,k}   
 f := g * h;    // ➦ {j,g,h}
@@ -450,7 +450,7 @@ c := e + 8;    // ➦ {b,m,e}
 d := c;        // ➦ {b,m,c}
 k := m + 4;    // ➦ {d,b,m}
 j := b         // ➦ {d,k,b}
-{d,j,k}        // ensemble de départ
+              // départ: {d,j,k}
 ```
 
 ## Graphe d'interférences
@@ -470,13 +470,13 @@ j := b         // ➦ {d,k,b}
 
 ### Exemple
 
-```d
+```c
 v := 0;     // ➦ {x,z,t}
 y := z + t; // ➦ {x,z,t}
 u := t;     // ➦ {x,y,t}
 z := x + y; // ➦ {x,y}
 v := z;     // ➦ {z}
-{}          // ensemble de départ
+            // départ: {}
 ```
 
 Interférences: (v,x), (v,t), (v,z), (y,x), (y,t), (u,x), (u,y)
