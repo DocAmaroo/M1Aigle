@@ -88,18 +88,18 @@ Ensemble de *théories, méthodes, techniques, outils* permettant de *récupére
 ### Rappels
 :bulb: `envoi de message` &rarr; autre nom donné à l'appel de méth.
 
-:bulb: `receveur courant` &rarr; au sein d'une méth. *M*, le receveur *(<small><span style="color=orange">this</span></small>)* est l'obj. auquel a été envoyé le msg. ayant conduit à l'exec. de *M*. 
+:bulb: `receveur courant` &rarr; au sein d'une méth. *M*, le receveur *(<small><span style="color:darkorange">this</span></small>)* est l'obj. auquel a été envoyé le msg. ayant conduit à l'exec. de *M*. 
 
 :bulb: `liaison dynamique (ou tardive)` &rarr; mécanisme distinct de l'héritage. C'est le fait qu'un nom de fonction membre d'une classe de base peut être associé à une fonction membre d'une classe dérivée.
 
 ### Schéma de réutilisations
 :bulb: `description différentielle` &rarr; permet l'ajout sur une nouvelle sous-classe, de nouvelles propriétés et la **spécialisation** de propriétés existantes, notamment des méth.
 
-:bulb: `spécialisation/redéfinition` &rarr; Définition d’une méth. M sur une sous-classe SC d’une classe C où une méth M est déjà définie. *(<small><span style="color=dodgerblue">@Override</span></small>)*
+:bulb: `spécialisation/redéfinition` &rarr; Définition d’une méth. M sur une sous-classe SC d’une classe C où une méth M est déjà définie. *(<small><span style="color:dodgerblue">@Override</span></small>)*
 
 :bulb: `masquage` &rarr; redéf. sur une classe C, masque, pour les instances de C, la méth. redéfinie.
 
-:bulb: `spécialisation/redéfinition partielle` &rarr; Redéfinition faisant appel à la méthode redéfinie (masquée) (*<small>super</small>*)
+:bulb: `spécialisation/redéfinition partielle` &rarr; Redéfinition faisant appel à la méthode redéfinie (masquée) *(<small><span style="color:darkorange">super</span></small>)*
 
 :bulb: `paramétrage par spécialisation` &rarr; Lors d'un appel d'une méthode d'une sous-classe dans la classe (exemple dans le cours: [voir p10](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/1_reuseAndFrameworks.pdf))
 
