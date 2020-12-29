@@ -42,11 +42,11 @@ _"D. Delahaye :heart:"_
 
 ### Définitions
 
-:bulb: compilateur &rarr; `traduit un lang. de haut niv. vers du bas niv.`
+:bulb: `compilateur` &rarr; traduit un lang. de haut niv. vers du bas niv.
 
-:bulb: analyse syntax. &rarr; `passer du txt. à une structure arborescente sur laquelle on peut travailler.`
+:bulb: `analyse syntax`. &rarr; passer du txt. à une structure arborescente sur laquelle on peut travailler.
 
-:bulb: compilat° à la volée <small>_('Just-In-Time' JIT)_</small> &rarr; `Combinaison de la compilation native et bytecode pour offrir portabilité et performance.`
+:bulb: `compilat° à la volée` <small>_('Just-In-Time' JIT)_</small> &rarr; Combinaison de la compilation native et bytecode pour offrir portabilité et performance.
 
 ### Difficultées
 
@@ -79,23 +79,23 @@ _Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/mas
 
 ### Les registres
 
-:unlock: $r0 &rarr; `toujours égal à 0`
+:unlock: `$r0` &rarr;toujours égal à 0
 
-:unlock: ($a0 - $a3, $ra) &rarr; `passage d'argument`
+:unlock: `($a0 - $a3, $ra)` &rarr; passage d'argument
 
-:unlock: ($v0 - $v1) &rarr; `renvoie de résultat`
+:unlock: `($v0 - $v1)` &rarr; renvoie de résultat
 
-:unlock: ($s0 - $s7) &rarr; `sauvegardé par l'appelé (une fonction)`
+:unlock: `($s0 - $s7)` &rarr; sauvegardé par l'appelé (une fonction)
 
-:unlock: ($t0 - $t9) &rarr; `non sauvegardé par l'appelé (une fonction)`
+:unlock: `($t0 - $t9)` &rarr; non sauvegardé par l'appelé (une fonction)
 
-:unlock: ($sp, $fp) &rarr; `pointeurs vers la pile`
+:unlock: `($sp, $fp)` &rarr; pointeurs vers la pile
 
-:unlock: $gp &rarr; `pointeur vers les données`
+:unlock: `$gp` &rarr; pointeur vers les données
 
-:unlock: (k0 - k1) &rarr; `réservé par le noyau`
+:unlock: `(k0 - k1)` &rarr; réservé par le noyau
 
-:unlock: at &rarr; `réservé par l'assembleur`
+:unlock: `at` &rarr; réservé par l'assembleur
 
 ### Les instructions
 
@@ -107,7 +107,7 @@ _Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/mas
 
 #### Instructions de transfert
 
-:bulb: Lecture
+:bulb: `Lecture`
 
 ```mips
 lw dest, offset(base)
@@ -115,7 +115,7 @@ lw dest, offset(base)
 ;dest = valeur de 'address'
 ```
 
-:bulb: Écriture
+:bulb: `Écriture`
 
 ```mips
 sw src, offset(base)
@@ -127,14 +127,14 @@ sw src, offset(base)
 
 ##### nullaire
 
-:bulb: Lecture d'une constante
+:bulb: `Lecture d'une constante`
 
 ```mips
 li dest, const ;dest = const
 ```
 
 
-:bulb: Lecture d'une adresse
+:bulb: `Lecture d'une adresse`
 
 ```mips
 la dest, address ;dest = address
@@ -143,20 +143,20 @@ la dest, address ;dest = address
 
 ##### unaire
 
-:bulb: Addition d'une constante
+:bulb: `Addition d'une constante`
 
 ```mips
 addi dest, src, const ;dest = const + src
 ```
 
 
-:bulb: Déplacement
+:bulb: `Déplacement`
 
 ```mips
 move dest, src ;dest = src
 ```
 
-:bulb: Négation
+:bulb: `Négation`
 
 ```mips
 neg dest, src ;dest = !src
@@ -164,7 +164,7 @@ neg dest, src ;dest = !src
 
 ##### binaire
 
-:bulb: Opérations
+:bulb: `Opérations`
 
 ```mips
 add dest, src1, src2 ;dest = src1 + src2
@@ -173,7 +173,7 @@ mul dest, src1, src2 ;dest = src1 * src2
 div dest, src1, src2 ;dest = src1 / src2
 ```
 
-:bulb: Comparaison
+:bulb: `Comparaison`
 
 ```mips
 slt dest, src1, src2 ;dest = src1 < src2
@@ -190,13 +190,13 @@ sne dest, src1, src2 ;dest = src1 != src2
 
 ##### Saut inconditionnel
 
-:bulb: Saut
+:bulb: `Saut`
 
 ```mips
 j address ;saute sur 'address'
 ```
 
-:bulb: Saut avec retour
+:bulb: `Saut avec retour`
 
 ```mips
 jal address 
@@ -205,7 +205,7 @@ jal address
 ```
 
 
-:bulb: Saut vers adresse variable
+:bulb: `Saut vers adresse variable`
 
 ```mips
 jr address ;saute dans le registre contenu dans address
@@ -215,7 +215,7 @@ _NB: `jr $ra` est typiquement utilisée pour rendre la main à l'appelant à la 
 
 ##### Saut conditionnel
 
-:bulb: Saut cond. unaire
+:bulb: `Saut cond. unaire`
 
 ```mips
 bgtz src, address ;saute sur 'address' si src > 0
@@ -224,7 +224,7 @@ blez src, address ;saute sur 'address' si src <= 0
 bltz src, address ;saute sur 'address' si src < 0
 ```
 
-:bulb: Saut cond. binaire
+:bulb: `Saut cond. binaire`
 
 ```mips
 blt src1, src2, address ;saute sur 'address' si src1 < src2
@@ -233,7 +233,7 @@ bne src1, src2, address ;saute sur 'address' si src1 != src2
 ```
 
 ##### spécial
-:bulb: Appel système
+:bulb: `Appel système`
 
 ```mips
 syscall
@@ -402,15 +402,13 @@ f4: li %1,1 -> f0           ;;%1 := 1
 
 ## Analyse de la durée de vie
 ### Définition
-:bulb: naissance d'une variable &rarr; `Une var. (v) est engendrée par une instruc. (i) si i utilise (= lit dans) v.`
+:bulb: `naissance d'une variable` &rarr; Une var. (v) est engendrée par une instruc. (i) si i utilise (= lit dans) v.
 
-:bulb: décès d'une variable &rarr; `Une var. (v) est tuée par une instruc. (i) si i définit (= écrit dans) v.`
+:bulb: `décès d'une variable` &rarr; Une var. (v) est tuée par une instruc. (i) si i définit (= écrit dans) v.
 
-:bulb: variable vivante &rarr; 
-`Une var. est utilisée et/ou n'est pas affectée d'un point x à un point y pendant la durée du programme`
+:bulb: `variable vivante` &rarr; Une var. est utilisée et/ou n'est pas affectée d'un point x à un point y pendant la durée du programme
 
-:bulb: variable morte &rarr; 
-`Une var. n'est pas utilisée et/ou est affectée d'un point x à un point y pendant la durée du programme`
+:bulb: `variable morte` &rarr; Une var. n'est pas utilisée et/ou est affectée d'un point x à un point y pendant la durée du programme
 
 :triangular_flag_on_post: Pour déterminer les variables vivantes aux différents points du programme on fait une analyse arrière (en remontant)
 
@@ -455,16 +453,16 @@ j := b         // ➦ {d,k,b}
 
 ## Graphe d'interférences
 ### Définition
-:bulb: Graphe d'interférences &rarr; `les sommets sont les var., les arêtes les relations d'interférences/préférences. Ce graphe spécifie à l'alloc. de reg. les contraintes sous lesquelles il doit travailler.`
+:bulb: `Graphe d'interférences` &rarr; les sommets sont les var., les arêtes les relations d'interférences/préférences. Ce graphe spécifie à l'alloc. de reg. les contraintes sous lesquelles il doit travailler.
 
-:bulb: Arête d'interférence &rarr; `relie deux var. (sommets) qui interfèrent.`
+:bulb: `Arête d'interférence` &rarr; relie deux var. (sommets) qui interfèrent.
 
-:bulb: Arête de préférence &rarr; `relie deux var. (sommets) reliée par une intr. move.`
+:bulb: `Arête de préférence` &rarr; relie deux var. (sommets) reliée par une intr. move.
 
 
-:bulb: Interférence &rarr; `Deux var. interfèrent si l'une est vivante à la sortie d'une instr. qui définit l'autre`
+:bulb: `Interférence` &rarr; Deux var. interfèrent si l'une est vivante à la sortie d'une instr. qui définit l'autre
 
-:bulb: Préférence &rarr; `Si une var. y est vivante à la sortie d'une instr. qui définit une var. x et dont la valeur reçu dans x et celle de y (x := y, c'est une instr. move).`
+:bulb: `Préférence` &rarr; Si une var. y est vivante à la sortie d'une instr. qui définit une var. x et dont la valeur reçu dans x et celle de y (x := y, c'est une instr. move).
 
 ### Exemple
 
