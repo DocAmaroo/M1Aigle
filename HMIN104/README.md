@@ -79,7 +79,7 @@ _Voir diapos 14 &rarr; [intro.pdf](https://github.com/DocAmaroo/M1Aigle/blob/mas
 
 ### Les registres
 
-:unlock: `$r0` &rarr;toujours égal à 0
+:unlock: `$r0` &rarr; toujours égal à 0
 
 :unlock: `($a0 - $a3, $ra)` &rarr; passage d'argument
 

@@ -14,8 +14,6 @@
   - [Les schémas de réutilisation en PPO](#les-schémas-de-réutilisation-en-ppo)
     - [Rappels](#rappels)
     - [Schéma de réutilisations](#schéma-de-réutilisations)
-    - [Paramétrage par spécialisation](#paramétrage-par-spécialisation)
-    - [Paramétrage par composition](#paramétrage-par-composition)
   - [Spécificités du typage statique en présence d’affectation polymorphique](#spécificités-du-typage-statique-en-présence-daffectation-polymorphique)
 
 ## Liens utiles :
@@ -90,30 +88,37 @@ Ensemble de *théories, méthodes, techniques, outils* permettant de *récupére
 ### Rappels
 :bulb: `envoi de message` &rarr; autre nom donné à l'appel de méth.
 
-:bulb: `receveur courant` &rarr; au sein d'une méth. *M*, le receveur *<small>(accessible via `this`)</small>* est l'obj. auquel a été envoyé le msg. ayant conduit à l'exec. de *M*. 
+:bulb: `receveur courant` &rarr; au sein d'une méth. *M*, le receveur *<small>(`this`)</small>* est l'obj. auquel a été envoyé le msg. ayant conduit à l'exec. de *M*. 
 
-:bulb: `liaison dynamique (ou tardive)` &rarr; mécanisme distinct *<small>(bien qu'étroitement lié)</small>* de l'héritage. C'est le fait qu'un nom de fonction membre d'une classe de base peut être associé à une fonction membre d'une classe dérivée.
-*<small>NB : un même nom de fonction pourra correspondre à des réalisations différentes suivant les classes dérivées</small>*
+:bulb: `liaison dynamique (ou tardive)` &rarr; mécanisme distinct de l'héritage. C'est le fait qu'un nom de fonction membre d'une classe de base peut être associé à une fonction membre d'une classe dérivée.
 
 ### Schéma de réutilisations
 :bulb: `description différentielle` &rarr; permet l'ajout sur une nouvelle sous-classe, de nouvelles propriétés et la **spécialisation** de propriétés existantes, notamment des méth.
 
-:bulb: `spécialisation` &rarr; Définition d’une méth. M sur une sous-classe SC d’une classe C où une méth M est déjà définie. (*<small>`@Override`</small>*)
+:bulb: `spécialisation/redéfinition` &rarr; Définition d’une méth. M sur une sous-classe SC d’une classe C où une méth M est déjà définie. (*<small>`@Override`</small>*)
 
 :bulb: `masquage` &rarr; redéf. sur une classe C, masque, pour les instances de C, la méth. redéfinie.
 
-:bulb: `sémantique` &rarr; un appel à *`super`*, revient à envoyer un message au receveur courant mais en cherchant la méth. dans la surclasse dans laquelle la méth. a été trouvée.
+:bulb: `spécialisation/redéfinition partielle` &rarr; Redéfinition faisant appel à la méthode redéfinie (masquée) (*<small>`super`</small>*)
 
-### Paramétrage par spécialisation
-:triangular_flag_on_post: **But :** Adapter une méth. à de nouveaux contexte sans modif./duplicat° de son code. (*<small>`méth./classe abstraite`</small>*)
+:bulb: `paramétrage par spécialisation` &rarr; Adapte une méthode à de nouveau contexte sans modif./duplication de code (*<small>`this.myFunction()`</small>*)
 
-### Paramétrage par composition
-:bulb: `affectation polymorphique` &rarr; un type (T), peut être déf. comme un sous-type (ST) d'un autre.
+:bulb: `paramétrage par composition` &rarr; une méthode utilise les méthodes d'une méthode (*<small>`this.p = p; p.myFunction()`</small>*)
 ```java
-// exemple;
-Collection L = new ArrayList();
-// Collection : T
-// ArrayList() : ST
+class Brandade {
+    Brandade(){}
+    toString(){ return "brandade de morue <3"; }
+}
+class itsMagic {
+    Brandade b;
+    awesomeConstructor(Brandade b) { this.b = b; }
+    insaneMethod(){ return b.toString(); }
+}
+
+// insaneMethod est paramétrée par toString() de par le paramètre b
 ```
+
+:bulb: `affectation polymorphique` &rarr; un type (T), peut être déf. comme un sous-type (ST) d'un autre. (*<small>`Collection L = new ArrayList();</small>*)
+
 
 ## Spécificités du typage statique en présence d’affectation polymorphique
