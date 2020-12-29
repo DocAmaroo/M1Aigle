@@ -101,22 +101,24 @@ Ensemble de *théories, méthodes, techniques, outils* permettant de *récupére
 
 :bulb: `spécialisation/redéfinition partielle` &rarr; Redéfinition faisant appel à la méthode redéfinie (masquée) (*<small>`super`</small>*)
 
-:bulb: `paramétrage par spécialisation` &rarr; Adapte une méthode à de nouveau contexte sans modif./duplication de code (*<small>`this.myFunction()`</small>*)
+:bulb: `paramétrage par spécialisation` &rarr; Lors d'un appel d'une méthode d'une sous-classe dans la classe (exemple dans le cours: [voir p10](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/1_reuseAndFrameworks.pdf))
 
-:bulb: `paramétrage par composition` &rarr; une méthode utilise les méthodes d'une méthode (*<small>`this.p = p; p.myFunction()`</small>*)
+
+:bulb: `paramétrage par composition` &rarr; Une méthode utilise les méthodes d'une méthode.
 ```java
 class Brandade {
     Brandade(){}
-    toString(){ return "brandade de morue <3"; }
+    String toString(){ return "brandade de morue <3"; }
 }
-class itsMagic {
+class Classname {
     Brandade b;
-    awesomeConstructor(Brandade b) { this.b = b; }
-    insaneMethod(){ return b.toString(); }
+    Classname(Brandade b) { this.b = b; }
+    String insaneMethod(){ return b.toString(); }
 }
 
 // insaneMethod est paramétrée par toString() de par le paramètre b
 ```
+(autre exemple dans le cours: [voir p10](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/1_reuseAndFrameworks.pdf))
 
 :bulb: `affectation polymorphique` &rarr; un type (T), peut être déf. comme un sous-type (ST) d'un autre. (*<small>`Collection L = new ArrayList();</small>*)
 
