@@ -159,51 +159,54 @@ Si il est nécessaire de créer des classes de données pour tester l'API il fau
 
 ```java
 class MyClassnameTest {
-	
+
 	@Test
-	// init mock
-	MyInterface mock = mock(MyInterface.class);
 
-	// when myMethod is called return ...
-	when(mock.myMethod()).thenReturn(0); // int
-	when(mock.myMethod()).thenThrow(Exception.class); // throws exception
-	doThrow(new Exception()).when(i).myVoidMethod(); // force exception on void method
+	void test() throws Exception {
+		// init mock
+		MyInterface mock = mock(MyInterface.class);
 
-	// Check if it works
-	assertEquals(0, mock.myMethod()); // int
-	assertThrows(Exception.class, i::myMethod); // throws exception
-	assertThrows(Exception.class, i::myVoidMethod); // force exception on void method
+		// when myMethod is called return ...
+		when(mock.myMethod()).thenReturn(0); // int
+		when(mock.myMethod()).thenThrow(Exception.class); // throws exception
+		doThrow(new Exception()).when(i).myVoidMethod(); // force exception on void method
 
-	// mocking with parameters
-	when(mock.myParamMethod(anyInt())).thenReturn(0); // anyInt return 0
-	when(mock.myParamMethod(3)).thenReturn(3); // 3 return 3
-	when(mock.myParamMethod(5)).thenReturn(10); // 5 return 10
-	for (int k=0; k < 10; k++) { System.out.print(mock.myParamMethod(k) + ";"); } // Simple display to verify
+		// Check if it works
+		assertEquals(0, mock.myMethod()); // int
+		assertThrows(Exception.class, i::myMethod); // throws exception
+		assertThrows(Exception.class, i::myVoidMethod); // force exception on void method
 
-			
-	// matcher on param
-	when(mock.myParamMethod(gt(10))).thenReturn(42);
-	when(mock.myParamMethod(leq(10))).thenReturn(0);
+		// mocking with parameters
+		when(mock.myParamMethod(anyInt())).thenReturn(0); // anyInt return 0
+		when(mock.myParamMethod(3)).thenReturn(3); // 3 return 3
+		when(mock.myParamMethod(5)).thenReturn(10); // 5 return 10
+		for (int k=0; k < 10; k++) { System.out.print(mock.myParamMethod(k) + ";"); } // Simple display to verify
 
-	// mock on arrayList
+				
+		// matcher on param
+		when(mock.myParamMethod(gt(10))).thenReturn(42);
+		when(mock.myParamMethod(leq(10))).thenReturn(0);
 
-	ArrayList<String> l1 = new ArrayList<String>(); // l1 = [1, 0, 42]
-	l1.add("1"); l1.add("0"); l1.add("42");
+		// mock on arrayList
 
-	ArrayList<String> l2 = new ArrayList<String>(); // l2 = [1, 0, 5]
-	l2.add("1"); l2.add("0"); l2.add("5");	
+		ArrayList<String> l1 = new ArrayList<String>(); // l1 = [1, 0, 42]
+		l1.add("1"); l1.add("0"); l1.add("42");
 
-	// -- if (array contains 42 || array size = 1) -> return 42
-	when(mock.methodParamArrayList(argThat( 
-		array -> array.contains("42") || array.size() == 1 )
-	)).thenReturn(42);
+		ArrayList<String> l2 = new ArrayList<String>(); // l2 = [1, 0, 5]
+		l2.add("1"); l2.add("0"); l2.add("5");	
 
-	assertEquals(42, mock.methodParamArrayList(l1)); // true
-	assertEquals(42, mock.methodParamArrayList(l2)); // false
+		// -- if (array contains 42 || array size = 1) -> return 42
+		when(mock.methodParamArrayList(argThat( 
+			array -> array.contains("42") || array.size() == 1 )
+		)).thenReturn(42);
+
+		assertEquals(42, mock.methodParamArrayList(l1)); // true
+		assertEquals(42, mock.methodParamArrayList(l2)); // false
 
 
-	// mock verify
-	verify(mock, times(number)).myMethod(); // check if myMethod have been called 'number' times
+		// mock verify
+		verify(mock, times(number)).myMethod(); // check if myMethod have been called 'number' times
+	}
 }
 ```
 
