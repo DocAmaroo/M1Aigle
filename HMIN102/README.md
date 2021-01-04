@@ -21,6 +21,8 @@
 		- [JUnit](#junit)
 		- [Mockito](#mockito)
 	- [Pattern](#pattern)
+	- [Ligne de produits](#ligne-de-produits)
+		- [Modélisation](#modélisation)
 
 ## Liens utiles :
 
@@ -149,14 +151,75 @@ class Classname {
 
 :triangular_flag_on_post: Permet de rédiger et effectuer des tests unitaires. 
 
-Nous pouvons parfois avoir besoin de classes de données pour tester l'API. Pour les créer, nous pouvons utiliser mockito.
+Si il est nécessaire de créer des classes de données pour tester l'API il faudras utiliser mockito.
 
 ### Mockito
 
 :triangular_flag_on_post: Utilisez spécifiquement pour rédiger efficacement certains types de tests, notammment pour créer objets factices.
 
+```java
+// init mock
+MyInterface mock = mock(MyInterface.class);
+
+// when myMethod is called return ...
+when(mock.myMethod()).thenReturn(0); // int
+when(mock.myMethod()).thenThrow(Exception.class); // throws exception
+doThrow(new Exception()).when(i).myVoidMethod(); // force exception on void method
+
+// Check if it works
+assertEquals(0, mock.myMethod()); // int
+assertThrows(Exception.class, i::myMethod); // throws exception
+assertThrows(Exception.class, i::myVoidMethod); // force exception on void method
+
+// mocking with parameters
+when(mock.myParamMethod(anyInt())).thenReturn(0); // anyInt return 0
+when(mock.myParamMethod(3)).thenReturn(3); // 3 return 3
+when(mock.myParamMethod(5)).thenReturn(10); // 5 return 10
+for (int k=0; k < 10; k++) { System.out.print(mock.myParamMethod(k) + ";"); } // Simple display to verify
+
+		
+// matcher on param
+when(mock.myParamMethod(gt(10))).thenReturn(42);
+when(mock.myParamMethod(leq(10))).thenReturn(0);
+
+// mock on arrayList
+
+ArrayList<String> l1 = new ArrayList<String>(); // l1 = [1, 0, 42]
+l1.add("1"); l1.add("0"); l1.add("42");
+
+ArrayList<String> l2 = new ArrayList<String>(); // l2 = [1, 0, 5]
+l2.add("1"); l2.add("0"); l2.add("5");	
+
+// -- if (array contains 42 || array size = 1) -> return 42
+when(mock.methodParamArrayList(argThat( 
+	array -> array.contains("42") || array.size() == 1 )
+)).thenReturn(42);
+
+assertEquals(42, mock.methodParamArrayList(l1)); // true
+assertEquals(42, mock.methodParamArrayList(l2)); // false
+
+
+// mock verify
+verify(mock, times(number)).myMethod(); // check if myMethod have been called 'number' times
+```
 
 ## Pattern
 
-:bulb: `Décorateur` &rarr; Ajout/Modif. d'une fonctionnalité à un objet sans modifier sa classe (ni les instances de celle-ci)
+:bulb: `Décorateur` &rarr; Ajout/Modif. d'une fonctionnalité à un objet sans modifier sa classe (ni les instances de celle-ci). [voir p5](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/4_cpatterns.pdf)
 
+:bulb: `Adaptateur` &rarr; Permet de convertir l'interface d'une classe en une autre interface que le client attend. [voir p9](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/4_cpatterns.pdf)
+
+:bulb: `State` &rarr; Gestion par état. [voir p15 & 16](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/4_cpatterns.pdf)
+
+## Ligne de produits
+
+:triangular_flag_on_post: Permet de créer une collection de produits (ou système logiciel).
+
+Cette méthode permet:
+- augmenter la productivité/qualité
+- diminuer le coût / la main-d'œuvre
+- Rapidement mise en place
+
+### Modélisation
+
+[voir diapo 22](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/5_SPLE.pdf)
