@@ -158,7 +158,7 @@ Si il est nécessaire de créer des classes de données pour tester l'API il fau
 :triangular_flag_on_post: Utilisez spécifiquement pour rédiger efficacement certains types de tests, notammment pour créer objets factices.
 
 ```java
-class Test {
+class MyClassnameTest {
 	@Test
 	// init mock
 	MyInterface mock = mock(MyInterface.class);
