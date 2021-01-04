@@ -1,4 +1,26 @@
-# XQuery
+****# XQuery
+# Element
+```dtd
+<!ELEMENT [NAME] [REG_EXPR] [OPTION]>
+
+<!-- [OPTION] -->
+ANY
+EMPTY
+PCDATA (=text)
+```
+
+# Attribute
+```dtd
+<!ATTLIST [EL_REFERENCE] [NAME] [TYPE] [OPTION]>
+
+<!-- [TYPE] -->
+CDATA
+****
+<!-- [OPTION] -->
+#REQUIRED (for ID & IDREF)
+#IMPLIED
+#FIXED
+```
 
 # Let
 ```xquery
@@ -42,7 +64,7 @@ for $x in P
 
 # Attribute Creation
 ```xquery
-<el attribute = "{ ... Xquery content ... }"> {
+<el attribute = "{ ... Xquery content ...  "> {
     ... XQuery content ...
 }
 </el>
