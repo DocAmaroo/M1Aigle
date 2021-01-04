@@ -21,7 +21,6 @@
 		- [JUnit](#junit)
 		- [Mockito](#mockito)
 	- [Pattern](#pattern)
-	- [Test](#test)
 
 ## Liens utiles :
 
@@ -161,13 +160,3 @@ Nous pouvons parfois avoir besoin de classes de données pour tester l'API. Pour
 
 :bulb: `Décorateur` &rarr; Ajout/Modif. d'une fonctionnalité à un objet sans modifier sa classe (ni les instances de celle-ci)
 
-## Test
-
-!!! note
-
-
-!!! tip
-	```js
-	let test = 0;
-	```
-!!! bug
