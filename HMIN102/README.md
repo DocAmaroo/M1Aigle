@@ -159,6 +159,7 @@ Si il est nécessaire de créer des classes de données pour tester l'API il fau
 
 ```java
 class MyClassnameTest {
+	
 	@Test
 	// init mock
 	MyInterface mock = mock(MyInterface.class);
