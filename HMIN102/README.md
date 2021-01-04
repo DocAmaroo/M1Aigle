@@ -5,23 +5,23 @@
 ## Sommaire
 
 - [HMIN102 - Ingénierie logicielle](#hmin102---ingénierie-logicielle)
-  - [Sommaire](#sommaire)
-  - [Liens utiles :](#liens-utiles-)
-  - [Programme](#programme)
-  - [Réutilisation](#réutilisation)
-    - [Définitions](#définitions)
-  - [Schémas avancés de paramétrage](#schémas-avancés-de-paramétrage)
-    - [Définitions](#définitions-1)
-    - [Entités d'ordre supérieur](#entités-dordre-supérieur)
-  - [Les schémas de réutilisation en PPO](#les-schémas-de-réutilisation-en-ppo)
-    - [Rappels](#rappels)
-    - [Schéma de réutilisations](#schéma-de-réutilisations)
-  - [Application aux 'Frameworks' et 'Lignes de produits'](#application-aux-frameworks-et-lignes-de-produits)
-  - [Framework de test](#framework-de-test)
-    - [JUnit](#junit)
-    - [Mockito](#mockito)
-  - [Pattern](#pattern)
-  - [Test](#test)
+	- [Sommaire](#sommaire)
+	- [Liens utiles :](#liens-utiles-)
+	- [Programme](#programme)
+	- [Réutilisation](#réutilisation)
+		- [Définitions](#définitions)
+	- [Schémas avancés de paramétrage](#schémas-avancés-de-paramétrage)
+		- [Définitions](#définitions-1)
+		- [Entités d'ordre supérieur](#entités-dordre-supérieur)
+	- [Les schémas de réutilisation en PPO](#les-schémas-de-réutilisation-en-ppo)
+		- [Rappels](#rappels)
+		- [Schéma de réutilisations](#schéma-de-réutilisations)
+	- [Application aux 'Frameworks' et 'Lignes de produits'](#application-aux-frameworks-et-lignes-de-produits)
+	- [Framework de test](#framework-de-test)
+		- [JUnit](#junit)
+		- [Mockito](#mockito)
+	- [Pattern](#pattern)
+	- [Test](#test)
 
 ## Liens utiles :
 
@@ -124,13 +124,13 @@ NB : les procédures ne sont pas composables*
 
 ```java
 class Brandade {
-    Brandade(){}
-    String toString(){ return "brandade de morue <3"; }
+		Brandade(){}
+		String toString(){ return "brandade de morue <3"; }
 }
 class Classname {
-    Brandade b;
-    Classname(Brandade b) { this.b = b; }
-    String insaneMethod(){ return b.toString(); }
+		Brandade b;
+		Classname(Brandade b) { this.b = b; }
+		String insaneMethod(){ return b.toString(); }
 }
 
 // insaneMethod est paramétrée par toString() de par le paramètre b
@@ -164,6 +164,10 @@ Nous pouvons parfois avoir besoin de classes de données pour tester l'API. Pour
 ## Test
 
 !!! note
-!!! danger
+
+
 !!! tip
+	```js
+	let test = 0;
+	```
 !!! bug
