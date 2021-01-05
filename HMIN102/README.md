@@ -23,6 +23,8 @@
 	- [Pattern](#pattern)
 	- [Ligne de produits](#ligne-de-produits)
 		- [Modélisation](#modélisation)
+	- [Framework](#framework)
+		- [Framework vs bibliothèque](#framework-vs-bibliothèque)
 
 ## Liens utiles :
 
@@ -164,7 +166,8 @@ class MyClassnameTest {
 
 	void test() throws Exception {
 		// init mock
-		MyInterface mock = mock(MyInterface.class);
+		MyInterface mock = mock(MyInterface.class); 00
+
 
 		// when myMethod is called return ...
 		when(mock.myMethod()).thenReturn(0); // int
@@ -188,7 +191,6 @@ class MyClassnameTest {
 		when(mock.myParamMethod(leq(10))).thenReturn(0);
 
 		// mock on arrayList
-
 		ArrayList<String> l1 = new ArrayList<String>(); // l1 = [1, 0, 42]
 		l1.add("1"); l1.add("0"); l1.add("42");
 
@@ -230,3 +232,62 @@ Cette méthode permet:
 ### Modélisation
 
 [voir diapo 22](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/5_SPLE.pdf)
+
+
+## Framework
+1. Intègre les connaissances d'un domaine
+2. dédiée à la réa. de nouvelle applications du domain visé
+3. dotée d'un cœur (code) **générique, extensible et adaptable**
+
+Le code du framework (pré-existant) invoque **(callback)** les parties de code représentant la nouvelle application en un certains nombres d'endroits prédéfinis nommés **Points d'extensions/paramétrages** (histiquement Hot spot)
+
+
+_exemple_ :
+
+```java
+public abstract class A {
+	public int m1() {
+		if (this.m2(this)) return 1 + this.m3();
+		else               return 1 + this.m4();
+	}
+	public boolean m2(A a) {return true;}
+	public abstract int m3();
+	public abstract int m4();
+}
+
+public class B extends A{
+	public boolean m2(B b) {return false;}	
+	public int m3() { return 1;}	
+	public int m4() { return 2;}	
+	public static void main(String[] args) {
+		A a = new B();
+		System.out.println(a.m1()); 	
+	}
+}
+
+public class C extends A{
+	public boolean m2(A c) {return false;}
+	public int m3() { return 3;}	
+	public int m4() { return 4;}	
+	public static void main(String[] args) {
+		A a = new C();
+		System.out.println(a.m1());	
+	}
+}
+```
+
+- Class A: le code du framework pré-existant (code générique, adaptable et extensible)
+- Class B: une nouvelle application.
+- Class C: une nouvelle application. 
+- Method m2(): point de paramétrage
+
+`Appel au main() de B` &rarr; Appel m2() de A et m4() de B. Affiche 2
+
+`Appel au main() de C` &rarr; Appel m2() et m4() de C. Affiche 5
+
+### Framework vs bibliothèque
+
+1. Une biblio **s'utilise,** un framework **s'étend/se paramètre**
+2. Dans une biblio, le code d'une nouvelle app. invoque le code de la biblio. Un framework invoque le code de la nouvelle app.
+
+
