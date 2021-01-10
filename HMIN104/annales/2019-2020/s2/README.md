@@ -214,6 +214,15 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 
 ### 2. Code VM
 ```lisp
+(JMP E0)
+(LABEL E0)
+(CAR R0 R1)
+
+```
+
+
+
+```lisp
 ; -------------- START
 (JMP <ETAT_INIT>)
 ;ex: (JMP E0)
@@ -225,10 +234,10 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 
 
 ; -------------- SAVE & CHECK
-(CAR R0 R1) ;save l'el. à comparer ds R1
+(CAR R0 R1)	;save l'el. à comparer ds R1
 (CMP R1)	;check si R1 === null
 (BNULL END)	;si vrai, on finis
-(CDR R0 R0) ;sinon le del. de la list
+(CDR R0 R0)	;sinon le del. de la list
 
 
 ; -------------- COMPARE
@@ -236,8 +245,8 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (JEQ <LABEL>)	;si vrai on saute vers le label (ou état) donné
 ;ex: (CMP R1 'a')
 ;    (JEQ E1)
-;	 (JMP ERR)
-; check si a est reconnu, si oui saute sur E1, sinon sort en renvoyant null
+;    (JMP ERR)
+;check si a est reconnu, si oui saute sur E1, sinon sort en renvoyant null
 
 
 ; -------------- ON ERROR
@@ -259,4 +268,10 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 
 ## Question 2
 
-### 1. 
+### 1. Principe de génération
+
+La fonction auto2vm est le résultat de la concaténation de trois fonctions auxiliaire:
+
+1. Permet de se brancher inconditionnellement sur l'état init. en ré-utilisant la fonction auto-init
+2. Permet de réaliser le traitement de chaque état à l'aide d'une fonction map. Celle-ci permet d'appliquer une fonction sur chaque état via auto-etat-liste.
+3. Retourne la liste d'instructions qui termine la VM.
