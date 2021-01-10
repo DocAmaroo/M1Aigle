@@ -217,7 +217,7 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (JMP E0)
 
 ; --- Etat 0
-(LABEL E0)	;nommage
+(LABEL E0)
 (CAR R0 R1)
 (CMP R1)
 (BNULL END)
@@ -230,6 +230,10 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 
 ; --- Etat 1
 (LABEL E1)
+(CAR R0 R1)
+(CMP R1)
+(BNULL ERR)
+(CDR R0 R0)
 ; si c'est un 'b'
 (CMP R1 'b')
 (JEQ E1)
@@ -241,16 +245,107 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 
 ; --- Etat 2
 (LABEL E2)
+(CAR R0 R1)
+(CMP R1)
+(BNULL ERR)
+(CDR R0 R0)
 (CMP R1 'a')
 ; sinon err
 (JMP ERR)
 
+; --- ON ERROR
+(LABEL ERR)
+(MOVE NIL R0)
+(STOP)
+
+; --- ON SUCCESS
 (LABEL END)
 (MOVE R2 R0)
 (STOP)
 ```
 
+## Question 2
 
+### 1. Principe de génération
+
+La fonction auto2vm est le résultat de la concaténation de trois fonctions auxiliaire:
+
+1. Permet de se brancher inconditionnellement sur l'état init. en ré-utilisant la fonction auto-init
+2. Permet de réaliser le traitement de chaque état à l'aide d'une fonction map. Celle-ci permet d'appliquer une fonction sur chaque état via auto-etat-liste.
+3. Retourne la liste d'instructions qui termine la VM.
+
+### 2. Décomposition du problème
+
+```lisp
+(defun auto2vm(auto)
+ (append '(
+	 (jump (auto_init auto))
+	)
+	(vm_etats auto)
+	(vm_auto_ok)
+ )
+)
+
+(defun vm_etats(auto)
+ (apply #'append
+	(map 'list 
+		(vm_etat_callback auto)
+		(auto_etat_liste auto)
+	)
+ )
+)
+
+(defun vm_etats_callback (auto)
+ (lambda (etat)
+ 	(append '((label etat))
+ 		(if (auto_final_p auto etat)
+ 			'(
+				(move etat R2)
+				(cmp R0)
+				(bnull ok)
+ 			)
+			nil ; cas FALSE
+ 		)
+		(vm_read_symbol)
+		(apply #'append
+			(map 'list
+				(vm_transition_callback etat)
+				(auto_trans_list auto etat)
+			)
+		)
+		(vm_auto_not_ok)
+ 	)
+ )
+)
+
+(defun vm_read_symbol()
+ '( (car R0 R1) (cdr R0 R0) )
+)
+
+(defun vm_transition_callback (etat)
+ ;; le parametre transition est un doublet (symbole,etat)
+ (lambda (transition)
+ 	'(
+		(cmp R1 (car transition))
+		(jeq (cdr transition))
+ 	)
+ )
+)
+
+(defun vm_auto_not_ok ()
+ '((move nil R0) (halt))
+)
+
+(defun vm_auto_ok ()
+ '( (label ok) (move R2 R0) (halt))
+)
+```
+
+
+
+
+# Mémo
+## Question 2.1: méthodologie
 
 ```lisp
 ; -------------- START
@@ -286,7 +381,7 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 
 ; -------------- ON SUCCESS
 (LABEL END)
-(MOVE R2 R0)
+(MOVE R2 R0) ;on met l'état final atteint quand le mot a été reconnu dans R0
 (STOP)
 
 
@@ -295,13 +390,3 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (JEQ)  	;saut si égale
 (LABEL)	;étiquette
 ```
-
-## Question 2
-
-### 1. Principe de génération
-
-La fonction auto2vm est le résultat de la concaténation de trois fonctions auxiliaire:
-
-1. Permet de se brancher inconditionnellement sur l'état init. en ré-utilisant la fonction auto-init
-2. Permet de réaliser le traitement de chaque état à l'aide d'une fonction map. Celle-ci permet d'appliquer une fonction sur chaque état via auto-etat-liste.
-3. Retourne la liste d'instructions qui termine la VM.
