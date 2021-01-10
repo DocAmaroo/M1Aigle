@@ -64,23 +64,23 @@ var %0, %1, %2, %3, %4, %5, %6, %7, %8
 entry f1
 f1: newframe -> f2
 f2: move %6, $ra -> f3        ;; Sauvegarde
-f3: move %8, $s0 -> f4	  	  ;; ...
-f4: move %0, $a0 -> f5	  	  ;; ...
-f5: li %1, 0 -> f6			      ;; %1 := 0
-f6: blez %0 -> f7, f8		      ;; if (n <= 0)
+f3: move %8, $s0 -> f4        ;; ...
+f4: move %0, $a0 -> f5        ;; ...
+f5: li %1, 0 -> f6            ;; %1 := 0
+f6: blez %0 -> f7, f8         ;; if (n <= 0)
 ;; then
-f8: mul %2, %0, 2 -> f9		    ;; %2 := 2*n
-f9: addiu %3, %2, -1 -> f10	  ;; %3 := (2*n)-1 
+f8: mul %2, %0, 2 -> f9       ;; %2 := 2*n
+f9: addiu %3, %2, -1 -> f10   ;; %3 := (2*n)-1 
 f10: addiu %4, %0, -1 -> f11  ;; %4 := n-1
-f11: move $a0, %4 -> f12	    ;; $a0 := n-1
-f12: call f(1) -> f13		      ;; appel f(n-1)
-f13: move $s0, $v0 -> f14	    ;; $s0 := f(n-1)
-f14: sub %1, %3, $s0 -> f0 	  ;; %1 := (2*n)-1-f(n-1)
+f11: move $a0, %4 -> f12      ;; $a0 := n-1
+f12: call f(1) -> f13         ;; appel f(n-1)
+f13: move $s0, $v0 -> f14     ;; $s0 := f(n-1)
+f14: sub %1, %3, $s0 -> f0    ;; %1 := (2*n)-1-f(n-1)
 f0: j -> f15
-f15: move $v0, %1 -> f16	    ;; Reset
-f15: move $ra, %6 -> f16	    ;; ...
-f16: move $s0, %8 -> f17	    ;; ...
-f17: delframe -> f18		      ;; end
+f15: move $v0, %1 -> f16      ;; Reset
+f15: move $ra, %6 -> f16      ;; ...
+f16: move $s0, %8 -> f17      ;; ...
+f17: delframe -> f18          ;; end
 f18: jr $ra
 ;; else
 f7: li %1, 0 -> f0            ;; %1 := 0
