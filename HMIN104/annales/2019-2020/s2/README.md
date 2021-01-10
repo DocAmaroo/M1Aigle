@@ -328,10 +328,10 @@ La fonction auto2vm est le résultat de la concaténation de trois fonctions aux
 (defun vm_transition_callback (etat)
  ;; le parametre transition est un doublet (symbole,etat)
  (lambda (transition)
- 	'(
-		(cmp R1 (car transition))
-		(jeq (cdr transition))
- 	)
+  '(
+    (cmp R1 (car transition))
+    (jeq (cdr transition))
+  )
  )
 )
 
