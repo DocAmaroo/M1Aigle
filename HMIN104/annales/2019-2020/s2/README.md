@@ -2,6 +2,7 @@
 1. Que fait la fonction *f* ?
 
 **Test**
+
 f(0) => 0
 
 f(1) => 2 - 0 - 1 = 1
