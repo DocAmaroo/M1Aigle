@@ -1,13 +1,19 @@
 # Exercice 1
 1. Que fait la fonction *f* ?
 
+**Test**
 f(0) => 0
+
 f(1) => 2 - 0 - 1 = 1
+
 f(2) => 2*2 - 1 - 1 = 2
+
 f(3) => 6 - 2 - 1 = 3
+
 f(4) => 8 - 3 - 1 = 4
 
 f est la fonction identité: f(n) => n
+
 Si n < 0 la réponse est indéterminable car appel récursif sur f(-n-1), donc n >= 0.
 
 1. fonction f en PP 
@@ -98,7 +104,7 @@ start ->
 | addu %6, %7, %9 | -> 
 | addu %8, %6, %9 | -> 
 
-1. Analyse durée de vie des variables
+2. Analyse durée de vie des variables
 ```c
 t := 1; 	// {z,v,x}
 u := x;		// {z,t,v,x}
@@ -111,15 +117,15 @@ t := y + u;	// {y,u}
 
 3. Graphe d'interférences
 
-_Arêtes d'interférence_: 
+**Arêtes d'interférence:** 
 
-(t,z), (t,v), (t,x), (t,u)
+(t,z), (t,v), (t,x), (t,u),
 
-(u,z), (u,v)
+(u,z), (u,v),
 
 (y,u), (y,z)
 
-_Arêtes de préférences_:
+**Arêtes de préférences:**
 
 (u,x)
 
