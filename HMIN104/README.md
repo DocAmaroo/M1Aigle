@@ -337,6 +337,7 @@ call f(n) ;;appel proc. f avec n param.
 
 ### Exemples
 Prenons pour exemple la fonction factorielle
+
 Version PP
 ```ocaml
 function f (n : integer) : integer

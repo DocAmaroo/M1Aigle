@@ -4,9 +4,9 @@
 <!ELEMENT [NAME] [REG_EXPR] [OPTION]>
 
 <!-- [OPTION] -->
-ANY
-EMPTY
-PCDATA (=text)
+(#ANY)
+(#EMPTY)
+(#PCDATA) (=text)
 ```
 
 # Attribute
@@ -15,7 +15,7 @@ PCDATA (=text)
 
 <!-- [TYPE] -->
 CDATA
-****
+
 <!-- [OPTION] -->
 #REQUIRED (for ID & IDREF)
 #IMPLIED
