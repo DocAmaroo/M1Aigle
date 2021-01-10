@@ -166,7 +166,9 @@ t := y + u;	// {y,u}
 
 ## 4. Coloriage
 
-Avec **3 couleurs** possible sans spiller
+### Avec 3 couleurs
+
+Il est possible de colorier ce graphe avec 3 couleurs sans spiller:
 
 Etape de retrait des sommets:
 
@@ -183,12 +185,14 @@ et en remontant on obtient un coloriage comme:
 
 :white_circle: {t,y}.
 
-Avec **2 couleurs** il faudras spiller
+### Avec 2 couleurs
+
+Il est impossible de colorier ce graphe avec 2 couleurs sans spiller:
 
 Etape de retrait des sommets:
 
 	1. G\{y}
-	2. G\{y,t} // t est spiller
+	2. G\{y,t} |=> t est spiller
 	3. G\{y,t,v}
 	4. G\{y,t,v,x}
 
