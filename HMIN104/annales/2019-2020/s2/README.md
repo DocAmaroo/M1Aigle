@@ -291,33 +291,33 @@ La fonction auto2vm est le résultat de la concaténation de trois fonctions aux
 
 (defun vm_etats(auto)
  (apply #'append
-	(map 'list 
-		(vm_etat_callback auto)
-		(auto_etat_liste auto)
-	)
+  (map 'list 
+    (vm_etat_callback auto)
+    (auto_etat_liste auto)
+  )
  )
 )
 
 (defun vm_etats_callback (auto)
  (lambda (etat)
- 	(append '((label etat))
- 		(if (auto_final_p auto etat)
- 			'(
-				(move etat R2)
-				(cmp R0)
-				(bnull ok)
- 			)
-			nil ; cas FALSE
- 		)
-		(vm_read_symbol)
-		(apply #'append
-			(map 'list
-				(vm_transition_callback etat)
-				(auto_trans_list auto etat)
-			)
-		)
-		(vm_auto_not_ok)
- 	)
+  (append '((label etat))
+    (if (auto_final_p auto etat)
+      '(
+        (move etat R2)
+        (cmp R0)
+        (bnull ok)
+      )
+      nil ; cas FALSE
+    )
+    (vm_read_symbol)
+    (apply #'append
+      (map 'list
+        (vm_transition_callback etat)
+        (auto_trans_list auto etat)
+      )
+    )
+    (vm_auto_not_ok)
+  )
  )
 )
 
