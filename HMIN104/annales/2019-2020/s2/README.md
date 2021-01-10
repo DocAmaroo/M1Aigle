@@ -147,7 +147,7 @@ u := v;		// {z,t,v}
 y := z + t;	// {u,z,t}
 y := z + u;	// {u,z}
 t := y + u;	// {y,u}
-		// {}
+		// **{t,u}**
 ```
 
 ## 3. Graphe d'interférences
@@ -203,3 +203,60 @@ et en remontant on obtient un coloriage comme:
 :black_circle: {v,z}.
 
 {t} est spiller
+
+# Exercice 3
+
+## Question 1
+
+### 1. Traduction de l'automate
+
+On représente chaque état d'un automate par un label (contenant une adresse) suivis du traitement des transitions sortantes de cet état. Ceci permet de passer aisément entre les différents état avec la méthode JMP.
+
+### 2. Code VM
+```lisp
+; -------------- START
+(JMP <ETAT_INIT>)
+;ex: (JMP E0)
+
+
+; -------------- LABEL
+(LABEL E<n>)
+;ex: (LABEL E0)
+
+
+; -------------- SAVE & CHECK
+(CAR R0 R1) ;save l'el. à comparer ds R1
+(CMP R1)	;check si R1 === null
+(BNULL END)	;si vrai, on finis
+(CDR R0 R0) ;sinon le del. de la list
+
+
+; -------------- COMPARE
+(CMP R1 <CHAR>)	;compare R1 avec le caractère donné
+(JEQ <LABEL>)	;si vrai on saute vers le label (ou état) donné
+;ex: (CMP R1 'a')
+;    (JEQ E1)
+;	 (JMP ERR)
+; check si a est reconnu, si oui saute sur E1, sinon sort en renvoyant null
+
+
+; -------------- ON ERROR
+(LABEL ERR)
+(MOVE NIL R0)
+(STOP)
+
+; -------------- ON SUCCESS
+(LABEL END)
+(MOVE R2 R0)	;save res dans R0
+(STOP)
+
+
+; --- Legendes
+(STOP) 	;arrêt
+(JEQ)  	;saut si égale
+(LABEL)	;étiquette
+```
+
+## Question 2
+
+### 1. 
