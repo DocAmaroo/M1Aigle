@@ -141,13 +141,13 @@ start
 
 ## 2. Analyse durée de vie des variables
 ```c
-t := 1; 	// {z,v,x}
-u := x;		// {z,t,v,x}
-u := v;		// {z,t,v}
-y := z + t;	// {u,z,t}
-y := z + u;	// {u,z}
-t := y + u;	// {y,u}
-                // {t,u}
+t := 1;     // {z,v,x}
+u := x;     // {z,t,v,x}
+u := v;     // {z,t,v}
+y := z + t; // {u,z,t}
+y := z + u; // {u,z}
+t := y + u; // {y,u}
+            // {t,u}
 ```
 
 ## 3. Graphe d'interférences
