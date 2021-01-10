@@ -1,5 +1,5 @@
 # Exercice 1
-1. Que fait la fonction *f* ?
+## 1. Que fait la fonction *f* ?
 
 **Test**
 
@@ -17,7 +17,7 @@ f est la fonction identité: f(n) => n
 
 Si n < 0 la réponse est indéterminable car appel récursif sur f(-n-1), donc n >= 0.
 
-1. fonction f en PP 
+## 2. Fonction f en PP
 
 ```ocaml
 function f(n : integer) : integer
@@ -27,7 +27,7 @@ function f(n : integer) : integer
 		f := (2*n) - f(n-1) - 1
 ```
 
-3. fonction f en UPP
+## 3. Fonction f en UPP
 ```ocaml
 function f(n);
 begin
@@ -39,7 +39,7 @@ begin
 end;
 ```
 
-4. fonction f en RTL
+## 4. Fonction f en RTL
 ```mips
 function f(%0) : %1
 var %0, %1, %2, %3, %4, %5
@@ -57,7 +57,7 @@ f6: sub %1, %3, %5 -> f0 	;; %1 := (2*n)-1-f(n-1)
 f3: li %1, 0 -> f0			;; %1 := 0
 ```
 
-5. fonction f en ERTL
+## 5. Fonction f en ERTL
 ```mips
 procedure f(1)
 var %0, %1, %2, %3, %4, %5, %6, %7, %8
@@ -87,7 +87,7 @@ f7: li %1, 0 -> f0			  ;; %1 := 0
 ```
 
 # Exercice 2
-1. Graphe du flot de contrôle
+## 1. Graphe du flot de contrôle
 
 Soit :
 x -> %5
@@ -105,7 +105,7 @@ start ->
 | addu %6, %7, %9 | -> 
 | addu %8, %6, %9 | -> 
 
-2. Analyse durée de vie des variables
+## 2. Analyse durée de vie des variables
 ```c
 t := 1; 	// {z,v,x}
 u := x;		// {z,t,v,x}
@@ -116,7 +116,7 @@ t := y + u;	// {y,u}
 			// {}
 ```
 
-3. Graphe d'interférences
+## 3. Graphe d'interférences
 
 **Arêtes d'interférence:** 
 
@@ -130,7 +130,7 @@ t := y + u;	// {y,u}
 
 (u,x)
 
-4. Coloriage
+## 4. Coloriage
 
 Avec **3 couleurs** possible sans spiller
 
