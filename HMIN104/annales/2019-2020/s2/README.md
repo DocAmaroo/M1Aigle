@@ -283,7 +283,7 @@ La fonction auto2vm est le résultat de la concaténation de trois fonctions aux
 ```lisp
 (defun auto2vm(auto)
  (append '(
-	 (jump (auto_init auto))
+	(jump (auto_init auto))
 	)
 	(vm_etats auto)
 	(vm_auto_ok)
