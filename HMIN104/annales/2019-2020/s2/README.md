@@ -44,16 +44,15 @@ function f(%0) : %1
 var %0, %1, %2, %3, %4, %5
 entry f1
 exit f0
-f1: li %1, 0 -> f2          ;; %1 := 0
-f2: blez %0 -> f3, f4       ;; if (n <= 0)
+f1: blez %0 -> f2, f3       ;; if (n <= 0)
 ;; then
-f4: mul %2, %0, 2 -> f5     ;; %2 := 2*n
-f5: addiu %3, %2, -1 -> f6  ;; %3 := (2*n)-1 
-f6: addiu %4, %0, -1 -> f7  ;; %4 := n-1
-f7: call %5, f(%4) -> f6    ;; %5 := f(n-1)
-f6: sub %1, %3, %5 -> f0    ;; %1 := (2*n)-1-f(n-1)
+f3: mul %2, %0, 2 -> f4     ;; %2 := 2*n
+f4: addiu %3, %2, -1 -> f5  ;; %3 := (2*n)-1 
+f5: addiu %4, %0, -1 -> f6  ;; %4 := n-1
+f6: call %5, f(%4) -> f7    ;; %5 := f(n-1)
+f7: sub %1, %3, %5 -> f0    ;; %1 := (2*n)-1-f(n-1)
 ;; else
-f3: li %1, 0 -> f0          ;; %1 := 0
+f2: li %1, 0 -> f0          ;; %1 := 0
 ```
 
 ## 5. Fonction f en ERTL
@@ -65,24 +64,23 @@ f1: newframe -> f2
 f2: move %6, $ra -> f3        ;; Sauvegarde
 f3: move %8, $s0 -> f4        ;; ...
 f4: move %0, $a0 -> f5        ;; ...
-f5: li %1, 0 -> f6            ;; %1 := 0
-f6: blez %0 -> f7, f8         ;; if (n <= 0)
+f5: blez %0 -> f6, f7         ;; if (n <= 0)
 ;; then
-f8: mul %2, %0, 2 -> f9       ;; %2 := 2*n
-f9: addiu %3, %2, -1 -> f10   ;; %3 := (2*n)-1 
-f10: addiu %4, %0, -1 -> f11  ;; %4 := n-1
-f11: move $a0, %4 -> f12      ;; $a0 := n-1
-f12: call f(1) -> f13         ;; appel f(n-1)
-f13: move $s0, $v0 -> f14     ;; $s0 := f(n-1)
-f14: sub %1, %3, $s0 -> f0    ;; %1 := (2*n)-1-f(n-1)
-f0: j -> f15
-f15: move $v0, %1 -> f16      ;; Reset
+f7: mul %2, %0, 2 -> f8       ;; %2 := 2*n
+f8: addiu %3, %2, -1 -> f9    ;; %3 := (2*n)-1 
+f9: addiu %4, %0, -1 -> f10   ;; %4 := n-1
+f10: move $a0, %4 -> f11      ;; $a0 := n-1
+f11: call f(1) -> f12         ;; appel f(n-1)
+f12: move $s0, $v0 -> f13     ;; $s0 := f(n-1)
+f13: sub %1, %3, $s0 -> f0    ;; %1 := (2*n)-1-f(n-1)
+f0: j -> f14
+f14: move $v0, %1 -> f15      ;; Reset
 f15: move $ra, %6 -> f16      ;; ...
 f16: move $s0, %8 -> f17      ;; ...
 f17: delframe -> f18          ;; end
 f18: jr $ra
 ;; else
-f7: li %1, 0 -> f0            ;; %1 := 0
+f6: li %1, 0 -> f0            ;; %1 := 0
 ```
 
 # Exercice 2
