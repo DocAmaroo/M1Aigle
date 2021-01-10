@@ -147,7 +147,7 @@ u := v;		// {z,t,v}
 y := z + t;	// {u,z,t}
 y := z + u;	// {u,z}
 t := y + u;	// {y,u}
-            // {t,u}
+			// {t,u}
 ```
 
 ## 3. Graphe d'interférences
@@ -283,41 +283,41 @@ La fonction auto2vm est le résultat de la concaténation de trois fonctions aux
 ```lisp
 (defun auto2vm(auto)
  (append 
-  '((jump (auto_init auto)))
-  (vm_etats auto)
-  (vm_auto_ok)
+	'((jump (auto_init auto)))
+	(vm_etats auto)
+	(vm_auto_ok)
  )
 )
 
 (defun vm_etats(auto)
  (apply #'append
-  (map 'list 
-    (vm_etat_callback auto)
-    (auto_etat_liste auto)
-  )
+	(map 'list 
+		(vm_etat_callback auto)
+		(auto_etat_liste auto)
+	)
  )
 )
 
 (defun vm_etats_callback (auto)
  (lambda (etat)
-  (append '((label etat))
-    (if (auto_final_p auto etat)
-      '(
-        (move etat R2)
-        (cmp R0)
-        (bnull ok)
-      )
-      nil ; cas FALSE
-    )
-    (vm_read_symbol)
-    (apply #'append
-      (map 'list
-        (vm_transition_callback etat)
-        (auto_trans_list auto etat)
-      )
-    )
-    (vm_auto_not_ok)
-  )
+	(append '((label etat))
+		(if (auto_final_p auto etat)
+			'(
+				(move etat R2)
+				(cmp R0)
+				(bnull ok)
+			)
+			nil ; cas FALSE
+		)
+		(vm_read_symbol)
+		(apply #'append
+			(map 'list
+				(vm_transition_callback etat)
+				(auto_trans_list auto etat)
+			)
+		)
+		(vm_auto_not_ok)
+	)
  )
 )
 
@@ -328,10 +328,10 @@ La fonction auto2vm est le résultat de la concaténation de trois fonctions aux
 (defun vm_transition_callback (etat)
  ;; le parametre transition est un doublet (symbole,etat)
  (lambda (transition)
-  '(
-    (cmp R1 (car transition))
-    (jeq (cdr transition))
-  )
+	'(
+		(cmp R1 (car transition))
+		(jeq (cdr transition))
+	)
  )
 )
 
