@@ -147,7 +147,7 @@ u := v;		// {z,t,v}
 y := z + t;	// {u,z,t}
 y := z + u;	// {u,z}
 t := y + u;	// {y,u}
-		      // {t,u}
+      // {t,u}
 ```
 
 ## 3. Graphe d'interférences
