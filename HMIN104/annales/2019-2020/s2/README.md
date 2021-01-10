@@ -21,21 +21,21 @@ Si n < 0 la réponse est indéterminable car appel récursif sur f(-n-1), donc n
 
 ```ocaml
 function f(n : integer) : integer
-	if n <= 0 then
-		f := 0
-	else
-		f := (2*n) - f(n-1) - 1
+  if n <= 0 then
+    f := 0
+  else
+    f := (2*n) - f(n-1) - 1
 ```
 
 ## 3. Fonction f en UPP
 ```ocaml
 function f(n);
 begin
-	f := 0;
-	if n <= 0 then
-		f := 0
-	else
-		f := (2*n) - f(n-1) - 1
+  f := 0;
+  if n <= 0 then
+    f := 0
+  else
+    f := (2*n) - f(n-1) - 1
 end;
 ```
 
