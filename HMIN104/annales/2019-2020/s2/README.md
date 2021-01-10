@@ -215,9 +215,39 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 ### 2. Code VM
 ```lisp
 (JMP E0)
-(LABEL E0)
-(CAR R0 R1)
 
+; --- Etat 0
+(LABEL E0)	;nommage
+(CAR R0 R1)
+(CMP R1)
+(BNULL END)
+(CDR R0 R0)
+; si c'est un 'a'
+(CMP R1 'a')
+(JEQ E1)
+; sinon err
+(JMP ERR)
+
+; --- Etat 1
+(LABEL E1)
+; si c'est un 'b'
+(CMP R1 'b')
+(JEQ E1)
+; sinon si c'est un 'c'
+(CMP R1 'c')
+(JEQ E2)
+; sinon err
+(JMP ERR)
+
+; --- Etat 2
+(LABEL E2)
+(CMP R1 'a')
+; sinon err
+(JMP ERR)
+
+(LABEL END)
+(MOVE R2 R0)
+(STOP)
 ```
 
 
@@ -256,7 +286,7 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 
 ; -------------- ON SUCCESS
 (LABEL END)
-(MOVE R2 R0)	;save res dans R0
+(MOVE R2 R0)
 (STOP)
 
 
