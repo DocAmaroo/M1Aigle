@@ -31,7 +31,6 @@ function f(n : integer) : integer
 ```ocaml
 function f(n);
 begin
-  f := 0;
   if n <= 0 then
     f := 0
   else
