@@ -1,9 +1,9 @@
-# HMIN102 - Compilation et interprétation
+# HMIN104 - Compilation et interprétation
 
 _"D. Delahaye :heart:"_
 
 ## Sommaire
-- [HMIN102 - Compilation et interprétation](#hmin102---compilation-et-interprétation)
+- [HMIN104 - Compilation et interprétation](#hmin104---compilation-et-interprétation)
   - [Sommaire](#sommaire)
   - [Liens utiles :](#liens-utiles-)
   - [Introduction](#introduction)
