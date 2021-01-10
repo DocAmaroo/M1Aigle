@@ -220,6 +220,7 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (LABEL E0)
 (CAR R0 R1)
 (CMP R1)
+; si null => success
 (BNULL END)
 (CDR R0 R0)
 ; si c'est un 'a'
@@ -232,6 +233,7 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (LABEL E1)
 (CAR R0 R1)
 (CMP R1)
+; si null => error
 (BNULL ERR)
 (CDR R0 R0)
 ; si c'est un 'b'
@@ -247,9 +249,11 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (LABEL E2)
 (CAR R0 R1)
 (CMP R1)
+; si null => error
 (BNULL ERR)
 (CDR R0 R0)
 (CMP R1 'a')
+(JEQ E0)
 ; sinon err
 (JMP ERR)
 
