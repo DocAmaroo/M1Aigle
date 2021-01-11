@@ -87,12 +87,12 @@ f19: jr $ra
 Soit :
 | var. name | var. reg |
 | --------- | -------- |
-| x         | %5       |
-| y         | %6       |
-| z         | %7       |
-| t         | %8       |
-| u         | %9       |
-| v         | %10      |
+| x         | %0       |
+| y         | %1       |
+| z         | %2       |
+| t         | %3       |
+| u         | %4       |
+| v         | %5       |
 
 
 start 
@@ -100,39 +100,38 @@ start
 ↓
 
 \----------\
-| li %8, 1 |\
+| li %3, 1 |\
 \----------
 
 ↓
 
 \-----------------\
-| move %9, %5 |\
+| move %4, %0 |\
 \-----------------
 
 ↓
 
 \------------------\
-| move %9, %10 |\
+| move %4, %5 |\
 \------------------
 
 ↓
  
 \---------------------\
-| addu %6, %7, %8 |\
+| addu %1, %2, %3 |\
 \--------------------- 
 
 ↓
 
 \---------------------\
-| addu %6, %7, %9 |\
+| addu %1, %2, %4 |\
 \--------------------- 
 
 ↓
  
 \---------------------\
-| addu %8, %6, %9 |\
+| addu %3, %1, %4 |\
 \--------------------- 
- 
 
 ## 2. Analyse durée de vie des variables
 ```c
@@ -215,41 +214,32 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (LABEL E0)
 (CAR R0 R1)
 (CMP R1)
-; si null => success
 (BNULL END)
 (CDR R0 R0)
-; si c'est un 'a'
 (CMP R1 'a')
 (JEQ E1)
-; sinon err
 (JMP ERR)
 
 ; --- Etat 1
 (LABEL E1)
 (CAR R0 R1)
 (CMP R1)
-; si null => error
 (BNULL ERR)
 (CDR R0 R0)
-; si c'est un 'b'
 (CMP R1 'b')
 (JEQ E1)
-; sinon si c'est un 'c'
 (CMP R1 'c')
 (JEQ E2)
-; sinon err
 (JMP ERR)
 
 ; --- Etat 2
 (LABEL E2)
 (CAR R0 R1)
 (CMP R1)
-; si null => error
 (BNULL ERR)
 (CDR R0 R0)
 (CMP R1 'a')
 (JEQ E0)
-; sinon err
 (JMP ERR)
 
 ; --- ON ERROR
