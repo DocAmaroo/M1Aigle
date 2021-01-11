@@ -188,18 +188,18 @@ Il est impossible de colorier ce graphe avec 2 couleurs sans spiller:
 
 Etape de retrait des sommets:
 
-	1. G\{y}
-	2. G\{y,t} |=> t est spiller
-	3. G\{y,t,v}
-	4. G\{y,t,v,x}
+	1. G\{t}        |=> t est spiller
+	2. G\{t,v}
+	3. G\{t,v,x}
+	4. G\{t,v,x,z}  |=> z est spiller
 
 et en remontant on obtient un coloriage comme:
 
-:red_circle: {u,x,y}.
+:red_circle: {u,x}.
 
-:black_circle: {v,z}.
+:black_circle: {v,y}.
 
-{t} est spiller
+{t,z} est spiller
 
 # Exercice 3
 
