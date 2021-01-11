@@ -24,10 +24,10 @@ Cette fonction additionne les nombres de même paritée.
 ## 2. Fonction *f* en PP
 
 ```ocaml
-function f(n:integer): integer
+function f(n : integer) : integer
 begin
-	if n = 0 
-		then f := 0
+	if n = 0
+	then f := 0
 		else if n = 1 
 			then f := 1
 			else f := n + f(n-2)
