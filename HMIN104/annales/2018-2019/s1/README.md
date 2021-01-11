@@ -54,12 +54,12 @@ var %0, %1, %2, %3, %4
 entry f1
 exit f0
 f1: beq %0, 0 -> f2, f3     ;; (n == 0)
-f2: li %1, %1 -> f0			    ;; return 0
-f3: beq %0, 1 -> f4, f5		  ;; (n == 1)
-f4: li %1, %1 -> f0			    ;; return 1
-f5: addiu %2, %0, -2 -> f6	;; %2 := n-2
-f6: call %3, f(%2) -> f7	  ;; %3 := f(n-2)
-f7: add %4, %0, %3 -> f0	  ;; %4 := n + f(n-2)
+f2: li %1, %1 -> f0         ;; return 0
+f3: beq %0, 1 -> f4, f5     ;; (n == 1)
+f4: li %1, %1 -> f0         ;; return 1
+f5: addiu %2, %0, -2 -> f6  ;; %2 := n-2
+f6: call %3, f(%2) -> f7    ;; %3 := f(n-2)
+f7: add %4, %0, %3 -> f0    ;; %4 := n + f(n-2)
 ```
 
 ## 3. Fonction *f* en ERTL
