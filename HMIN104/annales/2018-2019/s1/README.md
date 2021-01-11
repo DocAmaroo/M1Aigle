@@ -2,13 +2,21 @@
 ## 1. Que fait la fonction *f* ?
 
 f(0) = 0
+
 f(1) = 1
+
 f(2) = 2
+
 f(3) = 4
+
 f(4) = 6
+
 f(5) = 9
+
 f(6) = 12
+
 f(7) = 16
+
 f(8) = 20
 
 Cette fonction additionne les nombres de même paritée.
