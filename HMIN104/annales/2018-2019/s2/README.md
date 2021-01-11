@@ -215,46 +215,41 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (LABEL E0)
 (CAR R0 R1)
 (CMP R1)
-(BNULL ERR)   ;si null => error
+; si null => success
+(BNULL END)
 (CDR R0 R0)
-(CMP R1 'a')  ;si c'est un 'a'
-(JEQ E3)      ;saute à l'état 3
-(CMP R1 'b')  ;si c'est un 'b'
-(JEQ E1)      ;saute à l'état 1
-(JMP ERR)     ;sinon erreur
+; si c'est un 'a'
+(CMP R1 'a')
+(JEQ E1)
+; sinon err
+(JMP ERR)
 
 ; --- Etat 1
 (LABEL E1)
 (CAR R0 R1)
 (CMP R1)
+; si null => error
 (BNULL ERR)
 (CDR R0 R0)
-(CMP R1 'a')
-(JEQ E3)
+; si c'est un 'b'
 (CMP R1 'b')
 (JEQ E1)
+; sinon si c'est un 'c'
+(CMP R1 'c')
+(JEQ E2)
+; sinon err
 (JMP ERR)
 
 ; --- Etat 2
 (LABEL E2)
 (CAR R0 R1)
 (CMP R1)
+; si null => error
 (BNULL ERR)
 (CDR R0 R0)
 (CMP R1 'a')
 (JEQ E0)
-(CMP R1 'b')
-(JEQ E2)
-(JMP ERR)
-
-; --- Etat 3
-(LABEL E2)
-(CAR R0 R1)
-(CMP R1)
-(BNULL END)
-(CDR R0 R0)
-(CMP R1 'b')
-(JEQ E2)
+; sinon err
 (JMP ERR)
 
 ; --- ON ERROR
@@ -266,12 +261,6 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (LABEL END)
 (MOVE R2 R0)
 (STOP)
-
-
-; --- Legendes
-(STOP) 	;arrêt
-(JEQ)  	;saut si égale
-(LABEL)	;étiquette
 ```
 
 ## Question 2
