@@ -59,11 +59,11 @@ f2: li %1, 0 -> f0          ;; %1 := 0
 ## 5. Fonction *f* en ERTL
 ```mips
 procedure f(1)
-var %0, %1, %2, %3, %4, %5, %6, %7, %8
+var %0, %1, %2, %3, %4, %5, %6, %7
 entry f1
 f1: newframe -> f2
 f2: move %6, $ra -> f3        ;; Sauvegarde
-f3: move %8, $s0 -> f4        ;; ...
+f3: move %7, $s0 -> f4        ;; ...
 f4: move %0, $a0 -> f5        ;; ...
 f5: blez %0 -> f6, f7         ;; if (n <= 0)
 f6: li %1, 0 -> f7            ;; %1 := 0
@@ -77,7 +77,7 @@ f13: move $s0, $v0 -> f14     ;; $s0 := f(n-1)
 f14: sub %1, %3, $s0 -> f15   ;; %1 := (2*n)-1-f(n-1)
 f15: move $v0, %1 -> f16      ;; Reset
 f16: move $ra, %6 -> f17      ;; ...
-f17: move $s0, %8 -> f18      ;; ...
+f17: move $s0, %7 -> f18      ;; ...
 f18: delframe -> f19          ;; end
 f19: jr $ra
 ```
