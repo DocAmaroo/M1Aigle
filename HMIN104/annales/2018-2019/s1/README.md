@@ -26,7 +26,7 @@ Cette fonction additionne les nombres de même paritée.
 ```ocaml
 function f(n : integer) : integer
 begin
-	if n = 0
+if n = 0
 	then f := 0
 		else if n = 1 
 			then f := 1
