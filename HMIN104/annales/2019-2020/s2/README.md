@@ -17,17 +17,19 @@ f est la fonction identité: f(n) => n
 
 Si n < 0 la réponse est indéterminable car appel récursif sur f(-n-1), donc n >= 0.
 
-## 2. Fonction f en PP
+## 2. Fonction *f* en PP
 
 ```ocaml
 function f(n : integer) : integer
+begin
   if n <= 0 then
     f := 0
   else
     f := (2*n) - f(n-1) - 1
+end;
 ```
 
-## 3. Fonction f en UPP
+## 3. Fonction *f* en UPP
 ```ocaml
 function f(n);
 begin
@@ -38,7 +40,7 @@ begin
 end;
 ```
 
-## 4. Fonction f en RTL
+## 4. Fonction *f* en RTL
 ```mips
 function f(%0) : %1
 var %0, %1, %2, %3, %4, %5
@@ -55,7 +57,7 @@ f7: sub %1, %3, %5 -> f0    ;; %1 := (2*n)-1-f(n-1)
 f2: li %1, 0 -> f0          ;; %1 := 0
 ```
 
-## 5. Fonction f en ERTL
+## 5. Fonction *f* en ERTL
 ```mips
 procedure f(1)
 var %0, %1, %2, %3, %4, %5, %6, %7, %8
@@ -87,12 +89,12 @@ f19: jr $ra
 Soit :
 | var. name | var. reg |
 | --------- | -------- |
-| x         | %5       |
-| y         | %6       |
-| z         | %7       |
-| t         | %8       |
-| u         | %9       |
-| v         | %10      |
+| x         | %0       |
+| y         | %1       |
+| z         | %2       |
+| t         | %3       |
+| u         | %4       |
+| v         | %5       |
 
 
 start 
@@ -100,37 +102,37 @@ start
 ↓
 
 \----------\
-| li %8, 1 |\
+| li %3, 1 |\
 \----------
 
 ↓
 
 \-----------------\
-| move %9, %5 |\
+| move %4, %0 |\
 \-----------------
 
 ↓
 
 \------------------\
-| move %9, %10 |\
+| move %4, %5 |\
 \------------------
 
 ↓
  
 \---------------------\
-| addu %6, %7, %8 |\
+| addu %1, %2, %3 |\
 \--------------------- 
 
 ↓
 
 \---------------------\
-| addu %6, %7, %9 |\
+| addu %1, %2, %4 |\
 \--------------------- 
 
 ↓
  
 \---------------------\
-| addu %8, %6, %9 |\
+| addu %3, %1, %4 |\
 \--------------------- 
  
 
@@ -208,6 +210,7 @@ et en remontant on obtient un coloriage comme:
 On représente chaque état d'un automate par un label (contenant une adresse) suivis du traitement des transitions sortantes de cet état. Ceci permet de passer aisément entre les différents état avec la méthode JMP.
 
 ### 2. Code VM
+
 ```lisp
 (JMP E0)
 
