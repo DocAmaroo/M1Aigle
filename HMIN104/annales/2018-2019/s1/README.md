@@ -227,7 +227,7 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (BNULL ERR)   ;si null => error
 (CDR R0 R0)
 (CMP R1 'a')  ;si c'est un 'a'
-(JMP E1)      ;saute à l'état 1
+(JEQ E1)      ;saute à l'état 1
 (JMP ERR)     ;sinon erreur
 
 ; --- Etat 1
@@ -239,7 +239,7 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (CMP R1 'a')
 (JEQ E1)
 (CMP R1 'b')
-(JMP E2)
+(JEQ E2)
 (JMP ERR)
 
 ; --- Etat 2
@@ -249,7 +249,7 @@ On représente chaque état d'un automate par un label (contenant une adresse) s
 (BNULL ERR)
 (CDR R0 R0)
 (CMP R1 'b')
-(JMP E1)
+(JEQ E1)
 (JMP ERR)
 
 ; --- ON ERROR
