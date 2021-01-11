@@ -460,7 +460,6 @@ j := b         // ➦ {d,k,b}
 
 :bulb: `Arête de préférence` &rarr; relie deux var. (sommets) reliée par une intr. move.
 
-
 :bulb: `Interférence` &rarr; Deux var. interfèrent si l'une est vivante à la sortie d'une instr. qui définit l'autre
 
 :bulb: `Préférence` &rarr; Si une var. y est vivante à la sortie d'une instr. qui définit une var. x et dont la valeur reçu dans x et celle de y (x := y, c'est une instr. move).

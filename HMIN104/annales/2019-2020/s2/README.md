@@ -4,8 +4,6 @@
 
 ## 1. Que fait la fonction *f* ?
 
-**Test**
-
 f(0) => 0
 
 f(1) => 2 - 0 - 1 = 1
@@ -17,8 +15,6 @@ f(3) => 6 - 2 - 1 = 3
 f(4) => 8 - 3 - 1 = 4
 
 f est la fonction identité: f(n) => n
-
-Si n < 0 la réponse est indéterminable car appel récursif sur f(-n-1), donc n >= 0.
 
 ## 2. Fonction *f* en PP
 
@@ -100,43 +96,7 @@ Soit :
 | v         | %5       |
 
 
-start 
-
-↓
-
-\----------\
-| li %3, 1 |\
-\----------
-
-↓
-
-\-----------------\
-| move %4, %0 |\
-\-----------------
-
-↓
-
-\------------------\
-| move %4, %5 |\
-\------------------
-
-↓
- 
-\---------------------\
-| addu %1, %2, %3 |\
-\--------------------- 
-
-↓
-
-\---------------------\
-| addu %1, %2, %4 |\
-\--------------------- 
-
-↓
- 
-\---------------------\
-| addu %3, %1, %4 |\
-\--------------------- 
+start &rarr; | li %3, 1 | &rarr; | move %4, %0 | &rarr; | move %4, %5 | &rarr; | addu %1, %2, %3 | &rarr; | addu %1, %2, %4 | &rarr; | addu %3, %1, %4 |
  
 
 ## 2. Analyse durée de vie des variables
@@ -354,54 +314,4 @@ La fonction auto2vm est le résultat de la concaténation de trois fonctions aux
 (defun vm_auto_ok ()
  '( (label ok) (move R2 R0) (halt))
 )
-```
-
-
-
-
-# Mémo
-## Question 2.1: méthodologie
-
-```lisp
-; -------------- START
-(JMP <ETAT_INIT>)
-;ex: (JMP E0)
-
-
-; -------------- LABEL
-(LABEL E<n>)
-;ex: (LABEL E0)
-
-
-; -------------- SAVE & CHECK
-(CAR R0 R1)	;save l'el. à comparer ds R1
-(CMP R1)	;check si R1 === null
-(BNULL END)	;si vrai, on finis
-(CDR R0 R0)	;sinon le del. de la list
-
-
-; -------------- COMPARE
-(CMP R1 <CHAR>)	;compare R1 avec le caractère donné
-(JEQ <LABEL>)	;si vrai on saute vers le label (ou état) donné
-;ex: (CMP R1 'a')
-;    (JEQ E1)
-;    (JMP ERR)
-;check si a est reconnu, si oui saute sur E1, sinon sort en renvoyant null
-
-
-; -------------- ON ERROR
-(LABEL ERR)
-(MOVE NIL R0)
-(STOP)
-
-; -------------- ON SUCCESS
-(LABEL END)
-(MOVE R2 R0) ;on met l'état final atteint quand le mot a été reconnu dans R0
-(STOP)
-
-
-; --- Legendes
-(STOP) 	;arrêt
-(JEQ)  	;saut si égale
-(LABEL)	;étiquette
 ```
