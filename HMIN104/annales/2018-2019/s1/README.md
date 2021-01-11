@@ -26,11 +26,11 @@ Cette fonction additionne les nombres de même paritée.
 ```ocaml
 function f(n : integer) : integer
 begin
-if n = 0
-	then f := 0
-		else if n = 1 
-			then f := 1
-			else f := n + f(n-2)
+  if n = 0
+  then f := 0
+    else if n = 1 
+      then f := 1
+      else f := n + f(n-2)
 end;
 ```
 
