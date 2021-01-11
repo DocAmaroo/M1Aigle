@@ -53,13 +53,13 @@ function f(%0) : %1
 var %0, %1, %2, %3, %4
 entry f1
 exit f0
-f1: beq %0, 0 -> f2, f3 		;; (n == 0)
-f2: li %1, %1 -> f0			;; return 0
-f3: beq %0, 1 -> f4, f5		;; (n == 1)
-f4: li %1, %1 -> f0			;; return 1
+f1: beq %0, 0 -> f2, f3     ;; (n == 0)
+f2: li %1, %1 -> f0			    ;; return 0
+f3: beq %0, 1 -> f4, f5		  ;; (n == 1)
+f4: li %1, %1 -> f0			    ;; return 1
 f5: addiu %2, %0, -2 -> f6	;; %2 := n-2
-f6: call %3, f(%2) -> f7	;; %3 := f(n-2)
-f7: add %4, %0, %3 -> f0	;; %4 := n + f(n-2)
+f6: call %3, f(%2) -> f7	  ;; %3 := f(n-2)
+f7: add %4, %0, %3 -> f0	  ;; %4 := n + f(n-2)
 ```
 
 ## 3. Fonction *f* en ERTL
@@ -68,25 +68,25 @@ procedure f(1)
 var %0, %1, %2, %3, %4, %5, %6
 entry f1
 f1: newframe -> f2
-f2: move %4, $ra -> f3			;; Save...
+f2: move %4, $ra -> f3			  ;; Save...
 f3: move %5, $a0 -> f4
 f4: move %6, $s0 -> f5
 f5: beq %0, $r0 -> f6, f8 		;; (n == 0)
-f6: li %1, $r0 -> f7			;; return 0
+f6: li %1, $r0 -> f7			    ;; return 0
 f7: j -> f
-f8: beq %0, 1 -> f9, f11		;; (n == 1)
-f9: li %1, 1 -> f10				;; return 1
+f8: beq %0, 1 -> f9, f11		  ;; (n == 1)
+f9: li %1, 1 -> f10				    ;; return 1
 f10: j -> f
 f11: addiu %2, %0, -2 -> f12	;; %2 := n-2
 f12: move $a0, %2 -> f13
-f13: call f(1) -> f14			;; appel f(n-2)
+f13: call f(1) -> f14			    ;; appel f(n-2)
 f14: move $s0, $v0 -> f15
 f15: add %3, %0, $s0 -> f16		;; %3 := n + f(n-2)
-f16 : move $v0, %1 -> f17		;; Reset...
+f16 : move $v0, %1 -> f17		  ;; Reset...
 f17 : move $ra, %4 -> f18
 f18 : move $a0, %5 -> f19
 f19 : move $s0, %6 -> f20
-f20 : delframe -> f21			;; end
+f20 : delframe -> f21			    ;; end
 f21: jr $ra
 ```
 
