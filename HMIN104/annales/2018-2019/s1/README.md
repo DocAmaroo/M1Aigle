@@ -38,11 +38,11 @@ end;
 ```ocaml
 function f(n)
 begin
-	if n = 0 
-		then f := 0
-		else if n = 1 
-			then f := 1
-			else f := n + f(n-2)
+  if n = 0 
+  then f := 0
+    else if n = 1 
+      then f := 1
+      else f := n + f(n-2)
 end;
 ```
 
