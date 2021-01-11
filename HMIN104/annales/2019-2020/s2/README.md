@@ -1,4 +1,7 @@
+# HMIN104 - Session 2 2019/2020
+
 # Exercice 1
+
 ## 1. Que fait la fonction *f* ?
 
 **Test**
