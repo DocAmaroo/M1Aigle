@@ -43,7 +43,7 @@ Pour plus d'info [voir schéma diapo 16](https://github.com/DocAmaroo/M1Aigle/bl
 
 ### Fichier de configuration *(Manifest)*
 
-:orange_book: Le Manifest est un fichier xml contenant:
+:bulb: `Manifest` &rarr; Fichier xml contenant:
 
 - Point d'entrée (code exécuté au démarrage de l'application)
 - Composants du programme (activités, services...)
