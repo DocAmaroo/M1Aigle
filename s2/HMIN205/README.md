@@ -9,6 +9,7 @@
 		- [Couches](#couches)
 		- [Fichier de configuration *(Manifest)*](#fichier-de-configuration-manifest)
 		- [Composants](#composants)
+		- [Activité](#activité)
 
 ## Notes et liens utiles
 
@@ -49,6 +50,8 @@ Pour plus d'info [voir schéma diapo 16](https://github.com/DocAmaroo/M1Aigle/bl
 - Composants du programme (activités, services...)
 - Permissions
 
+Exemple [voir diapo 21](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN205/cours/Cours1_2021.pdf)
+
 ### Composants
 Les composants peuvent être classé en deux type d'éléments, applicatifs et intéractif.
 
@@ -59,7 +62,7 @@ Les composants peuvent être classé en deux type d'éléments, applicatifs et i
 | Fournisseur de contenu | Notification        |
 | Widget                 |                     |
 
-#### Activité (vues)
+### Activité
 
 :bulb: `Activité` &rarr; C'est ce que l'on voit sur l'écran. Composé d'une hiérarchie de *vues* (comme sous Angular/React/VueJs...) qui affichent des interfaces graphiques et répondent aux actions utilisateurs.
 
