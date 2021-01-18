@@ -3,13 +3,13 @@
 ## Sommaire
 
 - [HMIN205 - Développement logiciel pour mobiles](#hmin205---développement-logiciel-pour-mobiles)
-	- [Sommaire](#sommaire)
-	- [Notes et liens utiles](#notes-et-liens-utiles)
-	- [Architecture Android](#architecture-android)
-		- [Couches](#couches)
-		- [Fichier de configuration *(Manifest)*](#fichier-de-configuration-manifest)
-		- [Composants](#composants)
-		- [Activité](#activité)
+  - [Sommaire](#sommaire)
+  - [Notes et liens utiles](#notes-et-liens-utiles)
+  - [Architecture Android](#architecture-android)
+    - [Couches](#couches)
+    - [Fichier de configuration *(Manifest)*](#fichier-de-configuration-manifest)
+    - [Composants](#composants)
+    - [Activité](#activité)
 
 ## Notes et liens utiles
 
@@ -105,5 +105,3 @@ Version déclarative (xml)
 	</activity>
 </application>
 ```
-
-prout
