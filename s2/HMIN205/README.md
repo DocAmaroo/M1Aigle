@@ -68,10 +68,40 @@ Les composants peuvent être classé en deux type d'éléments, applicatifs et i
 
 Une activité est composée en deux parties :
 
-- Sa logique métier et gestion de son cycle de vie
+- Sa logique métier et la gestion de son cycle de vie
   > Implémenté en Java dans une classe héritant de *Activity*
 
 - Son interface utilisateur, pouvant être définis de deux façons:
-  - Programmative: dans le code de l'activité
-  - Déclarative: dans un fichier XML
-  
+  - *Programmative* &rarr; dans le code de l'activité
+  - *Déclarative* &rarr; dans un fichier XML
+
+:pencil2: Exemple
+
+Version programmative (java)
+```java
+import android.app.Activity;
+import android.os.Bundle;
+
+public class ActiviteBasic extends Activity{
+	//méthode OnCreate appelée à la création de l'activité 
+	public void onCreate(Bundle etatSauvegarde){
+		super.onCreate(etatSauvegarde); 
+	}
+}
+```
+
+Version déclarative (xml)
+```xml
+<application ...>
+	<activity 
+		android:name=".ClassDeLactivite"
+		android:label="nom_de_l_activite"
+		android:icon="@drawable/nom_du_fichier_icone"
+	>
+		<intent-filter>
+			<action android:name="android.intent.action.MAIN"/>
+			<category android:name="android.intent.category.LAUNCHER"/>
+		</intent-filter>
+	</activity>
+</application>
+```
