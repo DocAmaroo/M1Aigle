@@ -84,9 +84,9 @@ import android.os.Bundle;
 
 public class ActiviteBasic extends Activity{
 	//méthode OnCreate appelée à la création de l'activité 
-	public void onCreate(Bundle etatSauvegarde){
-		super.onCreate(etatSauvegarde); 
-	}
+  public void onCreate(Bundle etatSauvegarde){
+    super.onCreate(etatSauvegarde); 
+  }
 }
 ```
 
