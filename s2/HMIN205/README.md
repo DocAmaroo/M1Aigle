@@ -94,9 +94,9 @@ Version déclarative (xml)
 ```xml
 <application ...>
   <activity 
-		android:name=".ClassDeLactivite"
-		android:label="nom_de_l_activite"
-		android:icon="@drawable/nom_du_fichier_icone"
+    android:name=".ClassDeLactivite"
+    android:label="nom_de_l_activite"
+    android:icon="@drawable/nom_du_fichier_icone"
   >
     <intent-filter>
       <action android:name="android.intent.action.MAIN"/>
