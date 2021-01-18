@@ -75,7 +75,7 @@ Une activité est composée en deux parties :
   - *Programmative* &rarr; dans le code de l'activité
   - *Déclarative* &rarr; dans un fichier XML
 
-:pencil2: Exemple
+:pencil2: Exemple *(minimaliste)*
 
 Version programmative (java)
 ```java
