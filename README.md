@@ -8,36 +8,29 @@
 </p>
 
 # Semestre 1
-:books: [HMIN102 - Ingénierie logicielle](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN102 "HMIN102 courses")
+:books: [HMIN102 - Ingénierie logicielle](https://github.com/DocAmaroo/M1Aigle/s1/tree/master/HMIN102 "HMIN102 courses")
 
-:books: [HMIN103 - Données du Web](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN103 "HMIN103 courses")
+:books: [HMIN103 - Données du Web](https://github.com/DocAmaroo/M1Aigle/s1/tree/master/HMIN103 "HMIN103 courses")
 
-:books: [HMIN104 - Compilation et Interprétation](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN104 "HMIN104 courses")
+:books: [HMIN104 - Compilation et Interprétation](https://github.com/DocAmaroo/M1Aigle/s1/tree/master/HMIN104 "HMIN104 courses")
 
-:books: [HMIN105 - Principe de la programmation concurrente](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN105 "HMIN105 courses")
+:books: [HMIN105 - Principe de la programmation concurrente](https://github.com/DocAmaroo/M1Aigle/s1/tree/master/HMIN105 "HMIN105 courses")
 
-:books: [HMIN122M - Entrepôts de données et big-data](https://github.com/DocAmaroo/M1Aigle/tree/master/HMIN122M "HMIN122M courses")
+:books: [HMIN122M - Entrepôts de données et big-data](https://github.com/DocAmaroo/M1Aigle/s1/tree/master/HMIN122M "HMIN122M courses")
 
 # Semestre 2
+:books: [HMIN204 - Conduite de projet](https://github.com/DocAmaroo/M1Aigle/s2/tree/master/HMIN102 "HMIN204 courses")
 
-:construction:
+:books: [HMIN205 - Développement logiciel pour mobiles](https://github.com/DocAmaroo/M1Aigle/s2/tree/master/HMIN205 "HMIN205 courses")
+
+:books: [HMIN210 - Architecture logicielles distribuées](https://github.com/DocAmaroo/M1Aigle/s2/tree/master/HMIN104 "HMIN210 courses")
+
+:books: [HMIN224 - Algorithmique distribuée](https://github.com/DocAmaroo/M1Aigle/s2/tree/master/HMIN224 "HMIN224 courses")
+
+:books: [HMIN233 - Algorithmique d'exploration et de mouvement](https://github.com/DocAmaroo/M1Aigle/s2/tree/master/HMIN233 "HMIN233 courses")
 
 
 # TODO LIST
 
-:triangular_flag_on_post: **HMIN102** 
-
-:triangular_flag_on_post: **HMIN103** 
-
 :triangular_flag_on_post: **HMIN104** 
-- [ ] revoir MIPS
-
-:triangular_flag_on_post: **HMIN105** 
-- [ ] faire thread et files
-- [ ] faire des notes sur les threads et files
-
-:triangular_flag_on_post: **HMIN122M** 
-
-
-:triangular_flag_on_post: **English** 
-- [ ] Exsports : faire la pubs
+- [ ] Rendre le projet LISP
