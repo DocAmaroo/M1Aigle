@@ -46,9 +46,11 @@ Pour plus d'info [voir schéma diapo 16](https://github.com/DocAmaroo/M1Aigle/bl
 
 :bulb: `Manifest` &rarr; Fichier xml contenant:
 
-- Point d'entrée (code exécuté au démarrage de l'application)
-- Composants du programme (activités, services...)
-- Permissions
+> Point d'entrée (code exécuté au démarrage de l'application)
+>
+> Composants du programme (activités, services...)
+> 
+> Permissions
 
 Exemple [voir diapo 21](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN205/cours/Cours1_2021.pdf)
 
