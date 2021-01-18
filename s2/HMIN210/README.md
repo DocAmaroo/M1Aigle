@@ -9,6 +9,7 @@
 	- [Introduction](#introduction)
 		- [Définitions](#définitions)
 	- [Principes](#principes)
+		- [Architecture](#architecture)
 
 ## Liens utiles
 
@@ -22,11 +23,11 @@
 
 ### Définitions
 
-:bulb: `Middleware` &rarr; Ce qui permet la communication client-serveur à l'aide service.
+:bulb: `Middleware` &rarr; Ce qui permet la communication client-serveur à l'aide services.
 
-:bulb: `Proxy` &rarr; Intermédiaire client-serveur. Il récupère les requêtes client, encapsule la méthode (sous forme d'objet) dans un squellette (*skeleton*).
+:bulb: `Proxy` &rarr; Intermédiaire client-serveur. Il récupère les requêtes client, encapsule la méthode (sous forme d'objet) dans un squelette (*skeleton*).
 
-:bulb: `Skeleton` &rarr; Invoque et renvoie le résultat de la méthode reçu au proxy.
+:bulb: `Skeleton` &rarr; Invoque et renvoie le résultat, de la méthode reçu, au proxy.
 
 ## Principes
 
@@ -36,4 +37,16 @@
 
 :triangular_flag_on_post: Intéragir avec un objet distant comme s'il était en local.
 
-voir [Schéma général](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN210/cours/coursRMI.pdf) | diapo 14
+voir [Schéma général](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN210/cours/coursRMI.pdf) | diapo 14
+
+### Architecture
+
+#### Client: Proxy
+
+#### Server: skeleton
+
+
+#### Passage de paramètres
+- valeur primitif
+- objet d'une classe Serialisable
+- objet d'une classe implémentant l'interface Remote
