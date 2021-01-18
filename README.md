@@ -19,11 +19,11 @@
 :books: [HMIN122M - Entrepôts de données et big-data](https://github.com/DocAmaroo/M1Aigle/tree/master/s1/HMIN122M "HMIN122M courses")
 
 # Semestre 2
-:books: [HMIN204 - Conduite de projet](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN102 "HMIN204 courses")
+:books: [HMIN204 - Conduite de projet](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN204 "HMIN204 courses")
 
 :books: [HMIN205 - Développement logiciel pour mobiles](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN205 "HMIN205 courses")
 
-:books: [HMIN210 - Architecture logicielles distribuées](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN104 "HMIN210 courses")
+:books: [HMIN210 - Architecture logicielles distribuées](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN210 "HMIN210 courses")
 
 :books: [HMIN224 - Algorithmique distribuée](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN224 "HMIN224 courses")
 
