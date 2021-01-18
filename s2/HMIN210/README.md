@@ -36,4 +36,4 @@
 
 :triangular_flag_on_post: Intéragir avec un objet distant comme s'il était en local.
 
-Visuellement voir [Schéma général](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN210/cours/coursRMI.pdf)
+voir [Schéma général](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN210/cours/coursRMI.pdf) | diapo 14
