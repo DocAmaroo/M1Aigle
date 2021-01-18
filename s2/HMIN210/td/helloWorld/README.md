@@ -61,3 +61,7 @@ Naming.bind jette une exeception `AlreadyBoundException` si le nom est déjà ut
 Naming.rebind remplace dans ce cas l'ancien obj. associé par le nouveau passé en param.
 
 # Question 8
+
+Çà fonctionne correctement
+
+# Question 9

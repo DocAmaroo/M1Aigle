@@ -45,7 +45,6 @@ voir [Schéma général](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMI
 
 #### Server: skeleton
 
-
 #### Passage de paramètres
 - valeur primitif
 - objet d'une classe Serialisable
