@@ -1,6 +1,9 @@
 # Question 1
 
 ```bash
+# On compile
+javac helloWorld/*.java
+
 # On lance le registre 
 # Il tourne sur une JVM tierce en localhost:1099
 rmigestry &
@@ -19,6 +22,7 @@ Si on commente la ligne 15 et décommente la ligne 14, alors le registre est lan
 
 Pour lancer le serveur et le client :
 ```bash
+javac helloWorld/*.java
 java helloWorld.Server
 java helloWorld.Client 1099
 ```
@@ -49,7 +53,6 @@ A cause du bind:
 - `RemoteException`
 - `AccessException`
 - `NullPointerException`
-
 
 
 # Question 7
