@@ -68,10 +68,11 @@ Les composants peuvent être classé en deux type d'éléments, applicatifs et i
 
 Une activité est composée en deux parties :
 
-:one: Sa logique métier et gestion de son cycle de vie
-  - Implémenté en Java dans une classe héritant de *Activity*
+- Sa logique métier et gestion de son cycle de vie
+  > Implémenté en Java dans une classe héritant de *Activity*
 
-:two: Son interface utilisateur, pouvant être définis de deux façons
-  - Programmative: dans le code de l'activité
-  - Déclarative: dans un fichier XML
+- Son interface utilisateur, pouvant être définis de deux façons
+  > Programmative: dans le code de l'activité
+	>
+  > Déclarative: dans un fichier XML
   
