@@ -71,8 +71,7 @@ Une activité est composée en deux parties :
 - Sa logique métier et gestion de son cycle de vie
   > Implémenté en Java dans une classe héritant de *Activity*
 
-- Son interface utilisateur, pouvant être définis de deux façons
-  > Programmative: dans le code de l'activité
-	>
-  > Déclarative: dans un fichier XML
+- Son interface utilisateur, pouvant être définis de deux façons:
+  - Programmative: dans le code de l'activité
+  - Déclarative: dans un fichier XML
   
