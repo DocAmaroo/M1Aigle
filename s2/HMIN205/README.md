@@ -93,15 +93,15 @@ public class ActiviteBasic extends Activity{
 Version déclarative (xml)
 ```xml
 <application ...>
-	<activity 
+  <activity 
 		android:name=".ClassDeLactivite"
 		android:label="nom_de_l_activite"
 		android:icon="@drawable/nom_du_fichier_icone"
-	>
-		<intent-filter>
-			<action android:name="android.intent.action.MAIN"/>
-			<category android:name="android.intent.category.LAUNCHER"/>
-		</intent-filter>
-	</activity>
+  >
+    <intent-filter>
+      <action android:name="android.intent.action.MAIN"/>
+      <category android:name="android.intent.category.LAUNCHER"/>
+    </intent-filter>
+  </activity>
 </application>
 ```
