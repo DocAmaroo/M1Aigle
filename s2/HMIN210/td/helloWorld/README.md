@@ -29,7 +29,7 @@ java helloWorld.Client 1099
 
 # Question 3
 
-| step | side    | response                         |
+| step | side    | result                           |
 | ---- | ------- | -------------------------------- |
 | 1    | serveur | Server ready                     |
 | 2    | client  | response: Hello, World!          |
@@ -54,9 +54,10 @@ A cause du bind:
 - `AccessException`
 - `NullPointerException`
 
-
 # Question 7
 
-bind jette une exeception `AlreadyBoundException` si le nom est déjà utilisé dans le registre, 
+Naming.bind jette une exeception `AlreadyBoundException` si le nom est déjà utilisé dans le registre, 
 
-rebind remplace dans ce cas l'ancien obj. associé par le nouveau passé en param.
+Naming.rebind remplace dans ce cas l'ancien obj. associé par le nouveau passé en param.
+
+# Question 8
