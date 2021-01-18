@@ -26,6 +26,9 @@ Note finale:
 ## Architecture Android
 
 ### Couches
+
+Une architectures Android est divisée en plusieurs couches:
+
 :bulb: `Noyaux Linux` &rarr; permet le multitâches
 
 :bulb: `Bibliothèques` &rarr; graphisme et multimédias
@@ -40,7 +43,8 @@ Pour plus d'info [voir schéma diapo 16](https://github.com/DocAmaroo/M1Aigle/bl
 
 ### Fichier de configuration *(Manifest)*
 
-:bulb: `Manifest` &rarr; Fichier xml contenant:
+:orange_book: Le Manifest est un fichier xml contenant:
+
 - Point d'entrée (code exécuté au démarrage de l'application)
 - Composants du programme (activités, services...)
 - Permissions
