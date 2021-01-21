@@ -110,24 +110,24 @@ Calcul lorsqu'il n'y a pas de panne [voir page 22, Preuve du Lemme 2.2.1](https:
 Code du site *p*:
 ```d
 // On donne un numéro au paquet
-numEnvoi[p] := 0;
+numEnvoi_p := 0;
 procedure diffuser(message)
-  numEnvoi[p] := numEnvoi[p] + 1;
+  numEnvoi_p := numEnvoi_p + 1;
   Pour tout (xp € V-{p}) faire
-    Envoyer(<message, numEnvoi[p]>) à xp
+    Envoyer(<message, numEnvoi_p>) à xp
 ```
 
 code du site i:
 ```d
-seq[i] := 1;
+seq_i := 1;
 Lors de la réception de <message, numEnvoi> de p
   // Stocke le message
   Stocker(message);
   // Reste en attente tant qu'on reçoit pas tout les paquets
-  Attendre(numEnvoi = seq[i]);
+  Attendre(numEnvoi = seq_i);
   // On donne le message au système
   Delivrer(message);
-  seq[i] := seq[i] + 1;
+  seq_i := seq_i + 1;
   // On le détruit
   Detruire(message);
 ```
