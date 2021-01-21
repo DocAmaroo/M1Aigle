@@ -11,6 +11,7 @@
     - [Les services](#les-services)
   - [Communications](#communications)
     - [Diffusion asynchrone en cas de pannes de sites](#diffusion-asynchrone-en-cas-de-pannes-de-sites)
+    - [Diffusion respectant l'ordre FIFO des messages](#diffusion-respectant-lordre-fifo-des-messages)
 
 ## Liens utiles
 
@@ -96,4 +97,39 @@ Si (q € S0) alors	// Suppossons q = qk
     Accepter(message);
 ```
 
-Exemple d'éxécution [voir page 21, figure 2.2]()
+Exemple d'éxécution [voir page 21, figure 2.2](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN224/cours/main_cours.pdf)
+
+Calcul lorsqu'il n'y a pas de panne [voir page 22, Preuve du Lemme 2.2.1](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN224/cours/main_cours.pdf)
+
+### Diffusion respectant l'ordre FIFO des messages
+
+:children_crossing: En supposant que la machine ne plante pas!
+
+Code du site *p*:
+```d
+numEnvoi := 0;
+procedure diffuser(message)
+  numEnvoip := numEnvoiP + 1;
+  Pour tout (xp € V-{p}) faire
+    Envoyer(<message, numEnvoip>) à xp
+```
+
+code du site i:
+```d
+seqi := 1;
+Lors de la réception de <message, numEnvoiM> de p
+  // Stocke le message
+  Stocker(message);
+  // Reste en attente tant qu'on reçoit pas tout les paquets
+  Attendre(numEnvoiM = seqi);
+  // On donne le message au système
+  Delivrer(message);
+  seqi := seqi + 1;
+  // On le détruit
+  Detruire(message);
+```
+
+Inconvénient:
+- Un site i peut avoir à stocker beaucoup de message (avant de délivrer/détruire)
+- Le numéro de séquence des messages croît au delà de toute limite raisonnable si p diffuse beaucoup de message.
+- Si perte de message, tout est bloqué
