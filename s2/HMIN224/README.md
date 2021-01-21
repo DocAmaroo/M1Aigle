@@ -27,16 +27,16 @@
 
 Méthodes associées aux messages
 
-```bash
-# P_i envoie un message à P_j
-Envoyer(<name, 13, Tab_i>) à P_j
+```d
+// P_i envoie un message à P_j
+Envoyer(<name, 13, Tab[i]>) à Pj
 
-# La réception se fait par des évènements
+// La réception se fait par des évènements
 ```
 
 Mise en attente du système :
-```bash
-# Attendre tant que cond est faux
+```d
+// Attendre tant que cond est faux
 Attendre(cond)
 ```
 
@@ -44,19 +44,19 @@ Attendre(cond)
 ```d
 // Envoie un message à tout le monde
 procedure diffuser(message)
-  Pour (x_p dans V-{p})
-    Envoyer(<message>) à x_p
+  Pour (xp dans V-{p})
+    Envoyer(<message>) à xp
 ```
 
 ```d
 // Diffuse la nouvelle valeur d'une valeur globale partagée entre les sites
 procedure diffuser_valeur(value)
-  Pour (x_p dans V-{p})
-    Envoyer(<ECRITURE, value>) à x_p
+  Pour (xp dans V-{p})
+    Envoyer(<ECRITURE, value>) à xp
 
 // A la réception
 Lors de la réception de <ECRITURE, v> depuis q
-  C_p := v;
+  Cp := v;
 
 // Compléxité 	: (n-1) | pour chaque modif. de la valeur globale
 // Inconvéniant	: très nombreux
@@ -102,6 +102,8 @@ Exemple d'éxécution [voir page 21, figure 2.2](https://github.com/DocAmaroo/M1
 Calcul lorsqu'il n'y a pas de panne [voir page 22, Preuve du Lemme 2.2.1](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN224/cours/main_cours.pdf)
 
 ### Diffusion respectant l'ordre FIFO des messages
+
+`FIFO` &rarr; First in, First out
 
 :children_crossing: En supposant que la machine ne plante pas!
 
