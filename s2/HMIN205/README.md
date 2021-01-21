@@ -10,6 +10,7 @@
     - [Fichier de configuration *(Manifest)*](#fichier-de-configuration-manifest)
     - [Composants](#composants)
     - [Activité](#activité)
+    - [Vues](#vues)
 
 ## Notes et liens utiles
 
@@ -69,7 +70,9 @@ Les composants peuvent être classé en deux type d'éléments, applicatifs et i
 Une activité est composée en deux parties :
 
 - Sa logique métier et la gestion de son cycle de vie
-  > Implémenté en Java dans une classe héritant de *Activity*
+  > Implémenté en Java dans une classe héritant de *Activity* 
+  >
+  > Schéma du cycle de vie [voir diapo 30](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN205/cours/Cours1_2021.pdf)
 
 - Son interface utilisateur, pouvant être définis de deux façons:
   - *Programmative* &rarr; dans le code de l'activité
@@ -84,9 +87,16 @@ import android.os.Bundle;
 
 public class ActiviteBasic extends Activity{
 	//méthode OnCreate appelée à la création de l'activité 
-  public void onCreate(Bundle etatSauvegarde){
-    super.onCreate(etatSauvegarde); 
+  public void onCreate(Bundle savedInstanceState){
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.home)
   }
+
+  protected void onDestroy() { super.onDestroy(); }
+  protected void onPause() { super.onPause(); }
+  protected void onResume() { super.onResume(); }
+  protected void onStart() { super.onStart(); }
+  protected void onStop() { super.onStop(); }
 }
 ```
 
@@ -105,3 +115,10 @@ Version déclarative (xml)
   </activity>
 </application>
 ```
+
+### Vues
+
+Tous les composants graphiques (boutons, images, checkbox...) héritent de la classe *View*.
+
+On peut regrouper plusieurs dans une structure arborescente avec la classe *ViewGroup*
+
