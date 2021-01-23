@@ -62,6 +62,6 @@ Naming.rebind remplace dans ce cas l'ancien obj. associé par le nouveau passé 
 
 # Question 8
 
-Çà fonctionne correctement
+Ça fonctionne correctement
 
 # Question 9
