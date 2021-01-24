@@ -57,4 +57,4 @@ Fichier : *res/layout/layout_file_name.xml*
 
 ## Exercice 3 - Les layouts (Gabarits)
 
-![voir ex3.png](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN205/td/td1/ex3.png)
+![voir ex3.png](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN205/td/td1/ex3.jpg)
