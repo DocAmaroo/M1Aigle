@@ -11,6 +11,7 @@
   - [Principes](#principes)
     - [Architecture](#architecture)
     - [Développement et exécution](#développement-et-exécution)
+    - [Passage de paramètres](#passage-de-paramètres)
 
 ## Liens utiles
 
@@ -57,7 +58,6 @@ voir [Schéma général](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMI
 
 ### Développement et exécution
 
-#### Interface distante
 :pushpin: Spécification :
 - Doit être `Public`
 - Hérite de l'interface `java.rmi.Remote`
@@ -71,8 +71,33 @@ voir [Schéma général](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMI
 
 :pencil2: Exemple : [voir tp helloWorld](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN210/td/helloWorld)
 
+#### Policy
+
+Un fichier *.policy* autorise l'usage du `accept` et du `connect` sur les sockets
+
+| Autorisation | Serveur            | Client             |
+| ------------ | ------------------ | ------------------ |
+| connect      | :white_check_mark: | :white_check_mark: |
+| accept       | :white_check_mark: |                    |
 
 
+```d
+// hello.policy
+grant{
+  permission java.net.SocketPermission “*:1024-65535”,”connect,accept”;
+  permission java.net.SocketPermission “:80”,”connect”;
+  // permission java.security.AllPermission;
+}
+```
+
+```bash
+# Côté client
+java -Djava.security.policy = ./hello.policy helloClient hostreg:1099
+# Côté Serveur
+java -Djava.security.policy = ./hello.policy helloServer hostreg:1099
+```
+
+Illustration d'une exécution [voir diapo 31 à 34](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN210/td/helloWorld)
 #### Couches des références distantes et transport
 
 :triangular_flag_on_post: Références distantes
@@ -85,7 +110,7 @@ voir [Schéma général](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMI
 - Possibilité d'utiliser plusieurs classes
 
 
-#### Passage de paramètres
+### Passage de paramètres
 - valeur primitif
 - objet d'une classe Serialisable
 - objet d'une classe implémentant l'interface Remote
