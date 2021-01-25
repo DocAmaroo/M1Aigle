@@ -65,3 +65,5 @@ Naming.rebind remplace dans ce cas l'ancien obj. associé par le nouveau passé 
 Ça fonctionne correctement
 
 # Question 9
+
+![Question 9](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN210/td/helloWorld/q9.jpg)
