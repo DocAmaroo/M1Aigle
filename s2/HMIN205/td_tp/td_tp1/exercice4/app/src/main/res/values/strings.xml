@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyApp</string>
+    <string name="exo4">Exercice 4</string>
+    <string name="toast_btn">Toast button</string>
+    <string name="show_hidden_message">Show hidden message</string>
+    <string name="long_press_button">Long press button</string>
+    <string name="hidden_message">Hidden message :)</string>
+</resources>

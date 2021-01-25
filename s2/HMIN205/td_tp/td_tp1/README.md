@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
   private Button myButton;
 
   // ...idem
-    myButton = (Button) findViewById(R.id.my_button);
+    myButton = (Button) findViewById(R.id.myButtonId);
     myButton.setOnClickListener(new OnClickListener(){ 
       @Override
       public void onClick(View arg0) {
@@ -117,7 +117,7 @@ public class MainActivity extends Activity {
   private TextView text;
 
   // ...idem
-    myButton = (Button) findViewById(R.id.my_button);
+    myButton = (Button) findViewById(R.id.myButtonId);
     myButton.setOnClickListener(new OnClickListener(){ 
       @Override
       public void onClick(View v) {
