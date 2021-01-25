@@ -114,17 +114,22 @@ public class MainActivity extends Activity {
   
   private Button button;
   private Button myButton;
+  private TextView text;
 
   // ...idem
     myButton = (Button) findViewById(R.id.my_button);
     myButton.setOnClickListener(new OnClickListener(){ 
       @Override
       public void onClick(View v) {
-        Toast toast = Toast.makeText(getApplicationContext(), "Message My Button", Toast.LENGTH_SHORT)
+        text.setText("Exercice 4");
 
-        // add new text ???
-
-        toast.show()  
+        if(!visible){
+          text.setVisibility(View.VISIBLE);
+          visible=true;
+        }else{
+          text.setVisibility(View.INVISIBLE);
+          visible=false;
+        }
       }
     });
   }
