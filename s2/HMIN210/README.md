@@ -90,12 +90,19 @@ grant{
 }
 ```
 
-```bash
-# Côté client
-java -Djava.security.policy = ./hello.policy helloClient hostreg:1099
-# Côté Serveur
-java -Djava.security.policy = ./hello.policy helloServer hostreg:1099
+On lie le fichier dans le code comme ceci :
+
+```java
+System.setProperty("java.security.policy", "path/to/file");
+System.setSecurityManager(new SecurityManager());
 ```
+
+ou via terminal :
+
+```bash
+java -Djava.security.policy = ./file.policy MyClass hostreg:1099
+```
+
 
 Illustration d'une exécution [voir diapo 31 à 34](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN210/td/helloWorld)
 #### Couches des références distantes et transport
@@ -114,3 +121,5 @@ Illustration d'une exécution [voir diapo 31 à 34](https://github.com/DocAmaroo
 - valeur primitif
 - objet d'une classe Serialisable
 - objet d'une classe implémentant l'interface Remote
+
+Serialisable => méthode copier dans le client et qui ne sauras que modifier dans le client.

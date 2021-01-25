@@ -2,6 +2,10 @@
 
 ## Exercice 1 - Les différents parties d'une application Android
 
+### Question 1
+
+Ouai ouai j'ai observé
+
 ### Question 2
 
 Comprends pas ce qu'il veut 
