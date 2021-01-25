@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">exercice5</string>
-    <string name="linux_box">Linux</string>
-    <string name="macos_box">MacOS</string>
-    <string name="windows_box">Windows</string>
-    <string name="display_label">Submit</string>
-</resources>

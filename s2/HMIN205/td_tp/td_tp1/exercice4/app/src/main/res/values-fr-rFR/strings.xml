@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">MonApplication</string>
-    <string name="exo4">Exercice 4</string>
-    <string name="toast_btn">Toast bouton</string>
-    <string name="show_hidden_message">Afficher le message caché</string>
-    <string name="long_press_button">Bouton à pression longue</string>
-    <string name="hidden_message">Message caché :)</string>
-</resources>
