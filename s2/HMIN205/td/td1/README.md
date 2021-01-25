@@ -8,12 +8,19 @@ Ouai ouai j'ai observé
 
 ### Question 2
 
-Comprends pas ce qu'il veut 
+```java
+EditText et = new EditText(this);
+LinearLayout ll = new LinearLayout(this);
+ll.setOrientation(LinearLayout.VERTICAL);
+ll.addView(tv);
+ll.addView(et);
+setContentView(ll);
+```
 
 ### Question 3
 
 Le premier code est le Manifest, le fichier de configuration de notre application Android.
-Le second code est la vue contenant le code de notre activitée principales de notre application
+Le second code est la vue contenant le code de l'activitée principale de notre application
 
 ### Question 4
 
