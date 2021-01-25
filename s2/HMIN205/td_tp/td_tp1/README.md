@@ -64,7 +64,7 @@ Fichier : *res/layout/layout_file_name.xml*
 
 ## Exercice 3 - Les layouts (Gabarits)
 
-![Exercice 3](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN205/td/td1/ex3.jpg)
+![voir ex3.jpg](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN205/td_tp/td_tp1/ex3.jpg)
 
 ## Exercice 4 - Evènements utilisateurs
 
@@ -167,4 +167,4 @@ Quand on click sur le bouton, un message toast montrant le nom suivis de l'état
 
 ## Exercice 6
 
-![voir ex3.png](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN205/td/td1/ex6.jpg)
+![voir ex6.jpg](https://github.com/DocAmaroo/M1Aigle/blob/master/s2/HMIN205/td_tp/td_tp1/ex6.jpg)
