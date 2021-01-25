@@ -20,7 +20,8 @@ setContentView(ll);
 ### Question 3
 
 Le premier code est le Manifest, le fichier de configuration de notre application Android.
-Le second code est la vue contenant le code de l'activitée principale de notre application
+
+Le second code est la vue contenant le code de l'activitée principale de notre application.
 
 ### Question 4
 
