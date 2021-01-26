@@ -26,29 +26,15 @@ public class Atom {
 		if (!(b instanceof Atom))
 			return false;
 		return this.symbol.equals(((Atom) b).symbol);
-		// deux atomes sont égaux s'ils ont même symbole
-		// equals() de String compare le contenu des chaînes de caractère
 	}
 
-	/**
-	 * @return le symbole propositionnel
-	 */
 	@Override
 	public String toString() {
 		return this.symbol;
 	}
 
-	/** overrides hashCode from Object **/
 	@Override
-	public int hashCode()
-	// pour utilisation dans les hashMap :
-	// le hashcode est utilise pour définir les cles (deux objets ayant même hascode
-	// correspondent à la même cle)
-	// la redefinition de cette méthode assure que deux atomes sont égaux pour
-	// equals() ssi ils ont le même hashCode
-	//
-	{
+	public int hashCode() {
 		return symbol.hashCode(); // hashcode fondé sur l'attribut symbol (une String)
-
 	}
 }

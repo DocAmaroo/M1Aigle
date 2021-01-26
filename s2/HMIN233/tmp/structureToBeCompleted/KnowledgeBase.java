@@ -62,12 +62,6 @@ public class KnowledgeBase {
 		return br;
 	}
 
-	/**
-	 * Retourne une description de la base de connaissances
-	 * 
-	 * @return description de la base de connaissances
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "**********\nBase de connaissances: \n" + bf + br + "\n**********";

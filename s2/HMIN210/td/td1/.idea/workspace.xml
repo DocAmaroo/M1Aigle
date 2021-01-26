@@ -47,6 +47,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
   </component>
   <component name="RunManager" selected="Application.Client">
@@ -76,17 +79,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Client" />
@@ -103,6 +95,7 @@
       <option name="presentableId" value="Default" />
       <updated>1611561425102</updated>
       <workItem from="1611561426540" duration="14376000" />
+      <workItem from="1611647448062" duration="1437000" />
     </task>
     <servers />
   </component>
@@ -119,12 +112,21 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="765" y="271" key="#com.intellij.ide.util.MemberChooser" timestamp="1611570053272">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
     <state x="765" y="271" key="#com.intellij.ide.util.MemberChooser/0.30.1920.1050@0.30.1920.1050" timestamp="1611570053272" />
+    <state x="640" y="291" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1611647839161">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="640" y="291" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1611647839161" />
+    <state x="740" y="297" key="FileChooserDialogImpl" timestamp="1611649426622">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="740" y="297" key="FileChooserDialogImpl/0.30.1920.1050@0.30.1920.1050" timestamp="1611649426622" />
     <state width="1877" height="278" key="GridCell.Tab.0.bottom" timestamp="1611577340626">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
@@ -141,9 +143,13 @@
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
     <state width="1877" height="278" key="GridCell.Tab.0.right/0.30.1920.1050@0.30.1920.1050" timestamp="1611577340625" />
-    <state x="461" y="200" key="SettingsEditor" timestamp="1611570746514">
+    <state x="461" y="200" key="SettingsEditor" timestamp="1611647510055">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
-    <state x="461" y="200" key="SettingsEditor/0.30.1920.1050@0.30.1920.1050" timestamp="1611570746514" />
+    <state x="461" y="200" key="SettingsEditor/0.30.1920.1050@0.30.1920.1050" timestamp="1611647510055" />
+    <state x="551" y="130" key="new project wizard" timestamp="1611649454134">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="551" y="130" key="new project wizard/0.30.1920.1050@0.30.1920.1050" timestamp="1611649454134" />
   </component>
 </project>

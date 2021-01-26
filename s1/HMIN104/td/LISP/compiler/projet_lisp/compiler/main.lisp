@@ -14,12 +14,12 @@
 
 			;; booleans
 			((member (car exp) '(< > = <= >= )) (compile-comp exp env fenv namef))
-			((isCase exp 'and) (compile-and arg (gensym "finAnd") env fenv namef))
-			((isCase exp 'or) (compile-or arg (gensym "finOr") env fenv namef))
+			((isCase exp 'and) (compile-and arg (gensym "endAnd") env fenv namef))
+			((isCase exp 'or) (compile-or arg (gensym "endOr") env fenv namef))
 
 			;; conditions
 			((isCase exp 'if) (compile-if arg env fenv namef))
-			((isCase exp 'cond) (compile-cond arg (gensym "fincond") env fenv namef))
+			((isCase exp 'cond) (compile-cond arg (gensym "endCond") env fenv namef))
 
 			;; variables
 			((isCase exp 'setf) (compile-setf arg env fenv namef))
