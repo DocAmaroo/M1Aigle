@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">TD1</string>
+    <string name="homepage">Homepage</string>
+    <string name="return_to_homepage_btn">Go back to homepage</string>
+    <string name="ex1">Access to exercice 1</string>
+    <string name="ex1_title">Exercice 1</string>
+    <string name="ex2">Access to exercice 2</string>
+    <string name="ex2_title">Exercice 2</string>
+    <string name="ex3">Access to exercice 3</string>
+    <string name="ex3_title">Exercice 3</string>
+    <string name="ex4">Access to exercice 4</string>
+    <string name="ex4_title">Exercice 4</string>
+    <string name="ex5">Access to exercice 5</string>
+    <string name="ex5_title">Exercice 5</string>
+    <string name="first_app_msg">My First Application</string>
+    <string name="toast_btn">Toast button</string>
+    <string name="show_secret_message">Show secret message</string>
+    <string name="hide_secret_message">Hide secret message</string>
+    <string name="long_press_button">Long press button</string>
+    <string name="hidden_message">Hidden message :)</string>
+    <string name="linux_box">Linux</string>
+    <string name="macos_box">MacOS</string>
+    <string name="windows_box">Windows</string>
+    <string name="display_label">Submit</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TD1</string>
+    <string name="homepage">Accueil</string>
+    <string name="return_to_homepage_btn">Retour à la page d\'accueil</string>
+    <string name="ex1">Accéder à l\'exercice 1</string>
+    <string name="ex2">Accéder à l\'exercice 2</string>
+    <string name="ex3">Accéder à l\'exercice 3</string>
+    <string name="ex4">Accéder à l\'exercice 4</string>
+    <string name="ex5">Accéder à l\'exercice 5</string>
+    <string name="ex1_title">Exercice 1</string>
+    <string name="ex2_title">Exercice 2</string>
+    <string name="ex3_title">Exercice 3</string>
+    <string name="ex4_title">Exercice 4</string>
+    <string name="ex5_title">Exercice 5</string>
+    <string name="first_app_msg">MaPremiereApplication</string>
+    <string name="toast_btn">Bouton Toast</string>
+    <string name="show_secret_message">Afficher le message secret</string>
+    <string name="hide_secret_message">"Caché le message secret "</string>
+    <string name="long_press_button">Bouton à presion longue</string>
+    <string name="hidden_message">Message caché :)</string>
+    <string name="linux_box">Linux</string>
+    <string name="macos_box">MacOS</string>
+    <string name="windows_box">Windows</string>
+    <string name="display_label">Envoyer</string>
+</resources>

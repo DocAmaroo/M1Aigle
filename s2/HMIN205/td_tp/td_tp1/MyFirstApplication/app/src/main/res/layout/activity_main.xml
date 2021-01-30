@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="15dp"
+    android:layout_margin="15sp"
     tools:context=".MainActivity">
 
     <TextView
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="XML version"
         android:textAlignment="center"
-        android:textSize="15sp"
+        android:textSize="20sp"
         android:padding="10sp"
         android:gravity="center" />
 
@@ -138,7 +138,17 @@
             android:id="@+id/see_java_version_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next_btn"
+            android:text="@string/go_to_java_version_btn"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/go_next_intent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/green"
+            android:text="@string/go_to_new_intent_btn"
             android:textSize="12sp"
             android:textAllCaps="false"
             android:layout_gravity="center" />

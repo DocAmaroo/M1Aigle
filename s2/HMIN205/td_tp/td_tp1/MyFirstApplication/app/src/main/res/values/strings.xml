@@ -6,12 +6,15 @@
     <string name="label_field_of_expertise">Field of expertise: </string>
     <string name="label_phone_number">Phone number</string>
     <string name="submit">SUBMIT!</string>
-    <string name="next_btn">See Java version</string>
+    <string name="go_to_java_version_btn">See Java version</string>
+    <string name="go_to_xml_version_btn">See XML version</string>
+    <string name="go_to_new_intent_btn">Submit and switch page</string>
     <string name="show_calendar">Choose the date</string>
-    <string name="wait_permission_title">Wait permission</string>
-    <string name="ask_confirmation">Would you like to confirm ?</string>
+    <string name="dialog_validation_title">Validation</string>
+    <string name="dialog_validation_msg">Would you like to confirm ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancelled">Cancelled</string>
     <string name="welcome">Welcome</string>
+    <string name="my_intent_title">User informations</string>
 </resources>

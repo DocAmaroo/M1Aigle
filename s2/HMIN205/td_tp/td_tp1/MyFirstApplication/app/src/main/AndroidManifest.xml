@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyFirstApplication">
-        <activity android:name=".MainActivityJavaVersion"></activity>
+        <activity android:name=".MyIntent"></activity>
+        <activity android:name=".MainActivityJavaVersion" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

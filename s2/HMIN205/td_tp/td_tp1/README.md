@@ -1,4 +1,4 @@
-# HMIN205 - TD1
+# HMIN205 - TD/TP 1
 
 ## Exercice 1 - Les différents parties d'une application Android
 
@@ -123,7 +123,7 @@ public class MainActivity extends Activity {
       @Override
       public void onClick(View v) {
         text.setText("Exercice 4");
-
+        text.getVisibility() == VIEW.VISIBLE
         if(!visible){
           text.setVisibility(View.VISIBLE);
           visible=true;

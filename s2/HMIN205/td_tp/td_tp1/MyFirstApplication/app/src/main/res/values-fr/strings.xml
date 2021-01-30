@@ -8,11 +8,14 @@
     <string name="label_phone_number">Numéro de téléphone:</string>
     <string name="submit">ENVOYER!</string>
     <string name="show_calendar">Choisir la date</string>
-    <string name="ask_confirmation">Voulez-vous confirmer ?</string>
-    <string name="wait_permission_title">En attente de permission</string>
+    <string name="dialog_validation_msg">Voulez-vous confirmer ?</string>
+    <string name="dialog_validation_title">Validation</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
     <string name="cancelled">Annulé</string>
     <string name="welcome">Bonjour</string>
-    <string name="next_btn">Voir la version Java</string>
+    <string name="go_to_java_version_btn">Voir la version Java</string>
+    <string name="go_to_new_intent_btn">Envoyer et changer de page</string>
+    <string name="my_intent_title">Informations utilisateur</string>
+    <string name="go_to_xml_version_btn">Voir la version XML</string>
 </resources>

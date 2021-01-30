@@ -29,25 +29,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         findViewById(R.id.submit).setOnClickListener(v -> {
 
             AlertDialog.Builder userConfirmationDialog = new AlertDialog.Builder(this);
-            userConfirmationDialog.setTitle(R.string.wait_permission_title);
-            userConfirmationDialog.setMessage(R.string.ask_confirmation);
+            userConfirmationDialog.setTitle(R.string.dialog_validation_title);
+            userConfirmationDialog.setMessage(R.string.dialog_validation_msg);
 
             // On Yes
             userConfirmationDialog.setPositiveButton(R.string.yes, (dialog, which) -> {
-                EditText userName = findViewById(R.id.user_name);
-                EditText userFirstName = findViewById(R.id.user_first_name);
-                TextView userBirthday = findViewById(R.id.user_birthday);
-                EditText userPhoneNumber = findViewById(R.id.user_phone_number);
-                EditText userFieldOfExp = findViewById(R.id.user_field_of_expertise);
-
-                // Get information give by the user
-                String result = getString(R.string.welcome) + " " + userFirstName.getText() + " " + userName.getText() + " !";
-                result += "\n" + getString(R.string.label_birthday) + " "  + userBirthday.getText();
-                result += "\n" + getString(R.string.label_phone_number) + " "  + userPhoneNumber.getText();
-                result += "\n" + getString(R.string.label_field_of_expertise) + " "  + userFieldOfExp.getText();
-
-                // Toast
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getInformation(), Toast.LENGTH_LONG).show();
             });
 
             // On No
@@ -63,6 +50,43 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         findViewById(R.id.see_java_version_btn).setOnClickListener(v -> {
             openMainActivityJavaVersion();
         });
+
+        // Submit and switch page
+        findViewById(R.id.go_next_intent).setOnClickListener(v -> {
+
+            AlertDialog.Builder userConfirmationDialog = new AlertDialog.Builder(this);
+            userConfirmationDialog.setTitle(R.string.dialog_validation_title);
+            userConfirmationDialog.setMessage(R.string.dialog_validation_msg);
+
+            // On Yes
+            userConfirmationDialog.setPositiveButton(R.string.yes, (dialog, which) -> {
+                openNewIntent();
+            });
+
+            // On No
+            userConfirmationDialog.setNegativeButton(R.string.no, (dialog, which) -> {
+                Toast.makeText(getApplicationContext(), R.string.cancelled, Toast.LENGTH_LONG).show();
+            });
+
+            userConfirmationDialog.show();
+
+        });
+    }
+
+    private String getInformation() {
+        EditText userName = findViewById(R.id.user_name);
+        EditText userFirstName = findViewById(R.id.user_first_name);
+        TextView userBirthday = findViewById(R.id.user_birthday);
+        EditText userPhoneNumber = findViewById(R.id.user_phone_number);
+        EditText userFieldOfExp = findViewById(R.id.user_field_of_expertise);
+
+        // Get information give by the user
+        String result = getString(R.string.welcome) + " " + userFirstName.getText() + " " + userName.getText() + " !";
+        result += "\n" + getString(R.string.label_birthday) + " "  + userBirthday.getText();
+        result += "\n" + getString(R.string.label_phone_number) + " "  + userPhoneNumber.getText();
+        result += "\n" + getString(R.string.label_field_of_expertise) + " "  + userFieldOfExp.getText();
+
+        return result;
     }
 
     private void showDatePickerDialog() {
@@ -82,8 +106,14 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         userBirthday.setText(date);
     }
 
-    public void openMainActivityJavaVersion() {
+    private void openMainActivityJavaVersion() {
         Intent intent = new Intent(this, MainActivityJavaVersion.class);
+        startActivity(intent);
+    }
+
+    private void openNewIntent() {
+        Intent intent = new Intent(this, MyIntent.class);
+        intent.putExtra("userData", getInformation());
         startActivity(intent);
     }
 }
