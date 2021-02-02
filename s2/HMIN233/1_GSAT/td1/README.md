@@ -32,3 +32,8 @@ java Main CNF_FILE_PATH
 ```bash
 java Main ./mycnf.cnf
 ```
+
+:pushpin: D'autre fichier *.cnf* sont utilisable dans le dossier *uf20-91*
+
+
+:children_crossing: NB: Si un résultat n'est pas obtenu lors des premier essaie il suffit de réessayer plusieurs fois. Ceci est dû à l'initialisation aléatoire des littéraux. Ou alors c'est tout bonnement impossible.
