@@ -22,4 +22,13 @@ On as 2 pénalités :
 voir cours1 diapo 7
 
 # 2. Codage d'une métaheuristique dédiée à SAT
+Méthode de compilation:
+```bash
+javac Main.java
+java Main CNF_FILE_PATH
+```
 
+:pencil2: Exemple avec le fichier *mycnf.cnf* fournis
+```bash
+java Main ./mycnf.cnf
+```

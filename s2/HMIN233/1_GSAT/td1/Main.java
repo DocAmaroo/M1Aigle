@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.Scanner;
 
 class Literal {
@@ -22,6 +22,8 @@ class Clause {
     }
 
     public boolean trySolve(boolean[] truthAssignments) {
+
+        // --- If found one literal as true => return true
         if (truthAssignments[literals.get(0).indexIntoTruthArray] == literals.get(0).positive) {
             return true;
         } else if (truthAssignments[literals.get(1).indexIntoTruthArray] == literals.get(1).positive) {
@@ -50,11 +52,14 @@ class CNF {
         return this.variableCount;
     }
 
+    // --- Return the count of clause resolved
     public int trySolve(boolean[] truthAssignments) {
         int numberSolved = 0;
 
         for (Clause clause : this.clauses) {
-            if (clause.trySolve(truthAssignments)) { numberSolved++; }
+            if (clause.trySolve(truthAssignments)) {
+                numberSolved++;
+            }
         }
 
         return numberSolved;
@@ -64,13 +69,19 @@ class CNF {
 
 class Main {
     public static void main(String[] args) throws FileNotFoundException {
-        String filePath = args[0];
-        System.out.println("[+]filePath: " + filePath);
 
+        if (args.length == 0) {
+            System.out.println("Usage: java Main [CNF_FILE_PATH]");
+            System.out.println("\n[CNF_FILE_PATH]: the file path to the cnf file to resolve");
+            System.out.println("--- example (with the cnf file give): java Main ./mycnf.cnf");
+            System.exit(1);
+        }
+        String filePath = args[0];
+
+        System.out.println("[~]Loading file...");
         CNF cnf = readFile(filePath);
 
         boolean[] solved = GSAT(cnf, 50, 50);
-
         displaySolved(solved);
     }
 
@@ -80,7 +91,8 @@ class Main {
         // --- File reading
         InputStream file = new FileInputStream(filePath);
         BufferedReader br = new BufferedReader(new InputStreamReader(file));
-
+        System.out.println("[+]" + filePath + " has been loaded successfully");
+        System.out.println("\n[~]Searching a potential solution...");
         Scanner scanner = new Scanner(br);
         String token = scanner.nextLine();
         String[] splitRes;
@@ -135,19 +147,27 @@ class Main {
     }
 
 
-    public static boolean[] GSAT(CNF cnfToSolve, int maxRestarts, int maxClimbs) {
-        boolean[] truthAssignments = new boolean[cnfToSolve.numberOfVariables() + 1];
-        for (int i = 1; i <= maxRestarts; i++) {
-            randomlyGenerateTruthAssignments(truthAssignments);
-            for (int j = 1; j <= maxClimbs; j++) {
-                int clausesSolved = cnfToSolve.trySolve(truthAssignments);
+    public static boolean[] GSAT(CNF cnfToSolve, int maxTries, int maxFlips) {
 
+        // --- Credits :
+        // --- https://cs.stackexchange.com/questions/219/implementing-the-gsat-algorithm-how-to-select-which-literal-to-flip
+
+        boolean[] truthAssignments = new boolean[cnfToSolve.numberOfVariables() + 1];
+
+        for (int i = 1; i <= maxTries; i++) {
+            randomlyGenerateTruthAssignments(truthAssignments);
+
+            for (int j = 1; j <= maxFlips; j++) {
+
+                // --- If is satisfiable
+                int clausesSolved = cnfToSolve.trySolve(truthAssignments);
                 if (clausesSolved == cnfToSolve.numberOfClauses()) {
                     truthAssignments[0] = true;
                     return truthAssignments;
                 }
 
-                truthAssignments = randomBestSuccesor(truthAssignments, cnfToSolve);
+                // --- Flip literals
+                truthAssignments = randomBestSuccessors(truthAssignments, cnfToSolve);
             }
         }
         truthAssignments[0] = false;
@@ -155,104 +175,65 @@ class Main {
     }
 
 
-    public static boolean[] randomBestSuccesor(boolean[] oldTruthAssignments, CNF cnfToSolve)
-    {
+    // --- Looking for the variable whose flip yield the most important raise in the number of satisfied clauses;
+    public static boolean[] randomBestSuccessors(boolean[] oldTruthAssignments, CNF cnfToSolve) {
+
+        // Get all possibilities by flipping one by one each assignments
         ArrayList<boolean[]> potentialAssignments = new ArrayList<>();
-        for (int i = 1; i < oldTruthAssignments.length; i++)
-        {
+        for (int i = 1; i < oldTruthAssignments.length; i++) {
             boolean[] newTruthAssignments = oldTruthAssignments.clone();
             newTruthAssignments[i] = !oldTruthAssignments[i];
             potentialAssignments.add(newTruthAssignments);
         }
 
-        ArrayList<boolean[]> bestSuccesors = new ArrayList<>();
-        for (int i = 0; i < 10; i++)
-        {
-            Iterator assignmentsList = potentialAssignments.iterator();
-
+        // Solved all possibilities and get the 10 best ones possibilities
+        // (We could also only get the first one we found)
+        // (Also we could checking the best one of the best possibilities)
+        ArrayList<boolean[]> bestSuccessors = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
             int currentBestClausesSolved = -1;
             boolean[] currentBestAssignment = null;
-            while (assignmentsList.hasNext())
-            {
-                boolean[] currentAssignment = (boolean[])assignmentsList.next();
 
+            for (boolean[] currentAssignment : potentialAssignments) {
                 int currentClausesSolved = cnfToSolve.trySolve(currentAssignment);
-                if (currentClausesSolved > currentBestClausesSolved)
-                {
+                if (currentClausesSolved > currentBestClausesSolved) {
                     currentBestClausesSolved = currentClausesSolved;
                     currentBestAssignment = currentAssignment;
                 }
             }
 
+            // if no solution find => no more solution available => quit the loop
+            if (currentBestAssignment == null) {
+                break;
+            }
+
+            // Remove the one we found, avoiding getting him again next round
             potentialAssignments.remove(currentBestAssignment);
-            bestSuccesors.add(currentBestAssignment);
+
+            // Add it in our best successors collection
+            bestSuccessors.add(currentBestAssignment);
         }
 
-        int randomChoice = (int)Math.floor(Math.random() * 10.0);
+        // return one (out the 10 we possibly found) and make sure he his not null
+        int randomChoice;
+        do {
+            randomChoice = (int) Math.floor(Math.random() * 10.0);
+        } while (bestSuccessors.get(randomChoice) == null);
 
-        return bestSuccesors.get(randomChoice);
+        return bestSuccessors.get(randomChoice);
     }
+
 
     public static void displaySolved(boolean[] solved) {
         if (solved[0]) {
-            System.out.println("An answer was found, it is as follows :");
+            System.out.println("[+]An answer was found! See solution below:");
+            System.out.println("\n======= SOLVED =======");
             for (int i = 1; i < solved.length; i++) {
-                System.out.println("Variable " + i + " is " + solved[i]);
+                System.out.println("Literal " + i + " -> " + solved[i]);
             }
         } else {
-            System.out.println("No answer was found, sorry");
+            System.out.println("[-]No answer was found! Try again!");
         }
     }
 
 }
-
-
-//    public static SAT parse(String filePath) throws Exception {
-//        InputStream is = new FileInputStream(filePath);
-//        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-//
-//        Scanner scanner = new Scanner(br);
-//        String token = scanner.nextLine();
-//        String[] splitRes;
-//        SAT sat = null;
-//        int clause = 0;
-
-//        while (!token.equals("%")) {
-//
-//            //Split the line
-//            splitRes = token.trim().split(" ");
-//
-//            //Skip the comments
-//            if (splitRes[0].equals("c")) {
-//                token = scanner.nextLine();
-//                continue;
-//            }
-//
-//            //Initialise the GSAT problem with the problem's sizes given in the line starting with "p"
-//            if (splitRes[0].equals("p")) {
-//                try {
-//                    //splitRes[2] = nb de symboles
-//                    //splitRes[4] = nb de clauses
-//                    sat = new SAT(Integer.parseInt(splitRes[4]), Integer.parseInt(splitRes[2]));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                ;
-//                token = scanner.nextLine();
-//                continue;
-//            }
-//
-//            //TODO ICI GERER SPLITRES POUR INITIALISER LES CLAUSES :
-//
-//            for (int i = 0; i < splitRes.length - 1; i++) {
-//                // ajoute à la clause j la variable
-//                sat.addNewClause(clause, Integer.parseInt(splitRes[i]));
-//            }
-//
-//            clause++;
-//
-//            //Go to the next line
-//            token = scanner.nextLine();
-//        }
-//        return sat;
-//    }
