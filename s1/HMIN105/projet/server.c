@@ -4,13 +4,15 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <sys/shm.h>
+#include <sys/sem.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <pthread.h>
 
-/* colors define */
+//------- COLORS ------- //
 #define RED   "\x1B[31m"
 #define GRN   "\x1B[32m"
 #define YEL   "\x1B[33m"
@@ -20,370 +22,224 @@
 #define WHT   "\x1B[37m"
 #define RESET "\x1B[0m"
 
-const int DEFAULT_BUFFER_SIZE = 127;
-const int MAX_RESSOURCES = 10;
-const int MAX_CLIENT = 10;
+//------- GLOBAL VAR ------- //
+#define SHM_KEY 1 // cle du segment de memoire partage
+#define SEM_KEY 2 // cle du tableau de semaphores
+#define DEFAULT_BUFFER_SIZE 100 // nombre de carateres max d'une ligne
+#define MAX_CLIENT 10
+#define MAX_STORES 10
 
-/**
- * @brief structure used to get message sent by a client
- * 
- */
-struct message 
-{
-	int service;
-	long int quantity;
-} message;
+//------- STRUCTURES ------- //
+typedef struct store {
+	char city[20];
+	int cpu;
+	int go;
+} store;
 
-/**
- * @brief structure used to store ressource
- * 
- */
-struct ressource 
-{
-	char* city;
-	int length;
-	int CPU;
-	int storage;
-} ressource;
+typedef struct log {
+    char name[20];
+    char firstname[20];
+    int city;
+    int cpu;
+    int go;
+    int max_user;
+    int nb_user;
+    int flag;
+} log;
 
-/**
- * @brief structure used to store all ressources
- * 
- */
-struct data 
-{
-	struct ressource* ressources;
-	int length;
-}data;
+typedef struct{
+	int nb_client_connected;
+	int nb_stores;
+	store stores[MAX_STORES];
+	int nb_logs;
+	log logs[MAX_CLIENT*MAX_STORES];
+}shm_data;
 
-/**
- * @brief struct used to send param to thread
- * 
- */
-struct thread_param 
-{
-	int* socket;
-	int* socketStore;
-	int* nbClient;
-	struct data* data;
-    pthread_mutex_t* mutex;
-}param;
+//------- SEMAPHORES ------- //
+typedef union{
+	int val;
+	struct semid_ds *buf;
+	unsigned short *array;
+	struct seminfo *__buf;
+} semun;
 
-/**
- * @brief print on the terminal how to use server program
- * 
- * @param name 
- */
-void printUsage(char const* name) 
-{
-	printf("Usage: %s port", name);
-	exit(0);
+void print_system(int semid, int sem_length, store* stores, int store_length) {
+    int sem_cpt = 0;
+
+    semun semun;
+    semun.array = malloc(sem_length * sizeof(short));
+    if (semctl(semid, 0, GETALL, semun.array) == -1) {
+        perror("[-]Error occurred while reading semaphores");
+        return;
+    }
+
+
+    printf(CYN "\n\t--- Etat du systeme ---\n");
+    printf("index: { ville | cpu | cpu partages | go | go partages }\n");
+    for (int i=0; i < store_length; i++) {
+        sem_cpt = i*4;
+        printf("%i: { %s | %i | %i | %i | %i }\n", i, stores[i].city, semun.array[sem_cpt], semun.array[sem_cpt+1], semun.array[sem_cpt+2], semun.array[sem_cpt+3]);
+    }
+
+    printf("%i", semun.array[sem_length-1]);
 }
 
-/**
- * @brief print all data available
- * 
- * @param data 
- */
-void printData(struct data* data) 
-{
-	for (int i=0; i < data->length; i++) {
-		printf(RESET "{\n");
-		printf("\tCountry: %s\n", data->ressources[i].city);
-		printf("\tCPU: %i\n", data->ressources[i].CPU);
-		printf("\tStorage: %i\n", data->ressources[i].storage);
-		printf("}\n");
-	}
-}
 
-/**
- * @brief Receive TCP message
- * 
- * @param socket 
- * @param buffer 
- * @param length 
- * @return int 
- */
-int recvTCP(int socket, char *buffer, size_t length) 
-{
-
-	size_t toread = length; 
+int main(int argc, char const *argv[]) {
 	
-	while(toread > 0){
-		size_t _recv = recv(socket, buffer, toread, 0);
-		if (_recv <= 0) return _recv;		
-		buffer += _recv;
-		toread -= _recv;
+	if (argc < 2) {
+        printf("Usage: %s filename", argv[0]);
+        printf("\t[filename] : database file");
+        exit(0);
+    }
+
+    // OUVERTURE DU FICHIER CONTENANT LES STORES
+    FILE *f;
+	if ((f = fopen(argv[1], "r")) == NULL){
+		perror("seveur : erreur fopen");
+		exit(1);
 	}
 
-	return length;
-}
-
-/**
- * @brief Receive message from the client
- * 
- * @param socket 
- * @param msg 
- * @return int 
- */
-int recvMessage(int socket, char* buffer, struct message *ms) 
-{
-	int recv = 0;
-	int _intBuffer = 0;
-
-	recv = recvTCP(socket, (char *) &_intBuffer, sizeof(int));
-	if (recv <= 0) return recv;
-	ms->service = _intBuffer;
-
-	recv = recvTCP(socket, (char *) &_intBuffer, sizeof(long int));
-	if (recv <= 0) return recv;
-	ms->quantity = _intBuffer;
-
-	return 1;
-}
-
-/**
- * @brief Send TCP request
- * 
- * @param socket 
- * @param buffer 
- * @param length 
- * @return int 
- */
-int sendTCP(int socket, const char* buffer, size_t length)
-{
-	size_t bytes=length;
-	
-	while(bytes > 0){
-		size_t _send = send(socket, buffer, bytes, 0);
-		if (_send <= 0) return _send;
-
-		buffer += _send;
-		bytes -= _send;
+	int nbstores = 0;
+	char ligne[DEFAULT_BUFFER_SIZE];
+	// COMPTE LE NOMBE DE STORES
+	while (fgets(ligne, DEFAULT_BUFFER_SIZE, f) != NULL){
+		nbstores++;
 	}
 
-	return length;
-}
-
-/**
- * @brief Send ressource structure
- * 
- * @param socket 
- * @param buffer 
- * @param length 
- * @return int 
- */
-int sendRessource(int socket, char* buffer, struct ressource ressource) 
-{
-	int send = 0;
-
-	// send country size
-	sprintf(buffer, "%d", ressource.length);
-	send = sendTCP(socket, (char *) buffer, sizeof(int));
-	if (send <= 0) return send;
-	bzero(buffer, DEFAULT_BUFFER_SIZE);
-
-	// send country
-	send = sendTCP(socket, ressource.city, ressource.length*sizeof(char));
-	if (send <= 0) return send;
-	bzero(buffer, DEFAULT_BUFFER_SIZE);
-
-	// send CPU
-	sprintf(buffer, "%d", ressource.CPU);
-	send = sendTCP(socket, (char *) buffer, sizeof(size_t));
-	if (send <= 0) return send;
-	bzero(buffer, DEFAULT_BUFFER_SIZE);
-	
-	// send storage
-	sprintf(buffer, "%d", ressource.storage);
-	send = sendTCP(socket, (char *) buffer, sizeof(size_t));
-	if (send <= 0) return send;
-	bzero(buffer, DEFAULT_BUFFER_SIZE);
-	return 1;
-}
-
-/**
- * @brief Send all ressource structure
- * 
- * @param socket 
- * @param buffer 
- * @param length 
- * @return int 
- */
-int sendRessources(int socket, char* buffer, struct ressource* ressources, int length) 
-{
-	int send = 0;
-
-	sprintf(buffer, "%d", length);
-	send = sendTCP(socket, (char *) buffer, sizeof(int));
-	if (send <= 0) return send;
-
-	for (int i=0; i < length; i++){
-		send = sendRessource(socket, buffer, ressources[i]);
-		if (send <= 0) return send;
+	if (nbstores > MAX_STORES){
+		printf(RED "[-]Nombre de données trop important! Le max est %i, vous en avez donné(s) %i", MAX_STORES, nbstores);
+		exit(1);
 	}
 
-	return 1;
-}
+	shm_data data;
+	data.nb_stores = nbstores;
 
-/**
- * @brief initialize data
- * 
- * @param data 
- * @param ressources 
- */
-void initData(struct data* data, struct ressource* ressources) 
-{
-	struct ressource new;
-	int res = 0;
-
-	new.city = (char *) "Lyon";
-	new.length = strlen(new.city);
-	new.CPU = 10;
-	new.storage = 50000;
-	ressources[0] = new;
-	res++;
-
-	new.city = (char *) "Montpellier";
-	new.length = strlen(new.city);
-	new.CPU = 50;
-	new.storage = 500000;
-	ressources[1] = new;
-	res++;
-
-	data->length = res;
-	data->ressources = ressources;
-	printData(data);
-}
-
-/**
- * @brief client handler
- * 
- * @param param 
- * @return void* 
- */
-void* handleClient(void* param) 
-{
-
-	//get params
-	struct thread_param *p = (struct thread_param*) param;
-	int socket = *p->socket;
-
-	//lock mutex
-	pthread_mutex_lock(p->mutex);
-
-	//store the socket and update nbClient
-	p->socketStore[*p->nbClient] = socket;
-	*p->nbClient += 1;
-
-	//unlock mutex
-	pthread_mutex_unlock(p->mutex);
+	rewind(f); // REPLACE LE CUSEUR AU DEBUT DU FICHIER
+	char * token;
 	
-	//struct message msg;
-	char buffer[DEFAULT_BUFFER_SIZE];
-
-	// send available ressources to the client
-	int send = sendRessources(socket, buffer, p->data->ressources, p->data->length);
-	if (send < 0) { perror(RED "[-]Error while sending\n"); close(socket);}
-	else if (send == 0) { printf(YEL "[~]The client is disconnected\n"); close(socket);}	
-
-	while(1) {
-
-		// int recv = recvMessage(socket, buffer, &msg);
-		// if (recv < 0){ perror (RED "[-]Receive error"); close(socket);}
-		// if (recv == 0) { printf(YEL "[~]The socket is closed\n"); close(socket);}
-
-		// if (msg.service == 0) {
-		// 	printf(MAG "[+]Demand CPU usage: %li\n", msg.quantity);
-		// } else {
-		// 	printf(MAG "[+]Demand Storage usage: %li\n", msg.quantity);
-		// }
-
-		//send it the message
-		// int send = sendTCP(socket, buffer, sizeof(buffer));
-		// if (send < 0) { perror("[-]Sendind error\n"); close(socket); exit(1); }
-		// else if (send == 0) { printf("[-]The client is disconnected\n"); close(socket); break;}
-	}
-
-	pthread_exit(NULL);
-}
-
-int main(int argc, char const *argv[]) 
-{
-	
-	if (argc != 2) 
-		printUsage(argv[0]);
-
-	// ------- SOCKET INITIALISATION ------- //
-
-	//try to create a socket
-	int _socket; if ( (_socket = socket(PF_INET, SOCK_STREAM, 0)) == -1) { exit(1); }
-	printf(GRN "[+]Server Socket created\n");
-
-	//create server structure
-	struct sockaddr_in server;
-	server.sin_family = AF_INET;
-	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons(atoi(argv[1]));
-
-	//try to bind the port
-	if (bind(_socket, (struct sockaddr*) &server, sizeof(server)) == -1) { exit(1); }
-	printf(GRN "[+]Bind to port %i\n", atoi(argv[1]));
-
-	//try to listen
-	if (listen(_socket, MAX_CLIENT) == -1) { exit(1);}
-	printf(GRN "[+]Listening...\n");
-
-	//new client
-	int client;
-	struct sockaddr_in clientAddr;
-	socklen_t addr_size;
-
-
-	// ------- THREAD INITIALISATION ------- //
-
-	//thread store
-	pthread_t threads[MAX_CLIENT];
-
-	//thread mutex
-	pthread_mutex_t mutex;
-	pthread_mutex_init(&mutex, NULL);
-
-	//thread cond
-	pthread_cond_t cond;
-	pthread_cond_init(&cond, NULL);
-
-
-	// socket storage
-	int* socketStore = malloc(MAX_CLIENT * sizeof(int));
-
-	// init data
-	printf(CYN "\n------------------------------\n");
-	printf(CYN "----- * AVAILABLE DATA * -----\n");
-	printf(CYN "------------------------------\n");
-	struct data* data = malloc(sizeof(struct data));
-	struct ressource ressources[MAX_RESSOURCES];
-	initData(data, ressources);
-
-	//start the program
-	int nbClient=0; while(1) {
-		client = accept(_socket, (struct sockaddr *) &clientAddr, &addr_size);
-		if (client == -1) {exit(1);}
-		printf(YEL "[+]Connection accepted from %s:%d\n", inet_ntoa(clientAddr.sin_addr), ntohs(clientAddr.sin_port));
-
-		//create param to send with the thread of the client
-		struct thread_param *param = (struct thread_param*) malloc(sizeof(struct thread_param));
-		param->socket = &client;
-		param->socketStore = socketStore;
-		param->nbClient = &nbClient;
-		param->data = data;
-		param->mutex = &mutex;
-
-		//create a new thread for the client
-		if (pthread_create(&threads[nbClient], NULL, handleClient, param) != 0) { perror(RED "erreur creation thread\n"); exit(1); }
+	// LIT LE FICHIER LIGNE PAR LIGNE ET COPIE LES INFORMATIONS DANS LE TABLEAU DE STORES
+	for (int i = 0; i < data.nb_stores; i++){
+		fgets(ligne, DEFAULT_BUFFER_SIZE, f);
+		// RECUPERE ET COPIE CITY
+		token = strtok(ligne, " ");
+		memcpy(data.stores[i].city, token, 20);
+		// RECUPERE ET COPIE CPU
+		token = strtok(NULL, " ");
+		data.stores[i].cpu = atoi(token);
+		// RECUPERE ET COPIE GO
+		token = strtok(NULL, " ");
+		data.stores[i].go = atoi(token);
 	}
 	
-	//close the socket
-	close(_socket);
+	int shmID; // identificateur de la memoire partagee
+	void* ptr_shm; // pointeur de la memoire partagee
+
+	// CREATION DU SEGMENT MEMOIRE PARTAGEE
+	if ((shmID = shmget(SHM_KEY, sizeof(data), IPC_CREAT | 0666)) == -1) {
+		perror("serveur : erreur shmget");
+		exit(1);
+	}
+
+
+	// ATTACHEMENT AU SEGMENT MEMOIRE PARTAGEE
+	if ((ptr_shm = shmat(shmID, NULL, 0)) == (void *) -1) {
+		perror("serveur : erreur shmat");
+		exit(1);
+	}
+
+	((shm_data*)ptr_shm)->nb_client_connected = 0;
+	((shm_data*)ptr_shm)->nb_stores = data.nb_stores;
+	for (int i = 0; i < data.nb_stores; i++)
+	{
+		memcpy(((shm_data*)ptr_shm)->stores[i].city, data.stores[i].city, 20);
+		((shm_data*)ptr_shm)->stores[i].cpu = data.stores[i].cpu;
+		((shm_data*)ptr_shm)->stores[i].go = data.stores[i].go;
+	}
+	((shm_data*)ptr_shm)->nb_logs = 0;
+
+
+	/* ------------ SEMAPHORES ------------ */
+	int semID;
+	int sem_size = 4*nbstores+1;
+	if ((semID = semget(SEM_KEY, sem_size, IPC_CREAT | 0666)) < 0){
+        perror(RED "[-]Erreur creation semaphore");
+		exit(1);
+	}
+
+	// INITIALISATION DU TABLEAU DE SEMAPHORES
+    semun semun;
+
+    for (int i = 0; i < nbstores; i++) {
+        semun.val = 0;
+
+        // CPU PARTAGE
+        if (semctl(semID, i*nbstores+1, SETVAL, semun) == -1) {
+            perror(RED "[-]Erreur init semaphores");
+            exit(1);
+        }
+
+        // STOCKAGE PARTAGE
+        if (semctl(semID, i*nbstores+3, SETVAL, semun) == -1) {
+            perror(RED "[-]Erreur init semaphores");
+            exit(1);
+        }
+
+        // CPU DISPONIBLE
+        semun.val = data.stores[i].cpu;
+        if (semctl(semID, i*nbstores, SETVAL, semun) == -1) {
+            perror(RED "[-]Erreur init semaphores");
+            exit(1);
+        }
+
+        // STOCKAGE DISPONIBLE
+        semun.val = data.stores[i].go;
+        if (semctl(semID, i*nbstores+2, SETVAL, semun) == -1) {
+            perror(RED "[-]Erreur init semaphores");
+            exit(1);
+        }
+	}
+
+	semun.val = 0;
+	if (semctl(semID, sem_size-1, SETVAL, semun) == -1) {
+		perror("serveur : erreur initialisation semaphore on_update");
+		exit(1);
+	}
+
+    print_system(semID, sem_size, data.stores, data.nb_stores);
+
+
+//    semun.array = malloc(sem_size*sizeof(short));
+//	if (semctl(semID, 0, GETALL, semun.array) == -1){
+//		perror("serveur : erreur semctl GETALL");
+//		exit(1);
+//	}
+//
+//	for (int i = 0; i < sem_size; i++){
+//		// sem[i] = semun.array[i];
+//		printf("sem[%d] = %d\n", i, semun.array[i]);
+//	}
+
+    printf(GRN "\n\n[+]Serveur en attente de clients...\n");
+    printf(RESET "Appuyez sur une entrée pour l'arrêter !\n");
+    fgetc(stdin);
+
+	// DETACHEMENT AU SEGMENT MEMOIRE PARTAGEE
+	if (shmdt(ptr_shm) == -1){
+        perror("[-]Erreur shmdt");
+		exit(1);
+	}
+
+	// SUPPRESSION DU SEGMENT DE MEMOIRE PARTAGEE
+	if (shmctl(shmID, IPC_RMID, NULL) == -1){
+        perror("[-]Erreur shmdt");
+		exit(1);
+	}
+
+	if (semctl(semID, 0, IPC_RMID) == -1){
+        perror("[-]Erreur semctl");
+		exit(1);
+	}
+
 	return 0;
 }

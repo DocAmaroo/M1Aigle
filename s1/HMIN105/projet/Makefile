@@ -6,7 +6,7 @@ LDFLAGS = -lpthread
 SRCS0=client.c
 SRCS1=server.c
 
-#command
+#order
 MSQ = @
 RM = $(MSQ)rm -f
 MKDIR_P = mkdir -p obj bin
