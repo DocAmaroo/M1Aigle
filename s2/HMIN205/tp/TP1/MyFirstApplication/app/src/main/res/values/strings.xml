@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MyFirstApplication</string>
+    <string name="label_name">Name:</string>
+    <string name="label_first_name">Firstname:</string>
+    <string name="label_birthday">Birthday:</string>
+    <string name="label_field_of_expertise">Field Of Expertise</string>
+    <string name="label_phone_number">Phone number:</string>
+    <string name="submit">SUBMIT!</string>
+    <string name="show_calendar">Choose a date</string>
+    <string name="dialog_validation_msg">Do you confirm ?</string>
+    <string name="dialog_validation_title">Validate</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok_btn">OK</string>
+    <string name="okActivity_title">You have click on OK button</string>
+    <string name="return_btn">Return</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="welcome">Hello</string>
+    <string name="go_to_java_version_btn">See Java Version</string>
+    <string name="go_to_new_intent_btn">Submit and go to next page</string>
+    <string name="my_intent_title">User informations</string>
+    <string name="go_to_xml_version_btn">See XML Version</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Capteurs</string>
+    <string name="h_available_sensors">Capteurs disponibles</string>
+    <string name="h_all_sensors">Tous les capteurs</string>
+</resources>
