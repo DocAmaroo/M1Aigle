@@ -1,4 +1,6 @@
 package server;
+import base.*;
+
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 
@@ -9,8 +11,12 @@ public class Server {
 
     public static void main(String args[]) {
         try {
+
+            // Codebase
+            System.setProperty("java.rmi.server.codebase", "file:/D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/out/production/td1/base");
+
             // Set Policies
-            System.setProperty("java.security.policy", "D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/server/Server.policy");
+            System.setProperty("java.security.policy", "file:/D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/server/Server.policy");
             System.setSecurityManager (new SecurityManager());
 
             // Create Species
@@ -21,10 +27,14 @@ public class Server {
             IAnimal doggo = new Animal("Rudy", dog, "Border Collie", "Joseppe", new AnimalFile("Lederniersuivies"));
             IAnimal lechat = new Animal( "Mimi", cat, "Sphinx", "Palpatine", new AnimalFile("Suivisduchat"));
 
+
             // Create the Office
             Office office = new Office();
             office.addPatient(doggo);
             office.addPatient(lechat);
+            for (int i = 0; i < 97; i++) {
+                office.addPatient(doggo); // I lub doggos <3
+            }
 
             // RMIRegistry
             Registry registry = LocateRegistry.createRegistry(1099);

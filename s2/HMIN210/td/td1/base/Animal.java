@@ -1,4 +1,4 @@
-package server;
+package base;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -30,12 +30,10 @@ public class Animal extends UnicastRemoteObject implements IAnimal {
 
 	// Display
 	public String display() throws RemoteException{
-		String res = "";
-		res += "{ " + this.getName() + ": \n";
-		res += "\t[" + this.getSpecies().getSpecies() + ", " + this.getBreed() + "]\n";
-		res += "\tTrainer: " + this.getTrainer() + "\n";
-		res += "\tLastCheckUp: " + this.file.getLastCheckUp();
-		res += "\n}";
-		return res;
+		return "{ " + this.getName() + ": " +
+				"[" + this.getSpecies().getSpecies() + ", " + this.getBreed() + "] | " +
+				"Trainer: " + this.getTrainer() + " | " +
+				"LastCheckUp: " + this.file.getLastCheckUp() +
+				"}";
 	}
 }

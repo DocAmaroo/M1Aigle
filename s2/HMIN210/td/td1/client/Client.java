@@ -1,6 +1,6 @@
 package client;
 
-import server.*;
+import base.*;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -8,7 +8,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-public class Client implements IClient{
+public class Client implements IClient {
     private Client() throws RemoteException {
         UnicastRemoteObject.exportObject(this, 0);
     }
@@ -25,10 +25,10 @@ public class Client implements IClient{
 
             // Get Proxy
             Registry registry = LocateRegistry.getRegistry(host);
-            IOffice proxy = (IOffice) registry.lookup("office");
+            IOffice stub = (IOffice) registry.lookup("office");
 
             // Register client connection
-            proxy.registerClient(client);
+            stub.registerClient(client);
 
             int state = 1;
             Scanner StateScanner = new Scanner(System.in);
@@ -41,11 +41,11 @@ public class Client implements IClient{
 
                 switch (state) {
                     case 0 -> {
-                        proxy.disconnectClient(client);
+                        stub.disconnectClient(client);
                         System.out.println("[+]Vous avez été déconnecté!");
                         System.exit(0);
                     }
-                    case 1 -> proxy.display();
+                    case 1 -> stub.display();
                     case 2 -> {
                         String name = "";
                         String trainer = "";
@@ -61,19 +61,19 @@ public class Client implements IClient{
                         System.out.println("Species of the animal ?");
                         spieces = AnimalScanner.nextLine();
                         IAnimal patient = new Animal(name, new Species(spieces), breed, trainer, new AnimalFile("Empty"));
-                        proxy.addPatient(patient);
+                        stub.addPatient(patient);
                     }
                     case 3 -> {
                         System.out.println("Quel patient souhaitez-vous supprimer ?(par son nom) ");
                         Scanner patientToDeleteScanner = new Scanner(System.in);
                         String patientToDelete = patientToDeleteScanner.nextLine();
-                        proxy.removePatient(patientToDelete);
+                        stub.removePatient(patientToDelete);
                     }
                     case 4 -> {
                         System.out.println("Quel patient recherchez-vous ?(par son nom) ");
                         Scanner patientToCheckScanner = new Scanner(System.in);
                         String patientToCheck = patientToCheckScanner.nextLine();
-                        IAnimal patientRetrieve = proxy.getPatient(patientToCheck);
+                        IAnimal patientRetrieve = stub.getPatient(patientToCheck);
                         if (patientRetrieve != null) {
                             System.out.println("[+]Patient retrouvé: ");
                         }
