@@ -1,5 +1,10 @@
 package server;
-import base.*;
+
+import base.Species;
+import base.Animal;
+import base.IAnimal;
+import base.AnimalFile;
+import base.Office;
 
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
@@ -13,10 +18,10 @@ public class Server {
         try {
 
             // Codebase
-            System.setProperty("java.rmi.server.codebase", "file:/D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/out/production/td1/base");
+            System.setProperty("java.rmi.server.codebase", "file:/D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/Base/out/production/Base");
 
             // Set Policies
-            System.setProperty("java.security.policy", "file:/D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/server/Server.policy");
+            System.setProperty("java.security.policy", "file:/D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/Server/server/Server.policy");
             System.setSecurityManager (new SecurityManager());
 
             // Create Species

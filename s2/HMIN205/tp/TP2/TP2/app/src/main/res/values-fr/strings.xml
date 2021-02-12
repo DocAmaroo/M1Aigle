@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Capteurs</string>
-    <string name="h_available_sensors">Capteurs disponibles</string>
     <string name="h_all_sensors">Tous les capteurs</string>
+    <string name="h_accelerometer">Accéléromètre</string>
+    <string name="direction_left">Gauche</string>
+    <string name="direction_right">Droite</string>
+    <string name="h_proximity">Proximité</string>
+    <string name="txt_flashlight_on">Secouer pour allumer le flash</string>
+    <string name="txt_flashlight_off">Secouer à nouveau pour éteindre le flash</string>
+    <string name="direction_up">Haut</string>
+    <string name="direction_down">Bas</string>
 </resources>

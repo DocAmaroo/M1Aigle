@@ -1,6 +1,11 @@
 package client;
 
-import base.*;
+import base.IClient;
+import base.IOffice;
+import base.Species;
+import base.Animal;
+import base.IAnimal;
+import base.AnimalFile;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -19,8 +24,11 @@ public class Client implements IClient {
         String host = (args.length < 1) ? null : args[0];
 
         try {
+            // Codebase
+            System.setProperty("java.rmi.server.codebase", "file:/D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/Base/out/production/Base");
+
             // Set policies
-            System.setProperty("java.security.policy", "D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/client/Client.policy");
+            System.setProperty("java.security.policy", "D:/mydoc/classes/fac/M1Aigle/s2/HMIN210/td/td1/Client/client/Client.policy");
             System.setSecurityManager(new SecurityManager());
 
             // Get Proxy
