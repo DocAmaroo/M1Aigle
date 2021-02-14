@@ -10,4 +10,5 @@
     <string name="txt_flashlight_off">Secouer à nouveau pour éteindre le flash</string>
     <string name="direction_up">Haut</string>
     <string name="direction_down">Bas</string>
+    <string name="txt_proximity_distance">"distance: "</string>
 </resources>

@@ -9,4 +9,5 @@
     <string name="direction_down">Down</string>
     <string name="txt_flashlight_on">Shake to turn on the flash</string>
     <string name="txt_flashlight_off">Shake again to turn off the flash</string>
+    <string name="txt_proximity_distance">"distance: "</string>
 </resources>

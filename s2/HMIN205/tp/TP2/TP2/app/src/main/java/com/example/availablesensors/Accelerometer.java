@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,8 +25,8 @@ public class Accelerometer extends AppCompatActivity implements SensorEventListe
 
 
     // --- Sensors
-    private SensorManager senManager;
-    private Sensor senAccelerometer;
+    private SensorManager sensorManager;
+    private Sensor sensorAccelerometer;
     private float[] lastPos = new float[3];
     private String[] direction = {"NONE", "NONE"};
     private long lastUpdate;
@@ -74,23 +75,29 @@ public class Accelerometer extends AppCompatActivity implements SensorEventListe
 
         
         // --- Listen the accelerometer
-        senManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        senAccelerometer = senManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        senManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        // --- Next activity button
+        findViewById(R.id.btn_proximity).setOnClickListener(v -> {
+            Intent intent = new Intent(this, Proximity.class);
+            startActivity(intent);
+        });
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        senManager.unregisterListener(this); // unregister sensor
+        sensorManager.unregisterListener(this); // unregister sensor
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        senManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 
