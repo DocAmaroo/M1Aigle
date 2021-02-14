@@ -1,6 +1,6 @@
 # HMIN204 - Conduite de projet
 
-"E. Bourreau, aka Hagridou <3"  
+"E. Bourreau, aka Hagridou :heart:"  
 *~ Il faut toujours plus de temps que prévu, même en tenant compte du théorème d’Eric Bourreau, Eric Bourreau 2021 ~*
 
 * [Liens utiles](#liens-utiles)
