@@ -41,6 +41,10 @@ Préparation des contrats de réalisations (contenant les cahiers des charges).
 
 Produire un logiciel testé.
 
+* Programmation (~90%)
+* Test (~10%)
+
+
 #### 🚩 **5. Mise en œuvre**
 
 Installation et intégration des logiciels testé.
