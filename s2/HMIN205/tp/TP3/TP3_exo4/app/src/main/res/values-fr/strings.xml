@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">TP3_exo4</string>
+	<string name="label_name">Nom</string>
+	<string name="label_firstname">Prenom</string>
+	<string name="label_phone_number">Telephone</string>
+	<string name="label_password">Mot de passe</string>
+	<string name="submit">Soumettre</string>
+	<string name="submit_success">Vos informations ont été sauvegardés avec succès</string>
+	<string name="submit_error">Une erreur est survenue, veuillez réessayer</string>
+	<string name="header_fileRead">Données lus dans le fichier</string>
+	<string name="utilisation_counter_txt">Nombre d\'utilisation</string>
+	<string name="planning">Afficher le planning</string>
+	<string name="header_planning">Planning</string>
+	<string name="slot_1">8h-10h</string>
+	<string name="slot_2">10h-12h</string>
+	<string name="slot_3">14h-16h</string>
+	<string name="slot_4">16h-18h</string>
+</resources>

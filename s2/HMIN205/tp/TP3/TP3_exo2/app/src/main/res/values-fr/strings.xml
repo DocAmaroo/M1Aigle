@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">TP3_exo2</string>
+	<string name="label_name">Nom</string>
+	<string name="label_firstname">Prénom</string>
+	<string name="label_phone_number">Numéro de téléphone</string>
+	<string name="label_password">Mot de passe</string>
+	<string name="submit">Soumettre</string>
+	<string name="submit_success">Vos informations ont été sauvegardés avec succès</string>
+	<string name="submit_error">Une erreur est survenue, veuillez réessayer</string>
+	<string name="header_fileRead">Données lis dans le fichier</string>
+</resources>

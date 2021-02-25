@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TP3_exo1</string>
+    <string name="label_name">Name</string>
+    <string name="label_firstname">Firstname</string>
+    <string name="label_phone_number">Phone number</string>
+    <string name="label_password">Password</string>
+</resources>
