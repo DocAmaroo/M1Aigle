@@ -32,5 +32,19 @@
 
 # TODO LIST
 
-:triangular_flag_on_post: **HMIN104** 
-- [ ] Rendre le projet LISP
+:triangular_flag_on_post: **HMIN204** 
+- [ ] Analyse du risque
+
+:triangular_flag_on_post: **HMIN205** 
+- [ ] Finir exercice 5 et 6 TP3
+
+:triangular_flag_on_post: **HMIN210** 
+- [ ] TP injection dépendance
+
+:triangular_flag_on_post: **HMIN232** 
+- [ ] Lire les notebooks
+- [ ] (réfléchir au projet)
+
+:triangular_flag_on_post: **HMIN233** 
+- [ ] Finir le TP1 (MAX-CSP)
+- [ ] Finir le TP2 (NetLogo)
