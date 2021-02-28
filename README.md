@@ -32,14 +32,8 @@
 
 # TODO LIST
 
-:triangular_flag_on_post: **HMIN204** 
-- [ ] Analyse du risque
-
 :triangular_flag_on_post: **HMIN205** 
 - [ ] Finir exercice 5 et 6 TP3
-
-:triangular_flag_on_post: **HMIN210** 
-- [ ] TP injection dépendance
 
 :triangular_flag_on_post: **HMIN232** 
 - [ ] Lire les notebooks

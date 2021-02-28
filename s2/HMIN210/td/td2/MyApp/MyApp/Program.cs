@@ -25,6 +25,25 @@ namespace MyApp
             sub.display();
             mult.display();
             imult.display();
+
+            BaseClass d = new DerivedClass();
+            d.Method1();
+        }
+    }
+
+    class BaseClass
+    {
+        public void Method1()
+        {
+            Console.WriteLine("Base - Method1");
+        }
+    }
+
+    class DerivedClass : BaseClass
+    {
+        public void Method1()
+        {
+            Console.WriteLine("Derived - Method1");
         }
     }
 }
