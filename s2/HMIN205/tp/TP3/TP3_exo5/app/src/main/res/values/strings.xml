@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">TP3_exo5</string>
+    <string name="label_name">Name</string>
+    <string name="label_firstname">Firstname</string>
+    <string name="label_phone_number">Phone number</string>
+    <string name="label_password">Password</string>
+    <string name="submit">Submit</string>
+    <string name="submit_success">Your information have been saved successfully</string>
+    <string name="submit_error">An error occurred, try again</string>
+    <string name="header_fileRead">Data read in file</string>
+    <string name="utilisation_counter_txt">Number of uses</string>
+    <string name="planning">Show planning</string>
+    <string name="header_planning">Planning</string>
+    <string name="slot_1">8am-10am</string>
+    <string name="slot_2">10am-12am</string>
+    <string name="slot_3">2pm-4pm</string>
+    <string name="slot_4">4pm-6pm</string>
+    <string name="new_day">New day</string>
+</resources>

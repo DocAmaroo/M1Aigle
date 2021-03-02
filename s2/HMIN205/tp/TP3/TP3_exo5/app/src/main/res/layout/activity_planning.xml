@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Planning">
+
+	<TextView
+		android:id="@+id/header_planning"
+		android:text="@string/header_planning"
+		android:textSize="20sp"
+		android:padding="5dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginLeft="8dp"
+		android:layout_marginRight="8dp"
+		android:layout_marginTop="16dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<TableLayout
+		android:id="@+id/tableLayout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginLeft="8dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginRight="8dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/header_planning">
+
+		<TableRow>
+
+			<TextView
+				android:padding="2dp"
+				android:text="@string/slot_1"
+				android:textSize="15sp" />
+
+			<TextView
+				android:id="@+id/slot_1"
+				android:padding="2dp"
+				android:textSize="15sp" />
+		</TableRow>
+
+		<TableRow>
+
+			<TextView
+				android:padding="2dp"
+				android:text="@string/slot_2"
+				android:textSize="15sp" />
+
+			<TextView
+				android:id="@+id/slot_2"
+				android:padding="2dp"
+				android:textSize="15sp" />
+		</TableRow>
+
+		<TableRow>
+
+			<TextView
+				android:padding="2dp"
+				android:text="@string/slot_3"
+				android:textSize="15sp" />
+
+			<TextView
+				android:id="@+id/slot_3"
+				android:padding="2dp"
+				android:textSize="15sp" />
+		</TableRow>
+
+		<TableRow>
+
+			<TextView
+				android:padding="2dp"
+				android:text="@string/slot_4"
+				android:textSize="15sp" />
+
+			<TextView
+				android:id="@+id/slot_4"
+				android:padding="2dp"
+				android:textSize="15sp" />
+		</TableRow>
+	</TableLayout>
+
+	<Button
+		android:id="@+id/change_day"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="24dp"
+		android:text="@string/new_day"
+		android:onClick="onNewDay"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+</androidx.constraintlayout.widget.ConstraintLayout>
