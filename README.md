@@ -8,6 +8,7 @@
 </p>
 
 # Semestre 1
+
 :books: [HMIN102 - Ingénierie logicielle](https://github.com/DocAmaroo/M1Aigle/tree/master/s1/HMIN102 "HMIN102 courses")
 
 :books: [HMIN103 - Données du Web](https://github.com/DocAmaroo/M1Aigle/tree/master/s1/HMIN103 "HMIN103 courses")
@@ -19,6 +20,7 @@
 :books: [HMIN122M - Entrepôts de données et big-data](https://github.com/DocAmaroo/M1Aigle/tree/master/s1/HMIN122M "HMIN122M courses")
 
 # Semestre 2
+
 :books: [HMIN204 - Conduite de projet](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN204 "HMIN204 courses")
 
 :books: [HMIN205 - Développement logiciel pour mobiles](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN205 "HMIN205 courses")
@@ -29,13 +31,15 @@
 
 :books: [HMIN233 - Algorithmique d'exploration et de mouvement](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN233 "HMIN233 courses")
 
-
 # TODO LIST
+:triangular_flag_on_post: **TER** 
+- [ ] Avancer sur le TER
 
 :triangular_flag_on_post: **HMIN232** 
 - [ ] Lire les notebooks
-- [ ] (réfléchir au projet)
+- [ ] Faire le projet (quel fun!)
 
 :triangular_flag_on_post: **HMIN233** 
 - [ ] Finir le TP1 (MAX-CSP)
+- [ ] Finir le CC Mr. Lazaar
 - [ ] Finir le TP3 NetLogo (oskour !)
