@@ -25,7 +25,7 @@
 
 :books: [HMIN210 - Architecture logicielles distribuées](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN210 "HMIN210 courses")
 
-:books: [HMIN224 - Algorithmique distribuée](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN224 "HMIN224 courses")
+:books: [HMIN232 - Méthodes de la science des données](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN232 "HMIN232 courses")
 
 :books: [HMIN233 - Algorithmique d'exploration et de mouvement](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN233 "HMIN233 courses")
 
