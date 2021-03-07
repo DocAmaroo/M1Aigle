@@ -40,10 +40,14 @@ public class MainActivity extends AppCompatActivity {
         // save user id
         savedInstanceState.putString("USER_ID", this.userId);
 
+        EditText password = findViewById(R.id.user_password_entry);
+        password.setText(null);
+
         // Get all entries
         String username = this.userNameEntry.getText().toString();
         String firstname = this.firstNameEntry.getText().toString();
         String phone = this.phoneEntry.getText().toString();
+
         ArrayList<String> entries = new ArrayList<>(Arrays.asList(username, firstname, phone));
 
         // saved them

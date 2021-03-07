@@ -1,0 +1,7 @@
+c number of classes  : 3
+c avg degree          : 1.75
+p edge 4 4
+e 1 2
+e 1 3
+e 2 3
+e 2 4
