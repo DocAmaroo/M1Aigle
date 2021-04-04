@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Exercice4_App.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Exercice4_App_IbisHotelServices_IbisServices" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://localhost:44314/WebServices/IbisServices.asmx</Value>
+    </Setting>
+    <Setting Name="Exercice4_App_Formule1HotelServices_Formule1Services" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://localhost:44314/WebServices/Formule1Services.asmx</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

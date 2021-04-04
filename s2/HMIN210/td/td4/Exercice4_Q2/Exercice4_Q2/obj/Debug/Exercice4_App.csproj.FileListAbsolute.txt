@@ -1,0 +1,9 @@
+D:\mydoc\classes\fac\M1Aigle\s2\HMIN210\td\td4\Exercice4_Q2\Exercice4_Q2\obj\Debug\Exercice4_App.Forms.Form1.resources
+D:\mydoc\classes\fac\M1Aigle\s2\HMIN210\td\td4\Exercice4_Q2\Exercice4_Q2\obj\Debug\Exercice4_App.csproj.GenerateResource.cache
+D:\mydoc\classes\fac\M1Aigle\s2\HMIN210\td\td4\Exercice4_Q2\Exercice4_Q2\obj\Debug\Exercice4_App.csproj.CoreCompileInputs.cache
+D:\mydoc\classes\fac\M1Aigle\s2\HMIN210\td\td4\Exercice4_Q2\Exercice4_Q2\bin\Debug\Exercice4_App.exe.config
+D:\mydoc\classes\fac\M1Aigle\s2\HMIN210\td\td4\Exercice4_Q2\Exercice4_Q2\bin\Debug\Exercice4_App.exe
+D:\mydoc\classes\fac\M1Aigle\s2\HMIN210\td\td4\Exercice4_Q2\Exercice4_Q2\bin\Debug\Exercice4_App.pdb
+D:\mydoc\classes\fac\M1Aigle\s2\HMIN210\td\td4\Exercice4_Q2\Exercice4_Q2\obj\Debug\Exercice4_App.exe
+D:\mydoc\classes\fac\M1Aigle\s2\HMIN210\td\td4\Exercice4_Q2\Exercice4_Q2\obj\Debug\Exercice4_App.pdb
+D:\mydoc\classes\fac\M1Aigle\s2\HMIN210\td\td4\Exercice4_Q2\Exercice4_Q2\obj\Debug\Exercice4_App.csprojAssemblyReference.cache

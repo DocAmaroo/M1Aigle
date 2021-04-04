@@ -32,14 +32,8 @@
 :books: [HMIN233 - Algorithmique d'exploration et de mouvement](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN233 "HMIN233 courses")
 
 # TODO LIST
-:triangular_flag_on_post: **TER** 
-- [ ] Avancer sur le TER
-
-:triangular_flag_on_post: **HMIN232** 
-- [ ] Lire les notebooks
-- [ ] Faire le projet (quel fun!)
+:triangular_flag_on_post: **HMIN210** 
+- [ ] Faire le dépôt git pour le TP SOAP et le rapport.
 
 :triangular_flag_on_post: **HMIN233** 
-- [ ] Finir le TP1 (MAX-CSP)
-- [ ] Finir le CC Mr. Lazaar
-- [ ] Finir le TP3 NetLogo (oskour !)
+- [ ] Finir le TP5 (TP et Rapport).

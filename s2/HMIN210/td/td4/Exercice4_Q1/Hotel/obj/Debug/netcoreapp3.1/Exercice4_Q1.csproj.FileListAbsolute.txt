@@ -1,0 +1,13 @@
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\bin\Debug\netcoreapp3.1\Exercice4_Q1.exe
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\bin\Debug\netcoreapp3.1\Exercice4_Q1.deps.json
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\bin\Debug\netcoreapp3.1\Exercice4_Q1.runtimeconfig.json
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\bin\Debug\netcoreapp3.1\Exercice4_Q1.runtimeconfig.dev.json
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\bin\Debug\netcoreapp3.1\Exercice4_Q1.dll
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\bin\Debug\netcoreapp3.1\Exercice4_Q1.pdb
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\obj\Debug\netcoreapp3.1\Exercice4_Q1.AssemblyInfoInputs.cache
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\obj\Debug\netcoreapp3.1\Exercice4_Q1.AssemblyInfo.cs
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\obj\Debug\netcoreapp3.1\Exercice4_Q1.csproj.CoreCompileInputs.cache
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\obj\Debug\netcoreapp3.1\Exercice4_Q1.dll
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\obj\Debug\netcoreapp3.1\Exercice4_Q1.pdb
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\obj\Debug\netcoreapp3.1\Exercice4_Q1.genruntimeconfig.cache
+C:\Users\ctom3\Desktop\TP_SOAP\Exercice4_Q1\Hotel\obj\Debug\netcoreapp3.1\Exercice4_Q1.csprojAssemblyReference.cache
