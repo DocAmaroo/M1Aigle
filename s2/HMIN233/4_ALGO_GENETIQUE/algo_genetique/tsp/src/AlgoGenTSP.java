@@ -130,7 +130,6 @@ public class AlgoGenTSP {
             newGen.add(population.get(ip1).croiser(population.get(ip2)).muter());
         }
         population = newGen;
-
     }
 
     public void afficherPopulation() {
