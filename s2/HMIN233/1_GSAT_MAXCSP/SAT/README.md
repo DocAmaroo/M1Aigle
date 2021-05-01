@@ -17,9 +17,13 @@ On as 2 pénalités :
 
 **Coût total:** 2
 
-## Question 3/4
+## Question 3
 
-voir cours1 diapo 7
+Cela retourne un minimum local
+
+## Question 4
+
+La méthode Tabu permet d'éviter les cycles.
 
 # 2. Codage d'une métaheuristique dédiée à SAT
 Méthode de compilation:
