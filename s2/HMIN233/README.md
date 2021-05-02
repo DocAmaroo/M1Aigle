@@ -7,6 +7,9 @@
   - [Recherche local](#recherche-local)
     - [Définitions](#définitions)
     - [Algorithmes](#algorithmes)
+  - [Fouille de donnée](#fouille-de-donnée)
+  - [Mouvement](#mouvement)
+    - [Définitions](#définitions-1)
 
 ## Recherche local
 
@@ -33,7 +36,7 @@
 
 ### Algorithmes
 
-#### Inconvénient d'un métaheuristiques
+#### Inconvéniant d'un métaheuristiques
 
 🔴 `Incomplétude` &rarr; la recherche n'est pas systématique (toutes les possibilités ne sont pas essayées) => aucune preuve garantie que la meilleure solution a été trouvée.
 
@@ -52,3 +55,19 @@
 🟢 `Recuit simulé` &rarr; Accepter parfois une config. qui donne une moins bonne config.
 
 🟢 `IDWalk` &rarr; N'utilisez que la gestion des voisins pour intensifier ou diversifier la recherche.
+
+## Fouille de donnée
+
+/ feuille déjà faite
+
+## Mouvement
+
+### Définitions
+
+💡 `Flocking` &rarr; Mouvement d'agent (homme, oiseau, ...) qui se déplacent en formation.
+
+$$\vec{D} = \omega_{a} + \beta_{a} + \omega_{e} + \beta_{e} + \omega_{c} + \beta_{c}$$
+
+* a = alignement
+* e = évitement
+* c = cohésion
