@@ -33,7 +33,7 @@
 
 ### Algorithmes
 
-#### Inconvéniant d'un métaheuristiques
+#### Inconvénient d'un métaheuristiques
 
 🔴 `Incomplétude` &rarr; la recherche n'est pas systématique (toutes les possibilités ne sont pas essayées) => aucune preuve garantie que la meilleure solution a été trouvée.
 
