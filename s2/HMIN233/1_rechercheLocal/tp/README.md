@@ -6,6 +6,8 @@
 
 - Echanger deux voiture côte à côte => n(n-1)/2
 - Echanger deux voitures quelconque => n-1
+- On coupe en deux et on échange les deux morceaux => (c'est pas opti du tout)
+- On change le type des voitures => (c'est pas opti du tout)
 
 ## Question 2
 

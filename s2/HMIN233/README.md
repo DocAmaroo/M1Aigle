@@ -10,6 +10,8 @@
   - [Fouille de donnée](#fouille-de-donnée)
   - [Mouvement](#mouvement)
     - [Définitions](#définitions-1)
+    - [Calcul des vecteurs](#calcul-des-vecteurs)
+    - [Choix de chemin](#choix-de-chemin)
 
 ## Recherche local
 
@@ -66,8 +68,39 @@
 
 💡 `Flocking` &rarr; Mouvement d'agent (homme, oiseau, ...) qui se déplacent en formation.
 
-$$\vec{D} = \omega_{a} + \beta_{a} + \omega_{e} + \beta_{e} + \omega_{c} + \beta_{c}$$
+### Calcul des vecteurs
 
-* a = alignement
-* e = évitement
-* c = cohésion
+Voir pdf
+
+### Choix de chemin
+
+#### Difficultées
+
+🔴 Trouver le but le plus rapidement
+
+🔴 Ne pas rester bloqué (obstacle || min. local)
+
+🔴 Optimiser le chemin (détour inutile)
+
+#### Choix possibles
+
+🟢 `Dijkstra` &rarr; Explorer l'espace et essayer de trouver le "meilleur" chemin.
+
+* On ne sait pas où se trouve le but.
+* On parcours tout l'espace.
+* On trouve le meilleur chemin de cette espace.
+
+🏁 Recherche coûteuse mais résultat parfait.
+
+🟢 `Best-first` &rarr; Essayer d'atteindre le but en utilisant une heuristique.
+
+* On choisis toujours le chemin qui diminue au mieux la distance avec le but. Si blocage on explore autour.
+
+🏁 Recherche rapide mais pas optimal.
+
+🟢 `A*` &rarr; Combinaison des deux précédents.
+
+* On applique l'heuristique de `Best-first`
+* On optimise le chemin parcourus en tenant compte de la distance à l'origine comme avec `Dijkstra`.
+
+🏁 Bon compromis entre temps de recherche et qualité. (#IA)
