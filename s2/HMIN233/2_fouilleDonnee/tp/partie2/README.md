@@ -60,7 +60,7 @@ AC<sup>3</sup>,
 BC<sup>3</sup>, 
 DE<sup>2</sup>, 
 EF<sup>5</sup>, 
-ABC<sup>2</sup>
+ABC<sup>3</sup>
 }
 
 ### Question 3
