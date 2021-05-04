@@ -41,7 +41,7 @@ Alors :
 
 :pushpin: M<sub>&theta; = {ABC<sup>3</sup>, DE<sup>2</sup>, EF<sup>5</sup>}
 
-:round_pushpin: Fréquent : F = {A, B, C, D, E, F, AB, AC, BC, DE, EF, ABC}
+:round_pushpin: Fréquent : F = {A, B, C, D, E, F, AB, AC, BC, DE, EF, ABC, ABE}
 
 
 ### Question 2
