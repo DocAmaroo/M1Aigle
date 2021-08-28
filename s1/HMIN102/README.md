@@ -121,7 +121,7 @@ NB : les procédures ne sont pas composables*
 
 :bulb: `spécialisation/redéfinition partielle` &rarr; Redéfinition faisant appel à la méthode redéfinie (masquée) *(super)*
 
-:bulb: `paramétrage par spécialisation` &rarr; Lors d'un appel d'une méthode d'une sous-classe dans la classe (exemple dans le cours: [voir p10](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/1_reuseAndFrameworks.pdf))
+:bulb: `paramétrage par spécialisation` &rarr; Lors d'un appel d'une méthode d'une sous-classe dans la classe (exemple dans le cours: [voir p10](./cours/1_reuseAndFrameworks.pdf))
 
 :bulb: `paramétrage par composition` &rarr; Une méthode utilise les méthodes d'une méthode.
 
@@ -139,7 +139,7 @@ class Classname {
 // insaneMethod est paramétrée par toString() de par le paramètre b
 ```
 
-(autre exemple dans le cours: [voir p10](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/1_reuseAndFrameworks.pdf))
+(autre exemple dans le cours: [voir p10](./cours/1_reuseAndFrameworks.pdf))
 
 :bulb: `affectation polymorphique` &rarr; un type (T), peut être déf. comme un sous-type (ST) d'un autre. (*`Collection L = new ArrayList();`*)
 
@@ -214,11 +214,11 @@ class MyClassnameTest {
 
 ## Pattern
 
-:bulb: `Décorateur` &rarr; Ajout/Modif. d'une fonctionnalité à un objet sans modifier sa classe (ni les instances de celle-ci). [voir p5](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/4_cpatterns.pdf)
+:bulb: `Décorateur` &rarr; Ajout/Modif. d'une fonctionnalité à un objet sans modifier sa classe (ni les instances de celle-ci). [voir p5](./cours/4_cpatterns.pdf)
 
-:bulb: `Adaptateur` &rarr; Permet de convertir l'interface d'une classe en une autre interface que le client attend. [voir p9](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/4_cpatterns.pdf)
+:bulb: `Adaptateur` &rarr; Permet de convertir l'interface d'une classe en une autre interface que le client attend. [voir p9](./cours/4_cpatterns.pdf)
 
-:bulb: `State` &rarr; Gestion par état. [voir p15 & 16](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/4_cpatterns.pdf)
+:bulb: `State` &rarr; Gestion par état. [voir p15 & 16](./cours/4_cpatterns.pdf)
 
 ## Ligne de produits
 
@@ -231,7 +231,7 @@ Cette méthode permet:
 
 ### Modélisation
 
-[voir diapo 22](https://github.com/DocAmaroo/M1Aigle/blob/master/HMIN102/cours/5_SPLE.pdf)
+[voir diapo 22](./cours/5_SPLE.pdf)
 
 
 ## Framework
