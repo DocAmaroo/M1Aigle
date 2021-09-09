@@ -32,8 +32,3 @@
 :books: [HMIN233 - Algorithmique d'exploration et de mouvement](https://github.com/DocAmaroo/M1Aigle/tree/master/s2/HMIN233 "HMIN233 courses")
 
 # TODO LIST
-:triangular_flag_on_post: **HMIN210** 
-- [ ] Faire le dépôt git pour le TP SOAP et le rapport.
-
-:triangular_flag_on_post: **HMIN233** 
-- [ ] Finir le TP5 (TP et Rapport).
